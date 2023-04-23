@@ -3,85 +3,105 @@
   contents:
     - name: Full Name
       value: Rahul Manavalan
-    # - name: Date of Birth
-    #   value: 01.01.1998
+
+    - name : Age
+      value : 25
+
     - name: Languages
       value: English, German
 
 - title: Education
   type: time_table
   contents:
-    - title: Master of Science in Copmutational Science and Engineering
+    - title: Master of Science in Computational Science and Engineering (1.6/1.0)
       institution: Technical University of Munich
       year: 2023
       description:
-        - Description 1.
-        - Description 2.
+        - Numerical Analysis and Scientific Computing.
+        - Dynamical Systems and Machine Learning.
+        - Quantum Information and Tensor Networks.
+
+    - title: Bachelor of Science in Mechanical Engineering (1.7/1.0)
+      institution: Government College of Technology, Coimbatore
+      year: 2019
+      description:
+        - Metallurgical Physics.
+        - Continuum Mechanics.
+        - Design of Machine Elements and Product Design.
+
+- title: Research Stays
+  type: time_table
+  contents:
+    - title: Student Researcher
+      institution: Forschungszentrum Juelich
+      year: 2021
+      description:
+        - High performace tensor network contraction with TCL.
 
 - title: Experience
   type: time_table
   contents:
-    - title: Professor of Theoretical Physics
-      institution: Institute for Advanced Study, Princeton University
-      year: 1933 - 1955
+    
+    - title: Student Researcher
+      institution: Technical University of Munich
+      year: 2022-2023
       description:
-        - Description 1.
-        - Description 2.
-        - title: Description 3.
-          contents:
-            - Sub-description 1.
-            - Sub-description 2.
-    - title: Visiting Professor
-      institution: California Institute of Technology, Pasadena, California, US
-      year: 1933
+        - Full waveform inversion using Neural Operators.
+
+    - title: Student Researcher
+      institution: Technical University of Munich
+      year: 2021-2022
       description:
-        - Description 1.
-        - Description 2.
+        - Multifidelity Gaussian Process surrogates for PDE simulations.
 
-    - title: Director
-      institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-      year: 1917-1933
-
-    - title: Professor of Theoretical Physics
-      institution: Karl-Ferdinand University, Prague, Czechoslovakia
-      year: 1911 - 1917
+    - title: Associate Software Engineer
+      institution: Robert Bosch Engineering and Bussiness Solutions.
+      year: 2019-2020
       description:
-
-    - title: Associate Professor of Theoretical Physics
-      institution: University of Zurich, Zurich, Switzerland
-      year: 1909 - 1911
+        - Systems simulation
+        - Product design
 
 - title: Open Source Projects
   type: time_table
   contents:
-    - title: <a href="https://github.com/alshedivat/al-folio">al-folio</a>
-      year: 2015-now
-      description: A beautiful, simple, clean, and responsive Jekyll theme for academics.
+    - title: <a href="https://github.com/dynamic-queries/OrdinaryDiffEq.jl">OrdinaryDiffEq.jl</a>
+      year: 2021-now
+      description: 
+        High performance ordinary differential equation (ODE) and differential-algebraic equation (DAE) solvers, including neural ordinary differential equations (neural ODEs) and scientific machine learning (SciML)
 
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 1921
-      items: 
-        - Nobel Prize in Physics 
-        - Matteucci Medal
-    - year: 2029
-      items: 
-        - Max Planck Medal
+    - title: <a href="https://github.com/dynamic-queries/ModelOrderReduction.jl">ModelOrderReduction.jl</a>
+      year: 2022-now
+      description: 
+        ModelOrderReduction.jl is a package for automatically reducing the computational complexity of mathematical models.
+
+    - title: <a href="https://github.com/SIAM-Munich-Chapter/DynamicalAlgorithms.jl">DynamicalAlgorithms.jl</a>
+      year: 2023-now
+      description:
+        DynamicalAlgorithms.jl is a collection of some prominent scientific-computing routines and their duals expressed as dynamical systems. 
+
 
 - title: Academic Interests
   type: nested_list
   contents:
-    - title: Topic 1.
+    - title: Scientific Computing
       items: 
-        - Description 1.
-        - Description 2.
-    - title: Topic 2.
+        - Outer Loop Applications.
+        - Surrogates for PDEs.
+        - Non-linear Model Order Reduction.
+    - title: Quantum Chemistry
       items:
-        - Description 1.
-        - Description 2.
+        - Machine Learning Potentials.
+        - Coarse Grained Modelling.
 
-- title: Other Interests
-  type: list
+    - title: Deep Learning
+      items:
+        - Dynamical Systemic Theory of Deep Learning.
+
+- title: Academic Communities
+  type: time_table
   contents:
-    - <u>Hobbies:</u> Hobby 1, Hobby 2, etc.
+    - title: SIAM Munich Chapter
+      institution: Technical University of Munich
+      year: 2023
+      description:
+        - Principal Founding member.
