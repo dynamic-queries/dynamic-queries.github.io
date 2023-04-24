@@ -1,9 +1,9 @@
 ---
 layout: page
-permalink: /publications/
-title: Publications
-description: A list of peer-reviewed publications and conference proceedings.
-years: [2023]
+permalink: /reports/
+title: Technical Reports
+description: A list of technical reports of my formal projects.
+years: [2017,2018,2019,2020,2021,2022,2023]
 nav: true
 nav_order: 2
 ---

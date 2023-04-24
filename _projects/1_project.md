@@ -1,10 +1,10 @@
 ---
 layout: page
-title: project 1
-description: a project with a background image
-img: assets/img/12.jpg
+title: MOD-CVT
+description: Modelling performance characteristics of Continuously Variable Transmissions. 
+img: 
 importance: 1
-category: work
+category: Uni-Eng
 ---
 
 Every project has a beautiful feature showcase page.

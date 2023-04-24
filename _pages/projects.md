@@ -1,12 +1,12 @@
 ---
 layout: page
-title: projects
+title: Projects
 permalink: /projects/
-description: A growing collection of your cool projects.
+description: A collection of relevant projects from my engineering and applied-math years.
 nav: true
-nav_order: 2
-display_categories: [work, fun]
-horizontal: false
+nav_order: 3
+display_categories: [Uni-Eng, Work, Uni-Math]
+horizontal: true
 ---
 
 <!-- pages/projects.md -->

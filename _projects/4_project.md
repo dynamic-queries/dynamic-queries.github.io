@@ -1,10 +1,10 @@
 ---
 layout: page
-title: project 4
-description: another without an image
+title: EVCS
+description: Two Phase condensation simulations for EVCS - Electric Vehicle charging stations.
 img:
-importance: 3
-category: fun
+importance: 1
+category: Work
 ---
 
 Every project has a beautiful feature showcase page.

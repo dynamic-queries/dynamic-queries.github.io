@@ -1,10 +1,10 @@
 ---
 layout: page
-title: project 5
-description: a project with a background image
-img: assets/img/1.jpg
+title: cvd 
+description: In-silico simulation of Chemical Vapour Deposition reactor.
+img: 
 importance: 3
-category: fun
+category: Uni-Math
 ---
 
 Every project has a beautiful feature showcase page.

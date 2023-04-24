@@ -1,10 +1,10 @@
 ---
 layout: page
-title: project 6
-description: a project with no image
+title: hptn
+description: High Performance Tensor Networks - A DSL for tensor contractions.
 img:
 importance: 4
-category: fun
+category: Uni-Math
 ---
 
 Every project has a beautiful feature showcase page.
