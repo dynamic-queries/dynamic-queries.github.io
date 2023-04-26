@@ -152,9 +152,44 @@
   <li>In-silico validation of the theory by a computational scientist.</li>
 </ol>
 
-<p>In the age of machine learning, steps 2,3 are aggregated and serves as an <strong>“automation”</strong> of scientific discovery. While the results from ML-Potentials are certainly impressive, there are also unexplainable. “Unexaplainability” of machine learning models often has a negative connotation, and in some sense it is justified. But it also indicates that there are more accurate models that one can write down with our current mathematical framework. This work is a step in that direction while leveraging classical statistical models.</p>
+<p>In the age of machine learning, steps 2,3 are aggregated and serves as an <strong>“automation”</strong> of scientific discovery. While the results from ML-Potentials are certainly impressive, there are also unexplainable. “Unexaplainability” of machine learning models often has a negative connotation, and in some sense it is justified. But it also indicates that there exist more accurate models that could potentially be discovered using current mathematical frameworks. This work is a step in that direction while leveraging classical statistical models.</p>
 
 <h2 id="problem-setup">Problem setup</h2>
+<p>Consider a system \(\mathcal{S}\) with \(n\) identical interacting particles that live in a \(d\) dimensional phase space with positions \(q \in \mathbb{R}^d\) and momenta \(p \in \mathbb{R}^d\). The evolution of \(z:=[q \quad p]^T\) follows Newton’s laws.</p>
+
+\[\begin{align}
+    \label{eq:newtonslaws}
+    \frac{d}{dt}p(t) = -\nabla_{q} U(q(t)) \\ 
+    \frac{d}{dt}q(t) = p(t)
+\end{align}\]
+
+<p>It is often the case in experiments that, one can accurately record observables such as \(q\) (and sometimes \(p\)). Given \(q \textrm{ or } p\), we ask ourselves how accurately one can infer \(U\)? This is equivalent to asking, How accurately can one solve the following optimization problem,</p>
+
+\[\begin{align}
+    \label{eq:opt_prob}
+    \arg \min_{\phi \in \mathcal{H}} \left\|\frac{d}{dt}p(t) + \nabla_{q} \phi(q(t))\right\|_{\mu} 
+\end{align}\]
+
+<p>in a hypothesis space \(\mathcal{H}\) of potential functions \(\phi\) with respect to some measure \(\mu\).</p>
+
+<p>Assuming that the chosen measure \(\mu\) leads to a smooth loss landspace and our optimizer converges to the global minimum (say SGD), the accuracy of the inferred potential \(\phi\), depends on the “goodness” of \(\mathcal{H}\). (We will later clarify what goodness could mean.) Therefore the goal of this work is to find good hypothesis spaces for some commonly recurring interaction problems in computational chemistry.</p>
+
+<h4 id="physical-systems-of-interest">Physical Systems of interest</h4>
+
+<p>We investigate the following systems; ordered with respect to increasing computational complexity.</p>
+
+<ol>
+  <li>Gas in an infinite enclosure (homogenous / heterogenous)</li>
+  <li>Gas in a finite enclosure with fixed walls (homogenous / heterogenous)</li>
+  <li>Gas in a finite enclosure with one moving wall (homogenous / heterogenous)</li>
+  <li>Nucleation of water droplet</li>
+  <li>Solvation of Lysozyme in Water</li>
+  <li>Homogeneous nucleation of water and carbon dioxide in carrier gas</li>
+</ol>
+
+<p>A collection of descriptions to these systems and their computational models can be found <a href="https://github.com/dynamic-queries/MolecularDynamicsZoo" rel="external nofollow noopener" target="_blank">here</a>.</p>
+
+<h2 id="inference-models">Inference models</h2>
 
   </article>
 </div>
