@@ -3,7 +3,7 @@ layout: page
 permalink: /publications/
 title: Publications
 description: A list of peer-reviewed publications and conference proceedings.
-years: [2023]
+years: [2021,2023]
 nav: true
 nav_order: 2
 ---
