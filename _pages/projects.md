@@ -5,7 +5,7 @@ permalink: /projects/
 description: A collection of relevant projects from my engineering and applied-math years.
 nav: true
 nav_order: 3
-display_categories: [Uni-Eng, Work, Uni-Math]
+display_categories: [Uni-Math, Work, Uni-Eng]
 horizontal: true
 ---
 
