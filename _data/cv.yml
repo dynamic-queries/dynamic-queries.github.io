@@ -37,6 +37,15 @@
         - Continuum Mechanics.
         - Design of Machine Elements and Product Design.
 
+- title: Talks and Presentations
+  type: time_table
+  contents:
+    - title: Poster Session
+      institution: SIAM CSE Conference Amsterdam
+      year: 2023
+      description:
+        - Neural Operators and Fullwaveform inversion
+
 - title: Research Stays
   type: time_table
   contents:
