@@ -20,6 +20,14 @@
         - Numerical Analysis and Scientific Computing.
         - Dynamical Systems and Machine Learning.
         - Quantum Information and Tensor Networks.
+        
+      - title: Summer School on Density Functional Theory
+      institution: Sorbonne Université, Paris
+      year: 2022
+      description:
+        - Numerical Methods in DFT
+        - Convergence and error bounds
+        - Differentiable and scalable softwares
 
     - title: Bachelor of Science in Mechanical Engineering (1.7/1.0)
       institution: Government College of Technology, Coimbatore
