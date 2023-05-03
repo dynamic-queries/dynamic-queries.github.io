@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-05-03T01:49:44+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-05-03T02:01:12+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 </subtitle><entry><title type="html">Full waveform inversion with Neural Operators.</title><link href="https://dynamic-queries.github.io/blog/2023/fwi/" rel="alternate" type="text/html" title="Full waveform inversion with Neural Operators." /><published>2023-04-24T15:12:00+00:00</published><updated>2023-04-24T15:12:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/fwi</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/fwi/"><![CDATA[<hr />
 
 <h2 id="introduction">Introduction</h2>
@@ -122,6 +122,8 @@ where \(\mathcal{M}\) is the hypothesis space of candidate observables explored 
     \arg \min_{\psi \in \mathcal{H}} \left[ \frac{1}{l}\sum_{k=1}^{l} \frac{1}{m}\sum_{j=1}^{m} \frac{1}{n}\sum_{i=1}^{n} \left\|\frac{d}{dt}p_i(t) + \frac{1}{n}\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right)\right\|_2\right]
 \end{equation}\]
 
+<hr />
+
 <p>Introducing \(\frac{d}{dt}p_i(t):=f_i\) and \(\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right):=R_i \psi(r_i)\).</p>
 
 \[\begin{align}
@@ -136,6 +138,8 @@ where \(\mathcal{M}\) is the hypothesis space of candidate observables explored 
     \label{eq:minimizer}
     \frac{d}{d\psi} \|f_i + R_i \psi(r_i) \|_2 = f_i^T R_i + R_i^T f_i + R_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T R_i 
 \end{align}\]
+
+<hr />
 
 <p>In the complete context of (\ref{eq:minimization_problem}),</p>
 

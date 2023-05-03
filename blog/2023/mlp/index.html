@@ -204,6 +204,8 @@
     \arg \min_{\psi \in \mathcal{H}} \left[ \frac{1}{l}\sum_{k=1}^{l} \frac{1}{m}\sum_{j=1}^{m} \frac{1}{n}\sum_{i=1}^{n} \left\|\frac{d}{dt}p_i(t) + \frac{1}{n}\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right)\right\|_2\right]
 \end{equation}\]
 
+<hr>
+
 <p>Introducing \(\frac{d}{dt}p_i(t):=f_i\) and \(\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right):=R_i \psi(r_i)\).</p>
 
 \[\begin{align}
@@ -218,6 +220,8 @@
     \label{eq:minimizer}
     \frac{d}{d\psi} \|f_i + R_i \psi(r_i) \|_2 = f_i^T R_i + R_i^T f_i + R_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T R_i 
 \end{align}\]
+
+<hr>
 
 <p>In the complete context of (\ref{eq:minimization_problem}),</p>
 
