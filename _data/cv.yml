@@ -91,6 +91,12 @@
       description: 
         ModelOrderReduction.jl is a package for automatically reducing the computational complexity of mathematical models.
 
+    - title: <a href="https://github.com/dynamic-queries/LinearPDEs">LinearPDEs</a>
+      year: 2023-now
+      description:
+        A collection of 1D linear PDEs for Scientific Machine learning. 
+
+
     - title: <a href="https://github.com/SIAM-Munich-Chapter/DynamicalAlgorithms.jl">DynamicalAlgorithms.jl</a>
       year: 2023-now
       description:
