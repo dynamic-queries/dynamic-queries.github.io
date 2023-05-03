@@ -189,7 +189,57 @@
 
 <p>A collection of descriptions to these systems and their computational models can be found <a href="https://github.com/dynamic-queries/MolecularDynamicsZoo" rel="external nofollow noopener" target="_blank">here</a>.</p>
 
-<h2 id="inference-models">Inference models</h2>
+<h2 id="inference-model">Inference model</h2>
+<p>A simple inference model for the potential assumes the following structure.</p>
+
+\[\begin{equation}
+    \label{eq:inference_model}
+    -\frac{d}{dt}p_i(t) = \nabla_{q_i} \phi(q_i) := \frac{1}{n}\sum_{j=1}^{n} \left(q_i(t) - q_j(t)\right) \; \psi\left(\|q_i(t) - q_j(t)\|\right)
+\end{equation}\]
+
+<p>This is true for analytical potentials that have a pairwise dependence – including the Lennard Jones potential, the Morse Potential, the Stirling Weber potential and variations thereof. Assuming reference data (positions, velocity and forces) can be generated for these \(n\) particles over \(m\) timesteps and \(l\) different initial conditions, the following minimization problem is valid.</p>
+
+\[\begin{equation}
+    \label{eq:minimization_problem}
+    \arg \min_{\psi \in \mathcal{H}} \left[ \frac{1}{l}\sum_{k=1}^{l} \frac{1}{m}\sum_{j=1}^{m} \frac{1}{n}\sum_{i=1}^{n} \left\|\frac{d}{dt}p_i(t) + \frac{1}{n}\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right)\right\|_2\right]
+\end{equation}\]
+
+<p>Introducing \(\frac{d}{dt}p_i(t):=f_i\) and \(\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right):=R_i \psi(r_i)\).</p>
+
+\[\begin{align}
+    \label{eq:lstsq}
+    \|f_i + R_i \psi(r_i) \|_2 = \left(f_i + R_i \psi(r_i)\right)^{T} \left(f_i + R_i \psi(r_i)\right) =  \left(f_i^T + \psi(r_i)^T R_i^T\right)\left(f_i + R_i \psi(r_i)\right) \\ 
+    = f_i^T f_i + f_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T f_i + \psi(r_i)^T R_i^T R_i \psi(r_i) 
+\end{align}\]
+
+<p>Then</p>
+
+\[\begin{align}
+    \label{eq:minimizer}
+    \frac{d}{d\psi} \|f_i + R_i \psi(r_i) \|_2 = f_i^T R_i + R_i^T f_i + R_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T R_i 
+\end{align}\]
+
+<p>In the complete context of (\ref{eq:minimization_problem}),</p>
+
+\[\begin{equation}
+\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n} R_{kji}^T R_{kji} \psi(r_{kji}) + R_{kji}^T f_{kji} \; != 0 
+\end{equation}\]
+
+<p>If \(\psi(r) := \eta^T(r) k\), then
+\(\begin{equation}
+\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n}R_{kji}^T R_{kji} \eta(r_{kji})^T k =  -\frac{1}{l}\frac{1}{m}\frac{1}{n} \sum_{k=1}^{l} \sum_{j=1}^{m} \sum_{i=1}^{n} R_{kji}^T f_{kji}
+\end{equation}\)</p>
+
+<p>Equivalently,
+\(\begin{equation}
+\label{eq:additive}
+\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n}A_{kji} k =  -\frac{1}{l}\frac{1}{m}\frac{1}{n} \sum_{k=1}^{l} \sum_{j=1}^{m} \sum_{i=1}^{n} B_{kji}
+\end{equation}\)
+\(\begin{equation}
+\mathcal{A}k=\mathcal{B}
+\end{equation}\)</p>
+
+<p>The additive nature of (\ref{eq:additive}) ensures a memory efficient inference procedure for \(k\) and inturn \(\psi\).</p>
 
   </article>
 </div>
