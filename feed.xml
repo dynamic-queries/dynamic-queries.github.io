@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-05-03T02:01:12+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-05-06T08:44:38+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 </subtitle><entry><title type="html">Full waveform inversion with Neural Operators.</title><link href="https://dynamic-queries.github.io/blog/2023/fwi/" rel="alternate" type="text/html" title="Full waveform inversion with Neural Operators." /><published>2023-04-24T15:12:00+00:00</published><updated>2023-04-24T15:12:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/fwi</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/fwi/"><![CDATA[<hr />
 
 <h2 id="introduction">Introduction</h2>
@@ -107,7 +107,43 @@ where \(\mathcal{M}\) is the hypothesis space of candidate observables explored 
 
 <p>A collection of descriptions to these systems and their computational models can be found <a href="https://github.com/dynamic-queries/MolecularDynamicsZoo">here</a>.</p>
 
-<h2 id="inference-model">Inference model</h2>
+<h2 id="inference-models">Inference models</h2>
+
+<h4 id="first-attempt">First attempt</h4>
+
+<p>Consider the case where, \(n_{ics}=1\) , \(n_{ts}=1\) , \(n_p=100\) , \(n_d=2\)</p>
+
+<p>Recall, 
+\(\begin{equation}
+    f_i:=\sum_{j=1}^{n_p}(q_i-q_j)\phi(\|q_i-q_j\|)    
+\end{equation}\)
+where  \(q_i,q_j,f_i\in \mathbb{R}^2\), \(\phi:\mathbb{R} \mapsto \mathbb{R}\)</p>
+
+<p>Equivalently \(f_i=R_i \phi(r_i)\) 
+where \(R_i \in \mathbb{R}^{2 \times n_p}\) and \(r_i \in \mathbb{R}^{n_p}\) .</p>
+
+<p>Consider \(n_p=3\) ,</p>
+
+\[\begin{equation}
+\begin{bmatrix} f_1 \\ f_2 \\ f_3 \end{bmatrix} = \begin{bmatrix} R_1 &amp;&amp; &amp;&amp; \\ &amp;&amp; R_2 &amp;&amp; \\ &amp;&amp; &amp;&amp; R_3\end{bmatrix} \begin{pmatrix}  \begin{bmatrix} phi(r_1) \\ phi(r_2) \\ phi(r_3) \end{bmatrix} \otimes \begin{bmatrix} 1 \\ 1\end{bmatrix}\end{pmatrix}
+\end{equation}\]
+
+<p>where \(R_1 \in \mathbb{R}^{2\times 2},R_2 \in \mathbb{R}^{1\times 1},R_3 \in \mathbb{R}^{0\times 0}\)</p>
+
+<p>and</p>
+
+\[\begin{equation}
+\begin{bmatrix} phi(r_1) \\ phi(r_2) \\ phi(r_3) \end{bmatrix}=\begin{bmatrix}b_{11}&amp;b_{12}&amp;b_{13} \\ b_{21}&amp;b_{22}&amp;b_{23} \\ b_{31}&amp;b_{32}&amp;b_{33}\end{bmatrix} \begin{bmatrix} k_1 \\ k_2 \\ k_3 \end{bmatrix}
+\end{equation}\]
+
+<p>Then 
+\(\begin{equation}
+\begin{bmatrix} f_1 \\ f_2 \\ f_3 \end{bmatrix} =\begin{bmatrix} R_1 &amp; &amp; \\ &amp; R_2 &amp; \\ &amp; &amp; R_3\end{bmatrix} \left(\begin{bmatrix} b_{11}&amp;b_{12}&amp;b_{13} \\ b_{21}&amp;b_{22}&amp;b_{23} \\ b_{31}&amp;b_{32}&amp;b_{33} \end{bmatrix}\otimes \begin{bmatrix} 1 &amp;  \\ &amp; 1 \end{bmatrix}\right)\left(\begin{bmatrix} k_1 \\ k_2 \\ k_3 \end{bmatrix} \otimes \begin{bmatrix} 1 \\ 1\end{bmatrix} \right)
+\end{equation}\)</p>
+
+<p>This  inference procedure does not scale well.</p>
+
+<h4 id="second-attempt">Second attempt</h4>
 <p>A simple inference model for the potential assumes the following structure.</p>
 
 \[\begin{equation}
