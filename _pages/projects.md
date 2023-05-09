@@ -2,10 +2,10 @@
 layout: page
 title: Projects
 permalink: /projects/
-description: A collection of relevant projects from my engineering and applied-math years.
+description: A collection of academic projects.
 nav: true
 nav_order: 3
-display_categories: [Uni-Math, Work, Uni-Eng]
+display_categories: [2023, 2022, 2021, 2020]
 horizontal: true
 ---
 

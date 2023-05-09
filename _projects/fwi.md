@@ -4,7 +4,7 @@ title: FWI
 description: Full Waveform Inversion with Neural Operators.
 img:
 importance: 1
-category: Uni-Math
+category: 2022
 ---
 ---
 

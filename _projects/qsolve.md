@@ -1,8 +1,8 @@
 ---
 layout: page
-title: qsolve
+title: QSolve
 description: Quantum Algorithms for solving linear systems.
 img: 
 importance: 5
-category: Uni-Math
+category: 2020
 ---

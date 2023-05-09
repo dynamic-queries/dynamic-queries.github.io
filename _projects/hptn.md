@@ -1,10 +1,10 @@
 ---
 layout: page
-title: EVCS
-description: Two Phase condensation simulations for EVCS - Electric Vehicle charging stations.
+title: HPTN
+description: High Performance Tensor Networks - A DSL for tensor contractions.
 img:
-importance: 1
-category: Work
+importance: 4
+category: 2021
 ---
 
 Every project has a beautiful feature showcase page.
