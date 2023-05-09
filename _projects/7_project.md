@@ -33,7 +33,7 @@ Let $$\Omega \subset \mathbb{R}^2$$.
 
 For a reference observable (velocity) $$m_0:\Omega \mapsto \mathbb{R}$$, let the waveform be $$u_0(x,t) = A(m_0(x),x) \:\: \forall x \in \Omega$$. 
 
-Assuming that from an initial measurement (oracle), $$u_0(x_s,t) \:\: \forall x_s \subset x$$, is given, we are interested in numerically estimating $$m_0(x)$$.
+Assuming that from an initial measurement (oracle), $$u_0(x_s,t) \:\: \forall x_s \subset \Omega$$, is given, we are interested in numerically estimating $$m_0(x)$$.
 
 ---
 For instance, one could imagine the reference velocity $$m_0(x)$$ as being : 
@@ -44,6 +44,6 @@ and the corresponding waveform sampled at seven different locations (sensors) in
 
 --- 
 
-The optimization problem in $$(\ref{eq:fwi})$$ minimizes the distance betweem the above waveform (say) $$u_{m_0}$$ and a waveform $$u$$ obtained from a guessed observable $$m(x)$$. This computation is iterated until $$ \|u_{m_0}(x_s,t)-u(x_s,t)\|_2 \mapsto \epsilon $$, where $$\epsilon$$ is close to machine precision. Applications such as this, which repeatedly invoke an expensive computational routine such as the waveform map $$A$$, are referred to as outerloop applications. 
+The optimization problem in $$(\ref{eq:fwi})$$ minimizes the distance betweem the above waveform (say) $$u_{m_0}$$ and a waveform $$u$$ obtained from a guessed observable $$m(x)$$. Applications such as this, which repeatedly invoke an expensive computational routine such as the waveform map $$A$$, are referred to as outerloop applications. 
 
-Depending upon the choice of basis used in discretization, computational routines involving $$A$$ can be very expensive. Alternatively, we use Neural Operator surrogates for approximating $$A$$. In the figure, The predictions of the neural operator (say) $$A_{NO}$$ for a sample input observable is juxtaposed with the result from the full order simulation.
+Depending upon the choice of basis used in discretization, computational routines involving $$A$$ can be very expensive, usually due to the curse of dimensionality. Alternatively, we use Neural Operator surrogates for approximating $$A$$.

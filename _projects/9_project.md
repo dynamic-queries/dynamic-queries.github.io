@@ -60,3 +60,119 @@ We investigate the following systems; ordered with respect to increasing computa
 A collection of descriptions to these systems and their computational models can be found [here](https://github.com/dynamic-queries/MolecularDynamicsZoo).
 
 ## Inference models
+
+#### First attempt
+
+Consider the case where, $$n_{ics}=1$$ , $$n_{ts}=1$$ , $$n_p=100$$ , $$n_d=2$$ 
+
+Recall, 
+$$
+\begin{equation}
+    f_i:=\sum_{j=1}^{n_p}(q_i-q_j)\phi(\|q_i-q_j\|)    
+\end{equation}
+$$
+where  $$q_i,q_j,f_i\in \mathbb{R}^2$$, $$\phi:\mathbb{R} \mapsto \mathbb{R}$$
+
+Equivalently $$f_i=R_i \phi(r_i)$$ 
+where $$R_i \in \mathbb{R}^{2 \times n_p}$$ and $$r_i \in \mathbb{R}^{n_p}$$ . 
+
+Consider $$n_p=3$$ , 
+
+$$
+\begin{equation}
+\begin{bmatrix} f_1 \\ f_2 \\ f_3 \end{bmatrix} = \begin{bmatrix} R_1 && && \\ && R_2 && \\ && && R_3\end{bmatrix} \begin{pmatrix}  \begin{bmatrix} phi(r_1) \\ phi(r_2) \\ phi(r_3) \end{bmatrix} \otimes \begin{bmatrix} 1 \\ 1\end{bmatrix}\end{pmatrix}
+\end{equation}
+$$
+
+where $$R_1 \in \mathbb{R}^{2\times 2},R_2 \in \mathbb{R}^{1\times 1},R_3 \in \mathbb{R}^{0\times 0}$$  
+
+and 
+
+$$
+\begin{equation}
+\begin{bmatrix} phi(r_1) \\ phi(r_2) \\ phi(r_3) \end{bmatrix}=\begin{bmatrix}b_{11}&b_{12}&b_{13} \\ b_{21}&b_{22}&b_{23} \\ b_{31}&b_{32}&b_{33}\end{bmatrix} \begin{bmatrix} k_1 \\ k_2 \\ k_3 \end{bmatrix}
+\end{equation}
+$$
+
+
+Then 
+$$
+\begin{equation}
+\begin{bmatrix} f_1 \\ f_2 \\ f_3 \end{bmatrix} =\begin{bmatrix} R_1 & & \\ & R_2 & \\ & & R_3\end{bmatrix} \left(\begin{bmatrix} b_{11}&b_{12}&b_{13} \\ b_{21}&b_{22}&b_{23} \\ b_{31}&b_{32}&b_{33} \end{bmatrix}\otimes \begin{bmatrix} 1 &  \\ & 1 \end{bmatrix}\right)\left(\begin{bmatrix} k_1 \\ k_2 \\ k_3 \end{bmatrix} \otimes \begin{bmatrix} 1 \\ 1\end{bmatrix} \right)
+\end{equation}
+$$
+
+This  inference procedure does not scale well.
+
+#### Second attempt
+A simple inference model for the potential assumes the following structure.
+
+$$
+\begin{equation}
+    \label{eq:inference_model}
+    -\frac{d}{dt}p_i(t) = \nabla_{q_i} \phi(q_i) := \frac{1}{n}\sum_{j=1}^{n} \left(q_i(t) - q_j(t)\right) \; \psi\left(\|q_i(t) - q_j(t)\|\right)
+\end{equation}
+$$
+
+This is true for analytical potentials that have a pairwise dependence -- including the Lennard Jones potential, the Morse Potential, the Stirling Weber potential and variations thereof. Assuming reference data (positions, velocity and forces) can be generated for these $$n$$ particles over $$m$$ timesteps and $$l$$ different initial conditions, the following minimization problem is valid.
+
+$$
+\begin{equation}
+    \label{eq:minimization_problem}
+    \arg \min_{\psi \in \mathcal{H}} \left[ \frac{1}{l}\sum_{k=1}^{l} \frac{1}{m}\sum_{j=1}^{m} \frac{1}{n}\sum_{i=1}^{n} \left\|\frac{d}{dt}p_i(t) + \frac{1}{n}\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right)\right\|_2\right]
+\end{equation}
+$$
+
+--- 
+
+Introducing $$\frac{d}{dt}p_i(t):=f_i$$ and $$\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right):=R_i \psi(r_i)$$.
+
+$$
+\begin{align}
+    \label{eq:lstsq}
+    \|f_i + R_i \psi(r_i) \|_2 = \left(f_i + R_i \psi(r_i)\right)^{T} \left(f_i + R_i \psi(r_i)\right) =  \left(f_i^T + \psi(r_i)^T R_i^T\right)\left(f_i + R_i \psi(r_i)\right) \\ 
+    = f_i^T f_i + f_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T f_i + \psi(r_i)^T R_i^T R_i \psi(r_i) 
+\end{align}
+$$
+
+Then
+
+$$
+\begin{align}
+    \label{eq:minimizer}
+    \frac{d}{d\psi} \|f_i + R_i \psi(r_i) \|_2 = f_i^T R_i + R_i^T f_i + R_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T R_i 
+\end{align}
+$$
+
+---
+
+In the complete context of (\ref{eq:minimization_problem}),
+
+$$
+\begin{equation}
+\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n} R_{kji}^T R_{kji} \psi(r_{kji}) + R_{kji}^T f_{kji} \; != 0 
+\end{equation}
+$$
+
+
+If $$\psi(r) := \eta^T(r) k$$, then
+$$
+\begin{equation}
+\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n}R_{kji}^T R_{kji} \eta(r_{kji})^T k =  -\frac{1}{l}\frac{1}{m}\frac{1}{n} \sum_{k=1}^{l} \sum_{j=1}^{m} \sum_{i=1}^{n} R_{kji}^T f_{kji}
+\end{equation}
+$$
+
+Equivalently,
+$$
+\begin{equation}
+\label{eq:additive}
+\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n}A_{kji} k =  -\frac{1}{l}\frac{1}{m}\frac{1}{n} \sum_{k=1}^{l} \sum_{j=1}^{m} \sum_{i=1}^{n} B_{kji}
+\end{equation}
+$$
+$$
+\begin{equation}
+\mathcal{A}k=\mathcal{B}
+\end{equation}
+$$
+
+The additive nature of (\ref{eq:additive}) ensures a memory efficient inference procedure for $$k$$ and inturn $$\psi$$.
