@@ -6,7 +6,7 @@ subtitle: <a href='#'>Affiliations</a>. Chair of Scientific Computing in Compute
 
 profile:
   align: right
-  image: prof_pic.jpg
+  image: prof.jpeg
   image_circular: true # crops the image to make it circular
   address: >
     <p>Technical University of Munich.</p>
