@@ -84,9 +84,6 @@
                 <a class="nav-link" href="/publications/">Publications</a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" href="/reports/">Technical Reports</a>
-              </li>
-              <li class="nav-item ">
                 <a class="nav-link" href="/projects/">Projects</a>
               </li>
               <li class="nav-item ">
@@ -149,7 +146,7 @@ where \(\mathcal{M}\) is the hypothesis space of candidate observables explored 
 
 <p>For a reference observable (velocity) \(m_0:\Omega \mapsto \mathbb{R}\), let the waveform be \(u_0(x,t) = A(m_0(x),x) \:\: \forall x \in \Omega\).</p>
 
-<p>Assuming that from an initial measurement (oracle), \(u_0(x_s,t) \:\: \forall x_s \subset x\), is given, we are interested in numerically estimating \(m_0(x)\).</p>
+<p>Assuming that from an initial measurement (oracle), \(u_0(x_s,t) \:\: \forall x_s \subset \Omega\), is given, we are interested in numerically estimating \(m_0(x)\).</p>
 
 <hr>
 <p>For instance, one could imagine the reference velocity \(m_0(x)\) as being :</p>
@@ -180,9 +177,9 @@ where \(\mathcal{M}\) is the hypothesis space of candidate observables explored 
 
 <hr>
 
-<p>The optimization problem in \((\ref{eq:fwi})\) minimizes the distance betweem the above waveform (say) \(u_{m_0}\) and a waveform \(u\) obtained from a guessed observable \(m(x)\). This computation is iterated until \(\|u_{m_0}(x_s,t)-u(x_s,t)\|_2 \mapsto \epsilon\), where \(\epsilon\) is close to machine precision. Applications such as this, which repeatedly invoke an expensive computational routine such as the waveform map \(A\), are referred to as outerloop applications.</p>
+<p>The optimization problem in \((\ref{eq:fwi})\) minimizes the distance betweem the above waveform (say) \(u_{m_0}\) and a waveform \(u\) obtained from a guessed observable \(m(x)\). Applications such as this, which repeatedly invoke an expensive computational routine such as the waveform map \(A\), are referred to as outerloop applications.</p>
 
-<p>Depending upon the choice of basis used in discretization, computational routines involving \(A\) can be very expensive. Alternatively, we use Neural Operator surrogates for approximating \(A\). In the figure, The predictions of the neural operator (say) \(A_{NO}\) for a sample input observable is juxtaposed with the result from the full order simulation.</p>
+<p>Depending upon the choice of basis used in discretization, computational routines involving \(A\) can be very expensive, usually due to the curse of dimensionality. Alternatively, we use Neural Operator surrogates for approximating \(A\).</p>
 
           </article>
 
