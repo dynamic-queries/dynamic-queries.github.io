@@ -24,6 +24,6 @@ My research falls at the intersection of applied mathematics, scientific computi
 I have an eclectic mix of experiences in systems simulation, product design, computational fluid dynamics, quantum computing, waveform inversion and quantum chemistry. [See Github.](https://github.com/dynamic-queries)
 
 I am an active proponent of 
-[John Tukey](https://nationalmedals.org/laureate/john-wilder-tukey/)'s -- "getting to play in everyone’s backyard". Promptly, I am interested in all things manifold learning and its applications to Many Body Physics, Non-linear Model Order Reduction and other surrogates for Partial Differential Equations.
+[John Tukey](https://nationalmedals.org/laureate/john-wilder-tukey/)'s -- "getting to play in everyone’s backyard". Promptly, I am interested in all things [manifold learning](https://fdresearchblog.files.wordpress.com/2019/02/informal-introduction-to-manifold-learning.pdf) and its applications to Many Body Physics, Non-linear Model Order Reduction and other surrogates for Partial Differential Equations.
 
 I am also a founding member of the [SIAM Student Chapter](https://siam-munich-chapter.github.io/SIAM_Munich.io/) at the Technical University of Munich.
