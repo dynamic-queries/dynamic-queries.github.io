@@ -23,7 +23,7 @@
     <!-- Fonts & Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700%7CRoboto+Slab:100,300,400,500,700%7CMaterial+Icons">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
 
     <!-- Code Syntax Highlighting -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
@@ -135,7 +135,35 @@
   </header>
 
   <article class="post-content">
-    
+    <h3 id="introduction">Introduction</h3>
+
+<p>This review aims at providing a self-contained, pedantic, comprehensive overview of deep generative modelling, culminating with discussions on <a href="https://arxiv.org/abs/2304.00200" rel="external nofollow noopener" target="_blank">the recent paper</a> from Youssef Marzouk.</p>
+
+<p>Generative models are manifestations of this widely held philosophical belief:</p>
+<div class="alert alert-block alert-success">
+<b>Philosophical Belief 1</b> All natural phenomena are generative. That is to say, there is an underlying generative process for every physical occurance.
+</div>
+
+<p>Clearly, there are infinitely many possibilities that may ensue from such a generative process. Assuming that we can enumerate all of these outcomes, say with set \(\Omega\), then a generative process \(\mathcal{G}\) underlying a system \(\mathcal{S}\) can be effectively described using probability theory. Therefore, the problem of generative modelling is in-effect the problem of probability density (distribution) estimation.</p>
+
+<p>In practice, there are several restrictions to effectively estimating probability density, \(p_{\mathcal{G}}(z) \: \forall z \in \Omega\), from a finite set of observations \(\Omega_f \subset \Omega\). Regardless, any method \(m\) that claims to do so must satisfy these conditions.</p>
+<ol>
+  <li>For a suitably chosen functional norm, \(\lim_{\Omega_f \mapsto \Omega} \|p_{\mathcal{G}}^{m}(z) - p_{\mathcal{G}}(z)\|_f \mapsto 0\)</li>
+  <li>It must be computationally effcient to sample from \(p_{\mathcal{G}}^{m}(z)\).</li>
+  <li>It must be computationally effcient to evaluate \(p_{\mathcal{G}}^{m}(z)\).</li>
+</ol>
+
+<p>Traditional functional approximation methods can satisfy (1) with an arbitrary level of accuracy, yet fail with respect to (2) and (3) due to the curse of dimensionality. Deep learning models on the other hand, are adept at circumventing this problem. Popular deep-generative models (in no particular order) include</p>
+
+<div class="alert alert-block alert-success">
+   1. Adversarial Generative Models <br>
+   2. Variational Autoencoders <br>
+   3. Normalizing Flows <br>
+   4. Score based Diffusion Models <br>
+   5. Autoregressive Models <br>
+   6. Energy based Models <br>
+</div>
+<p>to name a few. In the ensuing discussion, we discuss the algorithmic procedures, their implications (where applicable), applications to MNIST datasets and the relative merits and drawbacks of these models.</p>
 
   </article>
 </div>

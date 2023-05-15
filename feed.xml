@@ -1,5 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-05-15T12:50:39+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Generative modeling using Diffusion map particle system</title><link href="https://dynamic-queries.github.io/blog/2023/gen_dmap/" rel="alternate" type="text/html" title="Generative modeling using Diffusion map particle system" /><published>2023-05-06T08:00:00+00:00</published><updated>2023-05-06T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/gen_dmap</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/gen_dmap/"><![CDATA[]]></content><author><name></name></author><category term="review" /><category term="GenMod" /><summary type="html"><![CDATA[Marrying two unlikely algorithms for physical modeling.]]></summary></entry><entry><title type="html">Numerical Methods for Density Functional Theory</title><link href="https://dynamic-queries.github.io/blog/2023/dft/" rel="alternate" type="text/html" title="Numerical Methods for Density Functional Theory" /><published>2023-05-06T08:00:00+00:00</published><updated>2023-05-06T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/dft</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/dft/"><![CDATA[<h2 id="introduction">Introduction</h2>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-05-15T23:56:55+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Generative modeling using Diffusion map particle system</title><link href="https://dynamic-queries.github.io/blog/2023/gen_dmap/" rel="alternate" type="text/html" title="Generative modeling using Diffusion map particle system" /><published>2023-05-06T08:00:00+00:00</published><updated>2023-05-06T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/gen_dmap</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/gen_dmap/"><![CDATA[<h3 id="introduction">Introduction</h3>
+
+<p>This review aims at providing a self-contained, pedantic, comprehensive overview of deep generative modelling, culminating with discussions on <a href="https://arxiv.org/abs/2304.00200">the recent paper</a> from Youssef Marzouk.</p>
+
+<p>Generative models are manifestations of this widely held philosophical belief:</p>
+<div class="alert alert-block alert-success">
+<b>Philosophical Belief 1</b> All natural phenomena are generative. That is to say, there is an underlying generative process for every physical occurance.
+</div>
+
+<p>Clearly, there are infinitely many possibilities that may ensue from such a generative process. Assuming that we can enumerate all of these outcomes, say with set \(\Omega\), then a generative process \(\mathcal{G}\) underlying a system \(\mathcal{S}\) can be effectively described using probability theory. Therefore, the problem of generative modelling is in-effect the problem of probability density (distribution) estimation.</p>
+
+<p>In practice, there are several restrictions to effectively estimating probability density, \(p_{\mathcal{G}}(z) \: \forall z \in \Omega\), from a finite set of observations \(\Omega_f \subset \Omega\). Regardless, any method \(m\) that claims to do so must satisfy these conditions.</p>
+<ol>
+  <li>For a suitably chosen functional norm, \(\lim_{\Omega_f \mapsto \Omega} \|p_{\mathcal{G}}^{m}(z) - p_{\mathcal{G}}(z)\|_f \mapsto 0\)</li>
+  <li>It must be computationally effcient to sample from \(p_{\mathcal{G}}^{m}(z)\).</li>
+  <li>It must be computationally effcient to evaluate \(p_{\mathcal{G}}^{m}(z)\).</li>
+</ol>
+
+<p>Traditional functional approximation methods can satisfy (1) with an arbitrary level of accuracy, yet fail with respect to (2) and (3) due to the curse of dimensionality. Deep learning models on the other hand, are adept at circumventing this problem. Popular deep-generative models (in no particular order) include</p>
+
+<div class="alert alert-block alert-success">
+   1. Adversarial Generative Models <br />
+   2. Variational Autoencoders <br />
+   3. Normalizing Flows <br />
+   4. Score based Diffusion Models <br />
+   5. Autoregressive Models <br />
+   6. Energy based Models <br />
+</div>
+<p>to name a few. In the ensuing discussion, we discuss the algorithmic procedures, their implications (where applicable), applications to MNIST datasets and the relative merits and drawbacks of these models.</p>]]></content><author><name></name></author><category term="review" /><category term="GenMod" /><summary type="html"><![CDATA[Marrying two unlikely algorithms for physical modeling.]]></summary></entry><entry><title type="html">Numerical Methods for Density Functional Theory</title><link href="https://dynamic-queries.github.io/blog/2023/dft/" rel="alternate" type="text/html" title="Numerical Methods for Density Functional Theory" /><published>2023-05-06T08:00:00+00:00</published><updated>2023-05-06T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/dft</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/dft/"><![CDATA[<h2 id="introduction">Introduction</h2>
 
 <p>It has been known for years that the physical laws underlying any arbitrary physical systems can be accurately described using quantum mechanics.
 While this viewpoint is philosophically elegant, it is not really useful as quantum mechanical descriptions of many-particle interactions, is formulated in a Hilbert’s space which scales exponentially with the number of particles, posing a computational bottleneck, which Bellman called the <strong>Curse of Dimensionality</strong>.</p>
