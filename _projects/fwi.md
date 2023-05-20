@@ -37,10 +37,14 @@ Assuming that from an initial measurement (oracle), $$u_0(x_s,t) \:\: \forall x_
 
 ---
 For instance, one could imagine the reference velocity $$m_0(x)$$ as being : 
-{% include figure.html path="assets/FWI/reference_defect.png" class="img-fluid" %} 
+{% include figure.html path="assets/FWI/blog_1.png" class="img-fluid" %} 
+
+
+{% include figure.html path="assets/FWI/blog_2.png" class="img-fluid" %} 
 
 and the corresponding waveform sampled at seven different locations (sensors) in $$\Omega$$ as
-{% include figure.html path="assets/FWI/reference_waveform.png" class="img-fluid" %} 
+{% include figure.html path="assets/FWI/blog_3.png" class="img-fluid" %} 
+
 
 --- 
 
