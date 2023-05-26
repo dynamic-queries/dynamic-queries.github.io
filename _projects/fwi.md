@@ -51,3 +51,34 @@ and the corresponding waveform sampled at seven different locations (sensors) in
 The optimization problem in $$(\ref{eq:fwi})$$ minimizes the distance betweem the above waveform (say) $$u_{m_0}$$ and a waveform $$u$$ obtained from a guessed observable $$m(x)$$. Applications such as this, which repeatedly invoke an expensive computational routine such as the waveform map $$A$$, are referred to as outerloop applications. 
 
 Depending upon the choice of basis used in discretization, computational routines involving $$A$$ can be very expensive, usually due to the curse of dimensionality. Alternatively, we use Neural Operator surrogates for approximating $$A$$.
+
+--- 
+## Neural Operators
+Let $$L u(x,t) = f(x,t)$$ be an abstract partial differential equation for $$u \in \mathcal{U}$$ and $$f \in \mathcal{F}$$ (the output and input Banach spaces respectively). The operator $$L$$ is said to be linear, if $$\forall f_1,f_2 \in \mathcal{F}$$ and $$a,b \in \mathbb{R}$$, $$L\:(a f_1 + b f_2) = a L f_1 + b L f_2$$. It is known that for linear operators, there exists a propagator $$\mathcal{P}$$ such that for any $$f \in \mathcal{F}$$,
+
+$$
+\begin{equation}
+    \label{eq:green}
+    u(x,t) = \int dt' \int dy \: \mathcal{P}(x,y,t,t')\:f(y,t')
+\end{equation}
+$$
+
+Neural Operators approximate $$\mathcal{P}$$ by parameterizing it using a Neural Network. Hence, if one has a sufficiently many input-output pairs $$\mathcal{D} = (f_i,u_i)$$, then learning the propagator $$\mathcal{P}$$ is equivalent to learning the action of the operator $$L$$ on all $$f \in \mathcal{F}$$. We shall use this trick to approximate the waveform map $$A$$.
+
+Additionally, evaluating (\ref{eq:green}) is much more efficient on the Fourier space. To wit,
+
+$$
+\begin{equation}
+    \label{eq:FT}
+    \mathcal{F}_x u(x,t) = \mathcal{F}_x \left(\int dt' \int dy \: \mathcal{P}(x,y,t,t')\:f(y,t') \right)
+\end{equation} 
+$$
+
+$$
+\begin{equation}
+    \label{eq:FIT}
+    \mathcal{F}_x u(x,t) = \mathcal{F}_x(\mathcal{P}(x,y,t,t')) \mathcal{F}_x(f(y,t'))
+\end{equation}
+$$
+
+Approximating $$\mathcal{F}_x(\mathcal{P}(x,y,t,t'))$$ using neural networks result in a computational framework that is known as Fourier Neural Operators in literature. The learned waveform for an arbitrarily chosen input observable $$m(x)$$ is shown below.
