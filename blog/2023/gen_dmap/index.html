@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Generative modeling using Diffusion map particle system | Rahul Manavalan</title>
+    <title>(WIP) Generative modeling using Diffusion map particle system | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
     <meta name="description" content="Marrying two unlikely algorithms for physical modeling.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
@@ -118,7 +118,7 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Generative modeling using Diffusion map particle system</h1>
+    <h1 class="post-title">(WIP) Generative modeling using Diffusion map particle system</h1>
     <p class="post-meta">May 6, 2023</p>
     <p class="post-tags">
       <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
@@ -137,7 +137,7 @@
   <article class="post-content">
     <h3 id="introduction">Introduction</h3>
 
-<p>This review aims at providing a self-contained, pedantic, comprehensive overview of deep generative modelling, culminating with discussions on <a href="https://arxiv.org/abs/2304.00200" rel="external nofollow noopener" target="_blank">the recent paper</a> from Youssef Marzouk.</p>
+<p>This review aims at providing a self-contained, pedantic overview of deep generative modelling using score based diffusion, culminating with discussions on <a href="https://arxiv.org/abs/2304.00200" rel="external nofollow noopener" target="_blank">the recent paper</a> from Youssef Marzouk.</p>
 
 <p>Generative models are manifestations of this widely held philosophical belief:</p>
 <div class="alert alert-block alert-success">
@@ -163,7 +163,33 @@
    5. Autoregressive Models <br>
    6. Energy based Models <br>
 </div>
-<p>to name a few. In the ensuing discussion, we discuss the algorithmic procedures, their implications (where applicable), applications to MNIST datasets and the relative merits and drawbacks of these models.</p>
+<p>to name a few.</p>
+
+<p>In what follows, a tutorial styled introduction to score based diffusion algorithms is presented and are compared with the method using diffusion map particle system.</p>
+
+<h3 id="score-based-diffusion">Score based diffusion</h3>
+
+<p>Diffusion models are based on certain assumptions and results, which we will assume are axiomatic.</p>
+
+<ol>
+  <li>Let \(p_f\) be the probability distribution defined over a certain function space \(\mathcal{F}\) such that \(\forall f \in \mathcal{F}, f:x \mapsto y\) where \(x,y \in \mathbb{R}^d\).</li>
+  <li>Let there exist a time dependent stochastic differential operator \(\mathcal{L}_t\) which transforms \(f(x) \sim p_f\) such that \(\lim_{t \mapsto \infty} \mathcal{L}_t f(x) = g(x)\) where \(g(x) \sim \mathcal{GP}(\bar{x},k(x,x'))\).</li>
+  <li>For every such forward operator, there exists an equivalent reverse time stochastic differential operator \(\tilde{\mathcal{L}_t}\) such that \(\lim_{t \mapsto \infty} \tilde{\mathcal{L}_t} g(x) = f(x)\).</li>
+</ol>
+
+<p>2 and 3, taken together results in differentiable and invertible map from a distribution over a trivial function space (noisy functions in this case) to a distribution over functions with certain structure. This forms the crux of generative modeling using score based diffusion. The key idea is to sample or evaluate the density of functions on the trivial distribution and transform the samples back and forth by solving stochastic differential equations. This further leads to the following questions.</p>
+
+<ol>
+  <li>For a given \(\mathcal{F}\), what is the most appropriate choice of \(\mathcal{L}\) in terms of computational tractablity? That is,
+    <ol>
+      <li>Which stochastic differential equation, reaches its steady state relatively quickly?</li>
+      <li>Which numerical integration scheme preserves the structure of any \(f \sim \mathcal{F}\)?</li>
+    </ol>
+  </li>
+  <li>What is the dual operator \(\tilde{\mathcal{L}}\) for a given \(\mathcal{L}\)?</li>
+</ol>
+
+<p>For better or worse, there is no clear resolution on the “best SDE” and the “best numerical integrator” for a given function class. Most of today’s state of the art, in this regard, is based on heuristics. The problem of the dual operator on the other hand, has a robust mathematical background which we will elucidate now.</p>
 
   </article>
 </div>

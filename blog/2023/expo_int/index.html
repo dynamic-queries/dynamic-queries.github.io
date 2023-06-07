@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>RKN | Rahul Manavalan</title>
+    <title>(WIP) Exponential Integrators | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="B-Series analysis of Runge Kutta Nyström Integrators.">
+    <meta name="description" content="ODE Integrators for Stiff Differential Equations.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/projects/nystrom/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/blog/2023/expo_int/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +72,8 @@
               </li>
               
               <!-- Blog -->
-              <li class="nav-item ">
-                <a class="nav-link" href="/blog/">SciML Gazette</a>
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">SciML Gazette<span class="sr-only">(current)</span></a>
               </li>
 
               <!-- Other pages -->
@@ -113,20 +113,80 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">RKN</h1>
-            <p class="post-description">B-Series analysis of Runge Kutta Nyström Integrators.</p>
-          </header>
+<div class="post">
 
-          <article>
-            
+  <header class="post-header">
+    <h1 class="post-title">(WIP) Exponential Integrators</h1>
+    <p class="post-meta">May 26, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/differentialequations">
+          <i class="fas fa-hashtag fa-sm"></i> DifferentialEquations</a>  
+          
+        ·  
+        <a href="/blog/category/review">
+          <i class="fas fa-tag fa-sm"></i> review</a>  
+          
 
-          </article>
+    </p>
+  </header>
 
-        </div>
+  <article class="post-content">
+    <h2 id="introduction">Introduction</h2>
+<p>Differential Equations are used as modeling tools in several scientific disciplines. Since the advent of affordable computing technologies, a prevalent theme in these fields is to numerically approximate the solutions to these differential equations using numerical integration.</p>
+
+<p>Consider a first order differential equation, formulated as an initial value problem.</p>
+
+\[\begin{align}
+\label{eq:IVP}
+\frac{d}{dx}y(x) = f(y(x),x) \\
+y(x=0) = y_0 \in \mathbb{R}^n
+\end{align}\]
+
+<p>The central theme of numerical integration is to transform the solution of the IVP in (\ref{eq:IVP}) to the solution of the following quadrature problem.</p>
+
+\[\begin{equation}
+    \label{eq:quad}
+    y(x) = y_0 + \int_{x_0}^{x} dz\:f(z) = y_0 + \frac{1}{x-x_0} \int_{0}^{1} dq\:f(q) 
+\end{equation}\]
+
+<p>Admittedly, there are several techniques to approximate the integral in (\ref{eq:quad}). Here we are interested in a class of integrators that are suitable for stiff differential equations.</p>
+
+<h2 id="stiff-differential-equations">Stiff Differential Equations</h2>
+<p>Stiffness of differential equations is an ambiguous term. Hairer and Wanner famouosly write about stiff differential equations, <em>as equations where evaluation of solutions using explicit integration methods is too inefficient</em>. There have been other attempts to formalize this “definition” using the eigenfunctions of the differential operator. Intuitively, stiff differential equations are those with \(f(y(x),x)\) evolving in disparate scales along its different bases directions.</p>
+
+<h2 id="exponential-integrators">Exponential Integrators</h2>
+<p>The question of resolving the disparate timescales in \(f(y(x),x)\) is addressed in exponential integrators as follows.</p>
+
+\[\begin{align}
+    \label{eq:exp-int}
+    \frac{d}{dx}y(x) = Ay(x) + g(y(x),x) \textrm{  [Linearization] }
+\end{align}\]
+
+<p>The solution to the homogenous problem in (\ref{eq:exp-int}), is</p>
+
+\[\begin{align}
+    \label{eq:exact-sol}
+    y(x) = \exp^{xA} y(0)
+\end{align}\]
+
+\[\begin{equation}
+    \label{eq:exp}
+    \exp^{zA} = \mathcal{I} + \frac{zA}{1!} + \frac{(zA)^2}{2!} + \frac{(zA)^3}{3!} + ...
+\end{equation}\]
+
+<p>For a generic heterogenity, \(g(x)\), the solution is expressed in terms of its propagator.</p>
+
+\[\begin{equation}
+    \label{eq:hetero}
+    y(x) = \exp^{xA} y(0) + \int dz \: \exp^{(x-z)A} g(y(z),z)
+\end{equation}\]
+
+  </article>
+</div>
 
     </div>
 
