@@ -9,8 +9,8 @@ display_categories:
 horizontal: true
 ---
 
-1. [Eduaordo Di Napoli](https://www.fz-juelich.de/profile/napoli_e.di) - JSC Guest Student Program
-2. [Matteo Rizzi](https://www.thp.uni-koeln.de/rizzi/index.html) - JSC Guest Student Program
-3. [Ravi Kislaya](https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/) - Physics Informed Gaussian Processes
+1. [Eduaordo Di Napoli](https://www.fz-juelich.de/profile/napoli_e.di) - High Performance Tensor Networks
+2. [Matteo Rizzi](https://www.thp.uni-koeln.de/rizzi/index.html) - High Performance Tensor Networks
+3. [Ravi Kislaya](https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/) - Multifidelity Gaussian Process
 4. [Felix Dietrich](https://fd-research.com/) - Waveform Inversion
-5. [Christian Mendl](http://christian.mendl.net/) - Interpretable Machine Learning Potentials
+5. [Christian Mendl](http://christian.mendl.net/) - Machine Learning Potentials

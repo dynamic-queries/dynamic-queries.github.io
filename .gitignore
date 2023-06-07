@@ -8,4 +8,7 @@ _site
 .tweet-cache
 Gemfile.lock
 vendor
-
+_projects/exp_gen.md
+_projects/mshoot.md
+_projects/mogp.md
+_projects/fwi.md

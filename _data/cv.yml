@@ -13,7 +13,7 @@
 - title: Education
   type: time_table
   contents:
-    - title: Master of Science in Computational Science and Engineering (1.6/1.0)
+    - title: Master of Science in Computational Science and Engineering (1.7/1.0)
       institution: Technical University of Munich
       year: 2023
       description:
@@ -69,7 +69,7 @@
       institution: Technical University of Munich
       year: 2021-2022
       description:
-        - Multifidelity Gaussian Process surrogates for PDE simulations.
+        - Multifidelity Gaussian Process surrogates.
 
     - title: Associate Software Engineer
       institution: Robert Bosch Engineering and Bussiness Solutions.
@@ -86,21 +86,21 @@
       description: 
         High performance ordinary differential equation (ODE) and differential-algebraic equation (DAE) solvers, including neural ordinary differential equations (neural ODEs) and scientific machine learning (SciML)
 
-    - title: <a href="https://github.com/dynamic-queries/ModelOrderReduction.jl">ModelOrderReduction.jl</a>
-      year: 2022-now
-      description: 
-        ModelOrderReduction.jl is a package for automatically reducing the computational complexity of mathematical models.
+    # - title: <a href="https://github.com/dynamic-queries/ModelOrderReduction.jl">ModelOrderReduction.jl</a>
+    #   year: 2022-now
+    #   description: 
+    #     ModelOrderReduction.jl is a package for automatically reducing the computational complexity of mathematical models.
 
     - title: <a href="https://github.com/dynamic-queries/LinearPDEs">LinearPDEs</a>
       year: 2023-now
       description:
-        A collection of 1D linear PDEs for Scientific Machine learning. 
+        A collection of 2D linear PDEs for Scientific Machine learning. 
 
 
-    - title: <a href="https://github.com/SIAM-Munich-Chapter/DynamicalAlgorithms.jl">DynamicalAlgorithms.jl</a>
-      year: 2023-now
-      description:
-        DynamicalAlgorithms.jl is a collection of some prominent scientific-computing routines and their duals expressed as dynamical systems. 
+    # - title: <a href="https://github.com/SIAM-Munich-Chapter/DynamicalAlgorithms.jl">DynamicalAlgorithms.jl</a>
+    #   year: 2023-now
+    #   description:
+    #     DynamicalAlgorithms.jl is a collection of some prominent scientific-computing routines and their duals expressed as dynamical systems. 
 
 
 - title: Academic Interests
@@ -118,7 +118,7 @@
 
     - title: Deep Learning
       items:
-        - Dynamical Systemic Theory of Deep Learning.
+        -  <a href="https://link.springer.com/article/10.1007/s40304-017-0103-z">Dynamical Systemic Theory of Deep Learning</a>.
 
 - title: Academic Communities
   type: time_table
