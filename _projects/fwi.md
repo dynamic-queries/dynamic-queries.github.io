@@ -25,7 +25,7 @@ where $$\mathcal{M}$$ is the hypothesis space of candidate observables explored 
 
 Since its first formulation in 1977, much has been discovered about FWI with respect to the efficacy of optimizers (SGD vs quasi-Newton vs Newton vs Truncated Newton) and the choice of measures ($$L_p$$ norm vs Wasserstein measure). Furthermore, advances in computing has also benefitted this discipline; with highly parallel solvers that operate on very large time and length scales. 
 
-Recently, machine learning based surrogates for forward maps are gaining traction due to their computational efficacy. Surrogates based on Neural Operators in particular have recently shown much promise for several applications in literature. In this work, we demostrate waveform inversion with such surrogates and outline their applicability for highly expensive optimization frameworks based on Bayesian inversion or optimal control. 
+Recently, machine learning based surrogates for forward maps are gaining traction due to their computational efficacy. Surrogates based on Neural Operators in particular have recently shown much promise for several applications in literature. In this work, we demostrate waveform inversion with such surrogates.
 
 ---
 ## Problem Setup
@@ -77,8 +77,114 @@ $$
 $$
 \begin{equation}
     \label{eq:FIT}
-    \mathcal{F}_x u(x,t) = \mathcal{F}_x(\mathcal{P}(x,y,t,t')) \mathcal{F}_x(f(y,t'))
+    \mathcal{F}_x u(x,t) = \mathcal{F}_x(\mathcal{P}(y,t')) \mathcal{F}_x(f(y,t'))
 \end{equation}
 $$
 
-Approximating $$\mathcal{F}_x(\mathcal{P}(x,y,t,t'))$$ using neural networks result in a computational framework that is known as Fourier Neural Operators in literature. The learned waveform for an arbitrarily chosen input observable $$m(x)$$ is shown below.
+Approximating $$\mathcal{F}_x(\mathcal{P}(x,y,t,t'))$$ using neural networks result in a computational framework that is known as Fourier Neural Operators in literature. 
+
+## Approximation with Fourier Neural Operators
+Fourier Neural Operators were trained on datasets generated from a full order finite difference approximation to the waveform map $$A$$. Here, predictions from the surrogate for different velocity fields $$m(x)$$ are presented.
+
+ The variety in $$m(x)$$ is based on the primitive shapes such as splines, rectangles, circles and so forth. It is to be noted that, not all primitive shapes were used in training. Nevertheless, the FNO trained on a family of splines -- sampled from a Gaussian process is capable of generalizing to sufficiently different function classes, as exemplified by its approximation over several seemingly disparate $$m$$.
+
+ The evolution of the wavefield over a two dimensional domain, initially approximated by a finite difference approximation (simulation) and the FNO (surrogate) is juxtaposed for your perusal. Furthermore, the wavefield sampled at specific sensor locations (here the left end of the domain, as illustrated previously) is also presented.
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+***Spline shaped velocity fields***
+
+Spline 1 <span style="color:red">[Not included in training]</span>.
+ <div class="row">
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/normal_spline/simulation.gif" alt="spline-sim" style="width:100%">
+  </div>
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/normal_spline/surrogate.gif" alt="spline-sur" style="width:100%">
+  </div>
+</div> 
+
+<img style="border:1px solid black;" src="/assets/FWI/validate/normal_spline/time_series.svg" alt="spline-sur" style="width:120%">
+
+Spline 2 <span style="color:red">[Not included in training]</span>.
+ <div class="row">
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/my_spline/simulation.gif" alt="spline-sim" style="width:100%">
+  </div>
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/my_spline/surrogate.gif" alt="spline-sur" style="width:100%">
+  </div>
+</div> 
+<img style="border:1px solid black;" src="/assets/FWI/validate/my_spline/time_series.svg" alt="spline-sur" style="width:120%">
+
+***Circular velocity fields***
+
+<span style="color:red">[Not included in training]</span>.
+ <div class="row">
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/circle/simulation.gif" alt="spline-sim" style="width:100%">
+  </div>
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/circle/surrogate.gif" alt="spline-sur" style="width:100%">
+  </div>
+</div> 
+<img style="border:1px solid black;" src="/assets/FWI/validate/circle/time_series.svg" alt="spline-sur" style="width:120%">
+
+***Rectangular velocity fields***
+
+<span style="color:red">[Not included in training]</span>.
+ <div class="row">
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/rectangle/simulation.gif" alt="spline-sim" style="width:100%">
+  </div>
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/rectangle/surrogate.gif" alt="spline-sur" style="width:100%">
+  </div>
+</div> 
+<img style="border:1px solid black;" src="/assets/FWI/validate/rectangle/time_series.svg" alt="spline-sur" style="width:120%">
+
+***Square velocity fields***
+
+<span style="color:red">[Not included in training]</span>.
+ <div class="row">
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/square/simulation.gif" alt="spline-sim" style="width:100%">
+  </div>
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/square/surrogate.gif" alt="spline-sur" style="width:100%">
+  </div>
+</div> 
+<img style="border:1px solid black;" src="/assets/FWI/validate/square/time_series.svg" alt="spline-sur" style="width:120%">
+
+***Diagonal velocity fields***
+
+<span style="color:red">[Not included in training]</span>.]
+ <div class="row">
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/diagonal/simulation.gif" alt="spline-sim" style="width:100%">
+  </div>
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/FWI/validate/diagonal/surrogate.gif" alt="spline-sur" style="width:100%">
+  </div>
+</div> 
+<img style="border:1px solid black;" src="/assets/FWI/validate/diagonal/time_series.svg" alt="spline-sur" style="width:120%">
+
+## Inversion
+
+The results in the previous section indicate that the surrogates albeit with some bias, can qualitatively reproduce the action of a linear waveform map $$A$$. One issue that is immediately obvious from the visualizations is the wavy nature of the predictions from the FNO. This is to be expected. As truncating the higher modes from the Fourier series of a function, is known to suffer from this problem. Alternatively, a Chebyshev expansion of the function can be used, but this remains outside the scope of this work.
+
+Subsequently, we use this surrogate to invert artifically generated measurements (from the simulation), say $$\tau_{m_{ref}}$$, inturn resulting in velocity field $$m_{ref}(x)$$. In order to ensure, the waviness of the prediction from the surrogate, does not further ill-condition the problem, the prediction is smoothed using radial bases functions.
