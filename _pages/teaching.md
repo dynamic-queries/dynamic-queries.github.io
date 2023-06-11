@@ -4,7 +4,7 @@ permalink: /teaching/
 title: Teaching
 description: Non-exhaustive list of courses instructed by me at TUM.
 nav: true
-nav_order: 5
+nav_order: 4
 ---
 
 ---
