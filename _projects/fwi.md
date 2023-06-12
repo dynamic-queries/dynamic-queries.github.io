@@ -29,9 +29,9 @@ Recently, machine learning based surrogates for forward maps are gaining tractio
 
 ---
 ## Problem Setup
-Let $$\Omega \subset \mathbb{R}^2$$.
+Let $$\Omega \subset \mathbb{R}^{d \times d}$$, where $$d$$ is the grid resolution.
 
-For a reference observable (velocity) $$m_0:\Omega \mapsto \mathbb{R}$$, let the waveform be $$u_0(x,t) = A(m_0(x),x) \:\: \forall x \in \Omega$$. 
+For a reference observable (velocity) $$m_0:\Omega \mapsto \mathbb{R}^{d \times d}$$, let the waveform be $$u_0(x,t) = A(m_0(x),x) \:\: \forall x \in \Omega$$. 
 
 Assuming that from an initial measurement (oracle), $$u_0(x_s,t) \:\: \forall x_s \subset \Omega$$, is given, we are interested in numerically estimating $$m_0(x)$$.
 
@@ -188,3 +188,28 @@ Spline 2 <span style="color:red">[Not included in training]</span>.
 The results in the previous section indicate that the surrogates albeit with some bias, can qualitatively reproduce the action of a linear waveform map $$A$$. One issue that is immediately obvious from the visualizations is the wavy nature of the predictions from the FNO. This is to be expected. As truncating the higher modes from the Fourier series of a function, is known to suffer from this problem. Alternatively, a Chebyshev expansion of the function can be used, but this remains outside the scope of this work.
 
 Subsequently, we use this surrogate to invert artifically generated measurements (from the simulation), say $$\tau_{m_{ref}}$$, inturn resulting in velocity field $$m_{ref}(x)$$. In order to ensure, the waviness of the prediction from the surrogate, does not further ill-condition the problem, the prediction is smoothed using radial bases functions.
+
+### Parameterization
+Prior to pursuing this, I will make a brief remark on how $$m(x)$$ is to be parameterized. 
+
+Parameterization is a necessary here, as a dense mapping $$m:\Omega \mapsto \mathbb{R}$$ suffers from the curse of dimensionality during gradient computation. Instead, radial bases sets are used to generate a one dimensional candidate function which is in-turn plotted inside $$\Omega$$ yielding $$m_{can}$$. The similarity measure between $$\tau_{m_{ref}}$$ and $$\tau_{m_{can}}$$ is now optimized with respect to the coefficients of these radial bases functions, say $$k$$. 
+
+Let $$n$$ be the number of radial bases functions. Then $$k \in \mathbb{R}^n$$. Here, the velocity field is defined as follows:
+
+$$
+\begin{equation}
+  m(x;k) = \eta \left(\sum_i^n k_i \phi_i(r,r_i)\right)
+\end{equation}
+$$
+
+$$
+\begin{equation}
+  \eta : \mathbb{R}^n \mapsto \mathbb{R}^{d \times d}
+\end{equation}
+$$
+
+$$
+\begin{equation}
+  \eta(z(r)) = \mathcal{G}  \circ \textrm{Plotting} \circ \textrm{Linear Interpolation}(r,z(r))
+\end{equation}
+$$
