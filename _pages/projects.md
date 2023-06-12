@@ -9,6 +9,8 @@ display_categories: [2023, 2022, 2021, 2020]
 horizontal: true
 ---
 
+[...Under Construction...]
+
 <!-- pages/projects.md -->
 <div class="projects">
 {%- if site.enable_project_categories and page.display_categories %}
