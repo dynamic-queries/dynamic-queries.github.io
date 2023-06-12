@@ -19,7 +19,7 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: false  # includes social icons at the bottom of the page
 ---
 I am a masters student and a student-researcher at the Technical University of Munich.
-My research falls at the intersection of applied mathematics, scientific computing and statistics.
+My research falls at the intersection of scientific computing and machine learning.
 
 I have an eclectic mix of experiences in systems simulation, product design, computational fluid dynamics, quantum computing, waveform inversion and quantum chemistry. [See Projects.](https://dynamic-queries.github.io/projects/)
 
