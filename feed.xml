@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-12T13:17:10+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-15T09:19:36+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 </subtitle><entry><title type="html">(WIP) Frobenius Perron Operator</title><link href="https://dynamic-queries.github.io/blog/2023/frobenius_perron/" rel="alternate" type="text/html" title="(WIP) Frobenius Perron Operator" /><published>2023-06-08T08:00:00+00:00</published><updated>2023-06-08T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/frobenius_perron</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/frobenius_perron/"><![CDATA[]]></content><author><name></name></author><category term="review" /><category term="OperatorML" /><summary type="html"><![CDATA[What you need when Diffusion Models make no sense.]]></summary></entry><entry><title type="html">(WIP) Lie Group Integrators</title><link href="https://dynamic-queries.github.io/blog/2023/lie_group/" rel="alternate" type="text/html" title="(WIP) Lie Group Integrators" /><published>2023-06-07T08:00:00+00:00</published><updated>2023-06-07T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/lie_group</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/lie_group/"><![CDATA[]]></content><author><name></name></author><category term="review" /><category term="DifferentialEquations" /><summary type="html"><![CDATA[Structure preserving integrators for Differential Equations.]]></summary></entry><entry><title type="html">(WIP) Exponential Integrators</title><link href="https://dynamic-queries.github.io/blog/2023/expo_int/" rel="alternate" type="text/html" title="(WIP) Exponential Integrators" /><published>2023-05-26T08:00:00+00:00</published><updated>2023-05-26T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/expo_int</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/expo_int/"><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>Differential Equations are used as modeling tools in several scientific disciplines. Since the advent of affordable computing technologies, a prevalent theme in these fields is to numerically approximate the solutions to these differential equations using numerical integration.</p>
 
@@ -157,4 +157,47 @@ While this viewpoint is philosophically elegant, it is not really useful as quan
   <li>What is the dual operator \(\tilde{\mathcal{L}}\) for a given \(\mathcal{L}\)?</li>
 </ol>
 
-<p>For better or worse, there is no clear resolution on the “best SDE” and the “best numerical integrator” for a given function class. Most of today’s state of the art, in this regard, is based on heuristics. The problem of the dual operator on the other hand, has a robust mathematical background which we will elucidate now.</p>]]></content><author><name></name></author><category term="review" /><category term="GenMod" /><summary type="html"><![CDATA[Marrying two unlikely algorithms for physical modeling.]]></summary></entry></feed>
+<p>For better or worse, there is no clear resolution on the “best SDE” and the “best numerical integrator” for a given function class. Most of today’s state of the art, in this regard, is based on heuristics.</p>
+
+<h4 id="computational-model">Computational model</h4>
+<p>Let \(p_0(x)\) be the target distribution. Given sample \(x_i^0 \in \mathbb{R}^d \sim p_0(x)\), we proceed as follows.</p>
+
+<ol>
+  <li>Numerically solve \(dx^t = f(x^t,t)\:dt + g(t)\:dW(t)\) with initial condition \(x_i^0\) for \([0,T]\).
+    <ol>
+      <li>Here, \(f(x,t) \textrm{ and } g(t)\) are known as the drift and the diffusivity terms respectively.</li>
+      <li>\(W(t)\) is a Wiener process.</li>
+    </ol>
+  </li>
+  <li>Parmeterize a neural network \(\mathcal{S_{\Theta}}:\mathbb{R}^d \mapsto \mathbb{R}^d\).</li>
+  <li>Numerically solve \(dx^t = [f(x^t,t) - g(t)^2 \mathcal{S_{\Theta}}]\:dt + g(t)\:dW(t)\) for \([T,0]\).</li>
+</ol>
+
+<p>Use this computational routine to solve</p>
+
+\[\begin{equation}
+   \arg \min_{\Theta} \mathbb{E}_{x \sim p(x)}[\|m^{0 \mapsto T \mapsto 0}(x) - x\|]
+\end{equation}\]
+
+<p>Common choices for \(f,g\) in literature include:</p>
+
+<h5 id="sldm">SLDM</h5>
+<p>\(\begin{equation}
+   f(x,t) = -\frac{\beta(t)x}{2}
+\end{equation}\)</p>
+
+\[\begin{equation}
+   g(t) = \sqrt{\beta(t)}
+\end{equation}\]
+
+<h5 id="ddpm">DDPM</h5>
+
+\[\begin{equation}
+   f(x,t) = 0
+\end{equation}\]
+
+\[\begin{equation}
+   g(t) = \sqrt{\frac{d \sigma(t)}{dt}}
+\end{equation}\]
+
+<p>for some suitably chosen functions \(\sigma, \beta\).</p>]]></content><author><name></name></author><category term="review" /><category term="GenMod" /><summary type="html"><![CDATA[Marrying two unlikely algorithms for physical modeling.]]></summary></entry></feed>
