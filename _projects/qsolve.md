@@ -25,8 +25,42 @@ $$
 \end{align} 
 $$
 
-For the rest of this discussion, I will discuss common ways to obtain orthogonal duals for a given matrix $$M$$, discuss their computational complexity and illustrate its place in the landscape of linear solvers.
-
 ## Orthogonalization
 
 There are countless orthogonalization schemes that are available in literature. Some of the commonly used ones include:
+
+<div class="alert alert-block alert-success">
+   1. Gram Schmidt projection <br>
+   2. Householder reflection <br>
+</div>
+
+### Gram Schmidt projection
+
+Let $$A = \left[ a_1\:a_2\:a_3 \:...\: a_n \right]$$ be composed of $$n$$ different directions enumerated by $$\{a_i:i \in (1,n)\}$$. The Gram-Schmidt procedure recursively generates orthonogonal vectors $$v_i$$ using the method of projections.
+
+$$
+\begin{equation}
+    v_1 = a_1
+\end{equation}
+$$
+
+
+$$
+\begin{equation}
+    v_2 = a_2 - \frac{\langle a_2 | v_1\rangle}{\langle v_1 | v_1\rangle} 
+\end{equation}
+$$
+
+$$
+\begin{equation}
+    v_n = a_n - \sum_{j=1}^{n-1} \frac{\langle a_n | v_j\rangle}{\langle v_{j} | v_{j}\rangle} 
+\end{equation}
+$$
+
+It is not hard to demonstrate that the Grad-Schmidt procedure scales as $$\mathcal{O}(n^3)$$. Furthermore, parallelizing the method is not possible due to its formulation. 
+
+## Householder reflection
+
+
+
+Owing to these inherent difficulties, solving linear systems with orthogonalization methods is suboptimal in comparison with other Kyrlov based iterative methods. Nonetheless it serves as a nice method which could be geometrically interpreted.
