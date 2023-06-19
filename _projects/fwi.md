@@ -10,7 +10,7 @@ category: 2022
 
 ## Introduction
 
-Full waveform inversion (FWI) is an effective technique to determine the subsurface mechanical properties of geological masses and engineering structures. It differs from other tomographic techniques in making use of the entire wavefield -- the amplitude, phase and frequency, to estimate features with high resolution. It consists of minimizing the distance between a measured signal and an artifically simulated one. 
+Full waveform inversion (FWI) is an effective technique to determine the subsurface mechanical properties of geological masses and engineering structures. It differs from other tomographic techniques in making use of the entire wavefield -- the amplitude, phase and frequency, to estimate features with high resolution. Mathematically, it consists of minimizing the distance between a measured signal and an artifically simulated one. 
 
 Formally, let $$x \in \Omega$$ be the domain of interest and let $$m_{o}(x)$$ be an observable defined over $$\Omega$$. Let $$A : m(x) \times x \mapsto u(x)$$ be an operator, mapping the observable and the domain to the wavefield $$u$$. ($$A$$ is also known as the forward map.) If $$u_{o}(x)$$ is the wavefield corresponding to $$m_{o}(x)$$, then FWI is principally a minimization problem defined as:
 
