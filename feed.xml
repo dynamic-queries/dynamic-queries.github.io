@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-27T09:22:58+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-06-29T14:38:39+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 </subtitle><entry><title type="html">(WIP) Frobenius Perron Operator</title><link href="https://dynamic-queries.github.io/blog/2023/frobenius_perron/" rel="alternate" type="text/html" title="(WIP) Frobenius Perron Operator" /><published>2023-06-08T08:00:00+00:00</published><updated>2023-06-08T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/frobenius_perron</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/frobenius_perron/"><![CDATA[]]></content><author><name></name></author><category term="review" /><category term="OperatorML" /><summary type="html"><![CDATA[What you need when Diffusion Models make no sense.]]></summary></entry><entry><title type="html">(WIP) Lie Group Integrators</title><link href="https://dynamic-queries.github.io/blog/2023/lie_group/" rel="alternate" type="text/html" title="(WIP) Lie Group Integrators" /><published>2023-06-07T08:00:00+00:00</published><updated>2023-06-07T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/lie_group</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/lie_group/"><![CDATA[]]></content><author><name></name></author><category term="review" /><category term="DifferentialEquations" /><summary type="html"><![CDATA[Structure preserving integrators for Differential Equations.]]></summary></entry><entry><title type="html">(WIP) Exponential Integrators</title><link href="https://dynamic-queries.github.io/blog/2023/expo_int/" rel="alternate" type="text/html" title="(WIP) Exponential Integrators" /><published>2023-05-26T08:00:00+00:00</published><updated>2023-05-26T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/expo_int</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/expo_int/"><![CDATA[<h2 id="introduction">Introduction</h2>
 <p>Differential Equations are used as modeling tools in several scientific disciplines. Since the advent of affordable computing technologies, a prevalent theme in these fields is to numerically approximate the solutions to these differential equations using numerical integration.</p>
 
@@ -57,53 +57,62 @@ While this viewpoint is philosophically elegant, it is not really useful as quan
 <p>Luckily there are several approximations that have been proposed that aim at circumventing this problem. One such method is Density Functional Theory. In what follows, I present a self-consistent introduction to Density Functional Theory (DFT) from the perspective of numerical analysis and an efficient algorithmic implementation.</p>
 
 <h2 id="a-many-body-problem">A Many Body Problem</h2>
+<p>For the rest of the article, I will refer to a many body quantum system with \(n\) electrons and \(m\) nuclear centers. It is known that the state of this system can be completely described with the help of its wavefunction, \(|\Psi\rangle\). If, the quantum system has \(p\) spin states, then the wavefunction, \(|\Psi\rangle : \mathbb{R}^{p^{m+n}} \times \mathbb{R}^{+} \mapsto \mathbb{C}\). Its evolution, is defined axiomatically by Schrodinger’s equation:</p>
 
-<p>To start with, I setup a generic manybody problem whose formulation depends on the following two postulates.</p>
+\[\begin{equation}
+    \label{eq:MBP}
+    i\bar{h} \frac{\partial |\Psi\rangle}{\partial t} = \left( -\frac{\bar{h}^2}{2M} \nabla^2 + V \right) |\Psi\rangle
+\end{equation}\]
 
-<blockquote>
-  <p><strong><em>First Postulate of QM</em></strong> : All the properties of a system \(\mathcal{S}\), are sufficiently described by a complex valued wavefunction \(\Psi\).</p>
-</blockquote>
+<p>The potential operator \(V\) in (\ref{eq:MBP}) is usually dominated by the electrostatic interactions among the different charge centers in the system. If \(Z_1, Z_2\) are the atomic numbers of two nuclear centers, located at \(r_1, r_2\), then the electrostatic potential between the two is</p>
 
-<blockquote>
-  <p><strong><em>Born Oppenheimer Approximation</em></strong> : Due to the massive nature of nuclei with respect to electrons, their movement can be described classicaly with quantum mechanically evaluated electronic forces influencing their motion.</p>
-</blockquote>
+\[\begin{equation}
+    \label{eq:electrostatic}
+    V(r_1,r_2) = \frac{1}{4 \pi \epsilon} \frac{Z_1 Z_2 e^2}{\|r_1 - r_2\|} + V_{ext}
+\end{equation}\]
 
-<p>Consider a system \(\mathcal{S}\) with \(N\) nuclear centers and \(N_e\) electrons. If \(x_i \in \mathbb{R}^3\) denotes the position of an electron, then \(\Psi:\mathbb{R}^{3N_e} \mapsto \mathbb{C}\).</p>
+<p>It is common to expand out (\ref{eq:MBP}-\ref{eq:electrostatic}) in its long form as follows.</p>
 
-<p>Due to the BO approximation, one is not interested in calculating the time evolution of \(\Psi\), rather given an electronic configuration, \(r\), we are interested in evaluating the <strong>ground state energy function</strong> parameterized by the nuclear positions \(R\). This is done so by solving the stationary Schrodinger’s equation.</p>
+\[\begin{equation}
+    \label{eq:Ham}
+    \begin{aligned}
+        i\bar{h} \frac{\partial |\Psi\rangle}{\partial t} = \left( -\frac{\bar{h}^2}{2} \sum_{i=1}^{m} \frac{1}{M_i}\nabla_{r_i}^2 -\frac{\bar{h}^2}{2} \sum_{j=1}^{n} \frac{1}{Me_{i}}\nabla_{r_j}^2\\ 
+         + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{m} \frac{Z_i e^2}{\|r_i - r_j\|} + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{n} \frac{e^2}{\|r_i - r_j\|} + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{m} \sum_{j=1}^{m} \frac{Z_i Z_j e^2}{\|r_i - r_j\|} + V_{ext}\right) |\Psi\rangle
+    \end{aligned}
+\end{equation}\]
+
+<p>The long form operator is known as the many electronic Hamiltonian. By itself, equation (\ref{eq:Ham}) is a parabolic partial differential equation with no analytical solutions, except for very simplified cases.</p>
+
+<p>The alternative of simulating the system numerically is also not computationally tractable. Say, \(p=2, m=6, n=60\). This corresponds to \(\Psi\) with \(2^{66} \approx 7.37 \times 10^{19}\) input parameters. If one were to parameterize each of these input directions with only \(10\) indicator functions then the state vector \(\tilde{\Psi}\) that uniquely represents a quantum state has \(10 \times 2^{66}\) components. This poses a burden that would be too heavy to bear for systems of larger sizes.</p>
+
+<h2 id="born-oppenheimer-approximation">Born Oppenheimer approximation</h2>
+
+<p>Making the observation that nuclear centers are substantially more massive than the electrons, Born and Oppenheimer postulated that the electrons and nuclear centers evolve in two different timescales. Effectively, the contributions of the nuclei to the many electronic Hamiltonian can be dropped and the nuclei can in-turn be simulated using Newton’s laws govered by a potential surface \(E\) obtained from solving the stationary Schrodinger’s equation.</p>
 
 \[\begin{equation}
     \label{eq:SSE}
-    H\:\Psi(r,R) = E(R)\:\Psi(r,R)
+        H_e |\Psi\rangle := \left(-\frac{\bar{h}^2}{2} \sum_{j=1}^{n} \frac{1}{Me_{i}}\nabla_{r_j}^2\\ 
+         + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{m} \frac{Z_i e^2}{\|r_i - r_j\|} + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{n} \frac{e^2}{\|r_i - r_j\|} + V_{ext}\right) |\Psi\rangle = E |\Psi\rangle
 \end{equation}\]
 
-\[\begin{equation}
-    \label{eq:SO}
-    H = -\frac{1}{2}\sum_{i=1}^{N_e} \nabla_{r_i}^2 + \sum_{j&gt;i}^{N_e} \frac{1}{\|r_i - r_j\|} + \sum_{i,j=1}^{N,N_e} \frac{1}{\|R_i - r_j\|} + V_{ext}(r,R,\omega)
-\end{equation}\]
-
-<p>Subsequently, the nuclear centers can be updated using Newton’s laws.
-\(\begin{align}
-    \label{eq:Newton}
-    \frac{d^2}{dt^2} R(t) = -\nabla_{R} E(R) \\ 
-    R(0) = R_0 \\ 
-    \frac{d}{dt}R(0) \sim \mathcal{M}(T)
-\end{align}\)</p>
-
-<p>where \(\mathcal{M}\) is Maxwellian distribution depending on temperature \(T\).</p>
-
-<p>The eigenproblem in (\ref{eq:SSE})-(\ref{eq:SO}) suffers from the said curse of dimensionality for larger systems, ruling out the use of exact-diagonalization algorithms.</p>
+<p>While, the BO approximation certainly reduces the complexity of solving (\ref{eq:MBP}), the wavefunction is still sufficiently massive to discourage its  computation, even on the largest computational facilities on earth. This is the curse of dimensionality that I alluded to, in the introduction. In what follows, I will elaborate on how DFT resolves this problem.</p>
 
 <h2 id="density-functional-theory">Density Functional Theory</h2>
-
-<p>Alternatively, one can consider the variational formulation of (\ref{eq:SSE}) due to Fischer-Courant.</p>
+<p>\(|\Psi\rangle(z_1,z_2,....)\) has an exponentially growing input parameter space. So, all computations that involve \(|\Psi\rangle\) are prohibitively expensive. DFT addresses this problem, by restating (\ref{eq:SSE}) using an observable of \(|\Psi\rangle\) that takes in fewer parameters – the electron density of the system, \(\rho\), which is defined as:</p>
 
 \[\begin{equation}
-    \label{eq:variantional}
-    E_{min} = \arg \min_{\Psi \in \mathcal{A}_N, \langle\Psi|\Psi \rangle=1} \langle \Psi |H|\Psi \rangle
+    \label{eq:density}
+    \rho(r) = n \sum_{s=\{0,1\}} \int \: dz_2 dz_3 ... dz_n \: \Psi^{*}((r,s),z_2,...,z_n) \Psi((r,s),z_2,...,z_n)
 \end{equation}\]
 
-<p>where \(\mathcal{A}_N\) is the hypothesis space of <a href="http://psi.phys.wits.ac.za/teaching/Connell/phys284/2005/lecture-03/lecture_03/node16.html">anti-symmetric</a> functions.</p>]]></content><author><name></name></author><category term="review" /><category term="DFT" /><summary type="html"><![CDATA[A Primer on Electronic Structure Calculations.]]></summary></entry><entry><title type="html">(WIP) Generative modeling using Diffusion map particle system</title><link href="https://dynamic-queries.github.io/blog/2023/gen_dmap/" rel="alternate" type="text/html" title="(WIP) Generative modeling using Diffusion map particle system" /><published>2023-05-06T08:00:00+00:00</published><updated>2023-05-06T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/gen_dmap</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/gen_dmap/"><![CDATA[<h3 id="introduction">Introduction</h3>
+<p>It would seem, that computing the density, in-turn requires knowledge of the wavefunction in the first place, which we have established as difficult to assemble on a computer. So, is this whole notion moot? Yes and No. While it is not computationally tractable to compute \(\rho\) directly, one can reformulate (\ref{eq:SSE}) in a variational setting and optimize for \(\rho\) indirectly.</p>
+
+<p>Consider the Ritz minimization iteration in the context of (\ref{eq:SSE}).</p>
+
+<p>\(\begin{equation}
+    E_{min} = \arg \min_{|\Psi\rangle \in \Theta} \frac{\langle\Psi|H_e|\Psi\rangle}{\langle\Psi|\Psi\rangle}
+\end{equation}\)
+where \(\Theta\) is the hypothesis space of antisymmetric functions \(|\Psi\rangle\) with \(\langle\Psi|\Psi\rangle = 1\).</p>]]></content><author><name></name></author><category term="review" /><category term="DFT" /><summary type="html"><![CDATA[A Primer on Electronic Structure Calculations.]]></summary></entry><entry><title type="html">(WIP) Generative modeling using Diffusion map particle system</title><link href="https://dynamic-queries.github.io/blog/2023/gen_dmap/" rel="alternate" type="text/html" title="(WIP) Generative modeling using Diffusion map particle system" /><published>2023-05-06T08:00:00+00:00</published><updated>2023-05-06T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/gen_dmap</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/gen_dmap/"><![CDATA[<h3 id="introduction">Introduction</h3>
 
 <p>This review aims at providing a self-contained, pedantic overview of deep generative modelling using score based diffusion, culminating with discussions on <a href="https://arxiv.org/abs/2304.00200">the recent paper</a> from Youssef Marzouk.</p>
 
