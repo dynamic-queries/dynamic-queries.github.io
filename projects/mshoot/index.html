@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Projects | Rahul Manavalan</title>
+    <title>para-NN | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A collection of academic projects.">
+    <meta name="description" content="Learning parallel in time integrators with neural networks.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/projects/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/projects/mshoot/">
     
     <!-- Dark Mode -->
     
@@ -80,8 +80,8 @@
               <li class="nav-item ">
                 <a class="nav-link" href="/cv/">CV</a>
               </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="/projects/">Projects<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">Projects</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" href="/collabs/">Collaborations</a>
@@ -120,113 +120,94 @@
         <div class="post">
 
           <header class="post-header">
-            <h1 class="post-title">Projects</h1>
-            <p class="post-description">A collection of academic projects.</p>
+            <h1 class="post-title">para-NN</h1>
+            <p class="post-description">Learning parallel in time integrators with neural networks.</p>
           </header>
 
           <article>
-            <!-- pages/projects.md -->
-<div class="projects">
-  <!-- Display categorized projects -->
-  <h2 class="category">2023</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/mlp/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">MLP</h3>
-            <p class="card-text">Efficient training procedure for Machine learning potentials</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
-<div class="card-item col">
-<a href="/projects/mshoot/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">para-NN</h3>
-            <p class="card-text">Learning parallel in time integrators with neural networks.</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
+            <hr>
 
-    </div>
-  </div>
-  <h2 class="category">2022</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/mogp/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">MOGP</h3>
-            <p class="card-text">Multi-Output Gaussian Processes.</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
+<h2 id="parallel-time-integration">Parallel Time Integration</h2>
+<p>Consider a system of ordinary differential equations, usually arising from the discretization of a partial differential equation in Eucledian space.</p>
 
-    </div>
-  </div>
-  <h2 class="category">2021</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/hptn/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">HPTN</h3>
-            <p class="card-text">High Performance Tensor Networks - A DSL for tensor contractions.</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
+\[\begin{equation}
+    \label{eq:ODE}
+    \frac{d}{dt}y(t) = f(y(t),t)
+\end{equation}\]
 
-    </div>
-  </div>
-  <h2 class="category">2020</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/qsolve/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">QSolve</h3>
-            <p class="card-text">Quantum Algorithms for solving linear systems.</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
+\[\begin{equation}
+    \label{eq:IC}
+    y(0) = y_0 \in \mathbb{R}^d
+\end{equation}\]
 
-    </div>
-  </div>
-</div>
+<p>Due to the causal nature of the solution to (\ref{eq:ODE}-\ref{eq:IC}), time integration of this problem has been carried out largely sequentially. Parallel in time integration method undertake an alternative approach.</p>
+
+<p>Here the monolithic equation in (\ref{eq:ODE}-\ref{eq:IC}) is partioned into \(N\) different sub-problems in the time domain, that is \(\forall \: i \in [0,T-1]\),</p>
+
+\[\begin{equation}
+    \label{eq:Parallel}
+    \frac{d}{dt}y_i(t) = f(y_i(t),t)
+\end{equation}\]
+
+\[\begin{equation}
+    \label{eq:IC Parallel}
+    y_{i}(t_i) = Y_i \in \mathbb{R}^d
+\end{equation}\]
+
+\[\begin{equation}
+    \label{eq:IC Parallel Initial}
+    Y_0 = y_{i}(0)
+\end{equation}\]
+
+<p>subject to constraints governing the consistent of the \(y_i\) at the interfaces.</p>
+
+<p>\(\begin{align}
+    \label{eq:constraints}
+    Y_0 = y(0) \\ 
+    Y_{j} = y_{j-1}(t_{j},Y_{j-1})
+\end{align}\)
+where \(j \in [1,T-1]\).</p>
+
+<p>If \(Y = [Y_0, Y_1, ..., Y_{T-1}]\), then the constraints form a non-linear system of equations.</p>
+
+\[\begin{equation}
+    \label{eq:non-linear}
+    F(Y) = 0
+\end{equation}\]
+
+<p>whose solution is promptly obtained from Newton’s iteration.</p>
+
+\[\begin{equation}
+    \label{eq:Newton}
+    Y^{k+1} = Y^{k} - \nabla_Y F(Y^{k})^{-1} F(Y^k)
+\end{equation}\]
+
+<p>The Jacobian for (\ref{eq:non-linear}) has a sparse, diagonal structure
+\(\begin{equation}
+    \label{eq:jac}
+    J := \nabla_Y F = \begin{bmatrix}
+    I&amp; &amp; &amp; &amp; &amp;\\
+    \frac{\partial y_1}{\partial Y_0}&amp;I&amp;&amp;&amp;&amp; \\
+    &amp;\frac{\partial y_2}{\partial Y_1}&amp;I&amp;&amp;&amp; \\ 
+    &amp;&amp;\ddots &amp;\ddots&amp;\\
+    &amp;&amp;&amp;\frac{\partial y_{T-1}}{\partial Y_{T-2}}&amp;I \\
+    \end{bmatrix}
+\end{equation}\)
+yielding a closed form solution to (\ref{eq:Newton}).</p>
+
+<p>\(\begin{equation}
+    \label{eq:closed-form-1}
+    Y_0^{k+1} = y(0)
+\end{equation}\)
+\(\begin{equation}
+    \label{eq:closed-form-2}
+    Y_n^{k+1} = y_{n-1}(t_n, Y_{n-1}^k) + \frac{\partial y_{n-1}}{\partial Y_{n-1}}(t_n, Y_{n-1}^k) (Y_{n-1}^{k+1}-Y_{n-1}^{k})
+\end{equation}\)</p>
+
+<p>This equation is still implicit.</p>
+
+<h2 id="contributions">Contributions</h2>
+<p>Usually, \(y_j\) in (\ref{eq:closed-form-2}) are evaluated from one-step integrators such as <strong>RK4, Tsit5</strong> and the like. Here, we parametrize \(y_j\) using a neural network with an explicit time integrator structure, namely \(y_{NN}\). Subsequently, the derivative \(\frac{\partial y_{j}}{\partial Y_{j}}\) is computed with automatic differentiation, alleviating the need for explicity discretizing \(\frac{\partial y_{j}}{\partial Y_{j}}\). It is expected that, the learned time-integrator, is customized for parallel execution and for the predefined problem, whose solutions were used for training.</p>
 
           </article>
 

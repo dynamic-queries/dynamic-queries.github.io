@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>MLP | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="Inferring Potential Energy Surfaces from Trajectories of MD simulations.">
+    <meta name="description" content="Efficient training procedure for Machine learning potentials">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -121,152 +121,132 @@
 
           <header class="post-header">
             <h1 class="post-title">MLP</h1>
-            <p class="post-description">Inferring Potential Energy Surfaces from Trajectories of MD simulations.</p>
+            <p class="post-description">Efficient training procedure for Machine learning potentials</p>
           </header>
 
           <article>
-            <h2 id="introduction">Introduction</h2>
-<p>Any physical system is characterized by a certain set of properties. It is these properties that define what that physical object is. Metals, for instance, are electrically and thermally conductive. Ceramics have extreme resitance to abrasion, electrical and thermal stresses. Biological tissues exhibit among other things properties such as regeneration. There are seemingly endless objects and endless properties that they posses.</p>
+            <h3 id="introduction">Introduction</h3>
+<p>Machine learning potentials are surrogates for expensive electronic structure calculations. The use of these surrogates is justified on account of the iterative nature of MD simulations for several practical applications from drug design to material discovery. Training such machine learning models over molecular properties calculated for billions of atomic configurations, has been shown to provide sufficient generalization accuracy. In this work, I introduce a new way of training second and third generation machine learning potentials with a recently proposed sampling algorithm.</p>
 
-<p>It is all the more impressive that a finite set of elements and compositions thereof, constitue this rich tapestry of physical systems. Naturally, this question intrigued the ancients and continues to intrigue the modern day researcher. What we do know is, interactions among these fundamental building blocks are crucial to explaining these emergent phenomena.</p>
+<h3 id="workflow">Workflow</h3>
 
-<p>In that pursuit there is a whole branch of mathematics – potential theory, devoted to finding a unifying framework for analyzing these potentials. There are countless physicists (theoretical and experimental), finding the <strong>“right interaction potential”</strong> for a specific system. And finally, there are computational scientists working towards effective computational procedures for calculating these potentials.</p>
+<p>A typical workflow for training machine learning potentials is illustrated below.</p>
 
-<p>Until recently, a typical workflow for estimating the interaction potential for a system \(\mathcal{S}\) would look like :</p>
-<ol>
-  <li>Experimental data acquisition and validation by an experimentalist.</li>
-  <li>Data analysis and theorization by physicists.</li>
-  <li>In-silico validation of the theory by a computational scientist.</li>
-</ol>
+<p><img style="width:90%" src="/assets/thesis/workflow2.svg" alt="spline-sur"></p>
 
-<p>In the age of machine learning, steps 2,3 are aggregated and serves as an <strong>“automation”</strong> of scientific discovery. While the results from ML-Potentials are certainly impressive, there are also unexplainable. “Unexaplainability” of machine learning models often has a negative connotation, and in some sense it is justified. But it also indicates that there exist more accurate models that could potentially be discovered using current mathematical frameworks. This work is a step in that direction while leveraging classical statistical models.</p>
+<p>As an example, a molecule of sucrose is considered. Sucrose – \(C_{12} H_{22} O_{11}\) is a hydrocarbon ubiquitous in fruits, sugars and other sweetening agents. The goal of this workflow is to efficiently predict the molecular properties of sucrose for different positions of the carbon, hydrogen and oxygen atoms respectively.</p>
 
-<h2 id="problem-setup">Problem setup</h2>
-<p>Consider a system \(\mathcal{S}\) with \(n\) identical interacting particles that live in a \(d\) dimensional phase space with positions \(q \in \mathbb{R}^d\) and momenta \(p \in \mathbb{R}^d\). The evolution of \(z:=[q \quad p]^T\) follows Newton’s laws.</p>
+<p>Typically, several positions of atoms \(\textbf{R}\) and their atomic numbers \(\textbf{A}\) are concatenated into a single vector called an atomic descriptor – \([\textbf{R},\textbf{A}]\). It has been observed that encoding additional inductive bias, based on the physics of the system can improve the accuracy of the training procedure. Promptly, the atomic descriptors are mapped into a higher level descriptor coordinate \(\textbf{D}\). One should bear in mind, that the computational complexity of this descriptor map should be as low as possible. Finally, the descriptor coordinates \(\textbf{D}\) are mapped onto the space of molecular properties using a neural network.</p>
 
-\[\begin{align}
-    \label{eq:newtonslaws}
-    \frac{d}{dt}p(t) = -\nabla_{q} U(q(t)) \\ 
-    \frac{d}{dt}q(t) = p(t)
-\end{align}\]
+<p>Training this model, entails altering the parameters of the neural network iteratively until the predictions from the network and the reference data from electronic structure calculations match to an acceptable degree of accuracy.</p>
 
-<p>It is often the case in experiments that, one can accurately record observables such as \(q\) (and sometimes \(p\)). Given \(q \textrm{ or } p\), we ask ourselves how accurately one can infer \(U\)? This is equivalent to asking, How accurately can one solve the following optimization problem,</p>
+<h3 id="classification-of-machine-learning-potentials-and-molecular-descriptors">Classification of machine learning potentials and molecular descriptors.</h3>
 
-\[\begin{align}
-    \label{eq:opt_prob}
-    \arg \min_{\phi \in \mathcal{H}} \left\|\frac{d}{dt}p(t) + \nabla_{q} \phi(q(t))\right\|_{\mu} 
-\end{align}\]
+<p>In 2021, <a href="https://arxiv.org/abs/2107.03727" rel="external nofollow noopener" target="_blank">Behler</a> classified machine learning potentials, based on the choice the neural network architecture.</p>
 
-<p>in a hypothesis space \(\mathcal{H}\) of potential functions \(\phi\) with respect to some measure \(\mu\).</p>
+<p><img style="width:80%" src="/assets/thesis/mlp.png" alt="spline-sur"></p>
 
-<p>Assuming that the chosen measure \(\mu\) leads to a smooth loss landspace and our optimizer converges to the global minimum (say SGD), the accuracy of the inferred potential \(\phi\), depends on the “goodness” of \(\mathcal{H}\). (We will later clarify what goodness could mean.) Therefore the goal of this work is to find good hypothesis spaces for some commonly recurring interaction problems in computational chemistry.</p>
+<p>Furthermore, research into descriptors for machine learning potentials is also quite involved as illustrated in this phylogenic tree of molecular descriptors. (Adopted from <a href="https://pubs.acs.org/doi/10.1021/acs.chemrev.1c00021" rel="external nofollow noopener" target="_blank">this paper</a>)</p>
 
-<h4 id="physical-systems-of-interest">Physical Systems of interest</h4>
+<p><img style="width:90%" src="/assets/thesis/descriptors.gif" alt="spline-sur"></p>
 
-<p>We investigate the following systems; ordered with respect to increasing computational complexity.</p>
+<h3 id="contrbutions">Contrbutions</h3>
+<p>In the light of this ubuquity, I choose two models, <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/qua.24890" rel="external nofollow noopener" target="_blank">PairHDNNP</a> from the third generation and <a href="https://arxiv.org/abs/1805.09003" rel="external nofollow noopener" target="_blank">DeepPMD</a> from the fourth generation of neural network potentials. It should be stated, that these models do not represent the state of the art in “Surrogates for force computational in quantum chemistry”. Nonetheless, they are sufficiently recent to demonstrate the efficacy of our training algorithm. These models are trained on the <a href="https://www.science.org/doi/10.1126/sciadv.1603015" rel="external nofollow noopener" target="_blank">MD17 dataset</a>.</p>
 
-<ol>
-  <li>Gas in an infinite enclosure (homogenous / heterogenous)</li>
-  <li>Gas in a finite enclosure with fixed walls (homogenous / heterogenous)</li>
-  <li>Gas in a finite enclosure with one moving wall (homogenous / heterogenous)</li>
-  <li>Nucleation of water droplet</li>
-  <li>Solvation of Lysozyme in Water</li>
-  <li>Homogeneous nucleation of water and carbon dioxide in carrier gas</li>
-</ol>
+<h3 id="md17-dataset">MD17 dataset</h3>
+<p>The MD17 dataset was first introduced along with the GDML model for inferring atomic forces. It consists of eight organic molecules with upto 21 atoms and 4 different chemical species, including</p>
 
-<p>A collection of descriptions to these systems and their computational models can be found <a href="https://github.com/dynamic-queries/MolecularDynamicsZoo" rel="external nofollow noopener" target="_blank">here</a>.</p>
+<ul>
+  <li>Benzene</li>
+  <li>Uracil</li>
+  <li>Naphthalene</li>
+  <li>Aspirin</li>
+  <li>Salicylic acid</li>
+  <li>Ethanol</li>
+  <li>Toluene</li>
+</ul>
 
-<h2 id="inference-models">Inference models</h2>
+<p>For each of these molecules, several thousand atomic configurations \(R = \{R_i : i \in [1,m]\}\) along with the corresponding ground state energies \(E\) and the atomic forces \(F\), computed from density functional computations are furnished. This constitutes the core of the dataset.</p>
 
-<h4 id="first-attempt">First attempt</h4>
+<p><a href="">..Insert figures of these molecules..</a></p>
 
-<p>Consider the case where, \(n_{ics}=1\) , \(n_{ts}=1\) , \(n_p=100\) , \(n_d=2\)</p>
+<h3 id="inference-models">Inference models</h3>
 
-<p>Recall, 
-\(\begin{equation}
-    f_i:=\sum_{j=1}^{n_p}(q_i-q_j)\phi(\|q_i-q_j\|)    
-\end{equation}\)
-where  \(q_i,q_j,f_i\in \mathbb{R}^2\), \(\phi:\mathbb{R} \mapsto \mathbb{R}\)</p>
+<p>Both the PairHDNNP model and DeePMD model have the following neural network architecture.</p>
 
-<p>Equivalently \(f_i=R_i \phi(r_i)\) 
-where \(R_i \in \mathbb{R}^{2 \times n_p}\) and \(r_i \in \mathbb{R}^{n_p}\) .</p>
+<p><img style="width:90%" src="/assets/thesis/DeepMD.svg" alt="spline-sur"></p>
 
-<p>Consider \(n_p=3\) ,</p>
+<p>The atomic coordinates \(R_i\) are mapped to a local environment feature vector \(D_i\). This transformation is different for the two models. Individual deep fully connected neural networks \(N_i\) are used to approximate the local atomic energy \(E_i\). The total energy, \(E\), which is an extensive property is the sum of the individual atomic energies.</p>
+
+<h4 id="deepmd-models">DeePMD models</h4>
+
+<h5 id="version-1">Version 1</h5>
+<p>There are several iterations of the DeePMD model. In the first ever model
+, the local atomic environments, \(D_i\) are defined by the following map.</p>
 
 \[\begin{equation}
-\begin{bmatrix} f_1 \\ f_2 \\ f_3 \end{bmatrix} = \begin{bmatrix} R_1 &amp;&amp; &amp;&amp; \\ &amp;&amp; R_2 &amp;&amp; \\ &amp;&amp; &amp;&amp; R_3\end{bmatrix} \begin{pmatrix}  \begin{bmatrix} phi(r_1) \\ phi(r_2) \\ phi(r_3) \end{bmatrix} \otimes \begin{bmatrix} 1 \\ 1\end{bmatrix}\end{pmatrix}
+    \label{eq:DeepMD}
+    D_i(...,R_i,...) = \begin{bmatrix}
+        \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+        \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+        \frac{1}{r_{ij}} &amp;
+        \frac{R_{ij}^x}{r_{ij}^2} &amp;
+         \frac{R_{ij}^y}{r_{ij}^2} &amp; 
+          \frac{R_{ij}^z}{r_{ij}^2} \\
+          \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+          \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+    \end{bmatrix}^{T} \in \mathbb{R}^{4 \times n}
 \end{equation}\]
 
-<p>where \(R_1 \in \mathbb{R}^{2\times 2},R_2 \in \mathbb{R}^{1\times 1},R_3 \in \mathbb{R}^{0\times 0}\)</p>
+<p>Here, information about the system, is sufficiently captured using all relative distances and displacements between the atoms.</p>
 
-<p>and</p>
+<h5 id="version-2">Version 2</h5>
+<p>Subsequently, a more physically inspired descriptor with a cutoff parameter was proposed.</p>
 
 \[\begin{equation}
-\begin{bmatrix} phi(r_1) \\ phi(r_2) \\ phi(r_3) \end{bmatrix}=\begin{bmatrix}b_{11}&amp;b_{12}&amp;b_{13} \\ b_{21}&amp;b_{22}&amp;b_{23} \\ b_{31}&amp;b_{32}&amp;b_{33}\end{bmatrix} \begin{bmatrix} k_1 \\ k_2 \\ k_3 \end{bmatrix}
+    \label{eq:DeepMD2}
+    D_i(...,R_i,...) = \begin{bmatrix}
+        \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+        \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+        \mathcal{s}(r_{ij}) &amp;
+        \frac{\mathcal{s}(r_{ij}) R_{ij}^x}{r_{ij}} &amp;
+         \frac{\mathcal{s}(r_{ij}) R_{ij}^y}{r_{ij}} &amp; 
+          \frac{\mathcal{s}(r_{ij}) R_{ij}^z}{r_{ij}} \\
+          \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+          \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+    \end{bmatrix}^{T} \in \mathbb{R}^{4 \times n}
 \end{equation}\]
-
-<p>Then 
-\(\begin{equation}
-\begin{bmatrix} f_1 \\ f_2 \\ f_3 \end{bmatrix} =\begin{bmatrix} R_1 &amp; &amp; \\ &amp; R_2 &amp; \\ &amp; &amp; R_3\end{bmatrix} \left(\begin{bmatrix} b_{11}&amp;b_{12}&amp;b_{13} \\ b_{21}&amp;b_{22}&amp;b_{23} \\ b_{31}&amp;b_{32}&amp;b_{33} \end{bmatrix}\otimes \begin{bmatrix} 1 &amp;  \\ &amp; 1 \end{bmatrix}\right)\left(\begin{bmatrix} k_1 \\ k_2 \\ k_3 \end{bmatrix} \otimes \begin{bmatrix} 1 \\ 1\end{bmatrix} \right)
-\end{equation}\)</p>
-
-<p>This  inference procedure does not scale well.</p>
-
-<h4 id="second-attempt">Second attempt</h4>
-<p>A simple inference model for the potential assumes the following structure.</p>
 
 \[\begin{equation}
-    \label{eq:inference_model}
-    -\frac{d}{dt}p_i(t) = \nabla_{q_i} \phi(q_i) := \frac{1}{n}\sum_{j=1}^{n} \left(q_i(t) - q_j(t)\right) \; \psi\left(\|q_i(t) - q_j(t)\|\right)
+    \label{eq:source}
+    s(r) = \begin{cases}
+        \frac{1}{r},&amp; \text{for } r &lt; r_{cs} \\ 
+        \frac{1}{r}\left(\frac{1}{2} cos\left[ \pi \frac{r-r_{cs}}{r_c - r_{cs}}\right] + \frac{1}{2}\right),&amp; \text{for } r_{cs} \leq r &lt; r_c \\ 
+        0, &amp; \text{for } r \geq r_c
+    \end{cases}
 \end{equation}\]
 
-<p>This is true for analytical potentials that have a pairwise dependence – including the Lennard Jones potential, the Morse Potential, the Stirling Weber potential and variations thereof. Assuming reference data (positions, velocity and forces) can be generated for these \(n\) particles over \(m\) timesteps and \(l\) different initial conditions, the following minimization problem is valid.</p>
+<p>It should be noted that, both versions of the DeepMD descriptors are invariant with respect to translation and rotation. However, when two identical atoms in a molecule are permuted, the descriptor functions do vary.</p>
+
+<h4 id="hdnnp-models">HDNNP models</h4>
+<p>This drawback is overcome in the HDNNP descriptors. Here permutation invariance is built into the descriptor function by summing up over all possible configurations. This comes in two flavours – a two body descriptor and a three body descriptor. Higher body descriptors are possible, however this would render them computationally intractable.</p>
+
+<h5 id="two-body-descriptors">Two body descriptors</h5>
+<p>Contrary to the previous descriptor, the local environment in this case is specified by a scalar.</p>
 
 \[\begin{equation}
-    \label{eq:minimization_problem}
-    \arg \min_{\psi \in \mathcal{H}} \left[ \frac{1}{l}\sum_{k=1}^{l} \frac{1}{m}\sum_{j=1}^{m} \frac{1}{n}\sum_{i=1}^{n} \left\|\frac{d}{dt}p_i(t) + \frac{1}{n}\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right)\right\|_2\right]
+    \label{eq:behler-2}
+    D_i(...,R_i,...) = \sum_j e^{-\left(\frac{R_{ij} - R_c}{\sigma}\right)^2} s(R_{ij})
 \end{equation}\]
 
-<hr>
+<h5 id="three-body-descriptors">Three body descriptors</h5>
 
-<p>Introducing \(\frac{d}{dt}p_i(t):=f_i\) and \(\sum_{p=1}^{n} \left(q_i(t) - q_p(t)\right) \; \psi\left(\|q_i(t) - q_p(t)\|\right):=R_i \psi(r_i)\).</p>
+<h4 id="model-order-reduction-methods">Model order Reduction methods</h4>
+<p>Borrowing ideas from reduced basis modeling, one can seek a low rank approximation for the potential energy. Such functions in the low dimensional space can be good descriptors, as it was recently demonstrated in the case of certain metallic elements.</p>
 
-\[\begin{align}
-    \label{eq:lstsq}
-    \|f_i + R_i \psi(r_i) \|_2 = \left(f_i + R_i \psi(r_i)\right)^{T} \left(f_i + R_i \psi(r_i)\right) =  \left(f_i^T + \psi(r_i)^T R_i^T\right)\left(f_i + R_i \psi(r_i)\right) \\ 
-    = f_i^T f_i + f_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T f_i + \psi(r_i)^T R_i^T R_i \psi(r_i) 
-\end{align}\]
+<h5 id="pod-descriptors">POD descriptors</h5>
 
-<p>Then</p>
-
-\[\begin{align}
-    \label{eq:minimizer}
-    \frac{d}{d\psi} \|f_i + R_i \psi(r_i) \|_2 = f_i^T R_i + R_i^T f_i + R_i^T R_i \psi(r_i) + \psi(r_i)^T R_i^T R_i 
-\end{align}\]
-
-<hr>
-
-<p>In the complete context of (\ref{eq:minimization_problem}),</p>
-
-\[\begin{equation}
-\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n} R_{kji}^T R_{kji} \psi(r_{kji}) + R_{kji}^T f_{kji} \; != 0 
-\end{equation}\]
-
-<p>If \(\psi(r) := \eta^T(r) k\), then
-\(\begin{equation}
-\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n}R_{kji}^T R_{kji} \eta(r_{kji})^T k =  -\frac{1}{l}\frac{1}{m}\frac{1}{n} \sum_{k=1}^{l} \sum_{j=1}^{m} \sum_{i=1}^{n} R_{kji}^T f_{kji}
-\end{equation}\)</p>
-
-<p>Equivalently,
-\(\begin{equation}
-\label{eq:additive}
-\frac{1}{l} \frac{1}{m} \frac{1}{n}\sum_{k=1}^{l}\sum_{j=1}^{m}\sum_{i=1}^{n}A_{kji} k =  -\frac{1}{l}\frac{1}{m}\frac{1}{n} \sum_{k=1}^{l} \sum_{j=1}^{m} \sum_{i=1}^{n} B_{kji}
-\end{equation}\)
-\(\begin{equation}
-\mathcal{A}k=\mathcal{B}
-\end{equation}\)</p>
-
-<p>The additive nature of (\ref{eq:additive}) ensures a memory efficient inference procedure for \(k\) and inturn \(\psi\).</p>
+<h5 id="dmap-descriptors">DMap descriptors</h5>
 
           </article>
 
