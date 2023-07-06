@@ -9,5 +9,6 @@ _site
 Gemfile.lock
 vendor
 _projects/exp_gen.md
-_projects/mshoot.md
+_projects/laplace_op.md
+_projects/green_learning.md
 _projects/fwi.md
