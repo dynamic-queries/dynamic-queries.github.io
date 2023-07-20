@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Rahul Manavalan</title>
+    <title>SINDY - Sparse Identification of non-linear dynamical systems. | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-">
+    <meta name="description" content="Symbolic regression.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -34,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/blog/2023/sindy/">
     
     <!-- Dark Mode -->
     
@@ -55,7 +54,7 @@
       <!-- Nav Bar -->
       <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
         <div class="container">
-          
+          <a class="navbar-brand title font-weight-lighter" href="/">Rahul Manavalan</a>
           <!-- Navbar Toggle -->
           <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="sr-only">Toggle navigation</span>
@@ -68,13 +67,13 @@
             <ul class="navbar-nav ml-auto flex-nowrap">
 
               <!-- About -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/">About<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/">About</a>
               </li>
               
               <!-- Blog -->
-              <li class="nav-item ">
-                <a class="nav-link" href="/blog/">Blog</a>
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">Blog<span class="sr-only">(current)</span></a>
               </li>
 
               <!-- Other pages -->
@@ -117,90 +116,145 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- about.html -->
-      <div class="post">
-        <header class="post-header">
-          <h1 class="post-title">
-           Rahul Manavalan
-          </h1>
-          <p class="desc"><a href="#">Affiliations</a>. Chair of Scientific Computing in Computer Science, TUM.</p>
-        </header>
+      <!-- _layouts/post.html -->
 
-        <article>
-          <div class="profile float-right">
+<div class="post">
 
-              <figure>
-
-  <picture>
-    
-
-    <!-- Fallback to the original file -->
-    <img src="/assets/img/prof.jpg" class="img-fluid z-depth-1 rounded-circle" width="auto" height="auto" alt="prof.jpg" onerror="this.onerror=null; $('.responsive-img-srcset').remove();">
-
-  </picture>
-
-</figure>
-
-            <div class="address">
-              <p>Technical University of Munich.</p> <p>Boltzmannstrasse 3.</p> <p>Garching, 85774.</p>
-
-            </div>
-          </div>
-
-          <div class="clearfix">
-            <p>I am a masters student and a student-researcher at the Technical University of Munich.
-My research falls at the intersection of scientific computing and machine learning.</p>
-
-<p>I have an eclectic mix of experiences in systems simulation, product design, computational fluid dynamics, quantum computing, waveform inversion and quantum chemistry. <a href="https://dynamic-queries.github.io/projects/">See Projects.</a></p>
-
-<p>I am an active proponent of 
-<a href="https://nationalmedals.org/laureate/john-wilder-tukey/" rel="external nofollow noopener" target="_blank">John Tukey</a>’s – “getting to play in everyone’s backyard”. Promptly, I am interested in all things <a href="https://fdresearchblog.files.wordpress.com/2019/02/informal-introduction-to-manifold-learning.pdf" rel="external nofollow noopener" target="_blank">manifold learning</a> and its applications to Many Body Physics, Non-linear Model Order Reduction and other surrogates for Partial Differential Equations.</p>
-
-<p>I am also a founding member of the <a href="https://siam-munich-chapter.github.io/SIAM_Munich.io/" rel="external nofollow noopener" target="_blank">SIAM Student Chapter</a> at the Technical University of Munich.</p>
-
-          </div>
-
-          <!-- News -->
-          <h2><a href="/news/" style="color: inherit;">news</a></h2>
-          <div class="news">
-            <div class="table-responsive">
-              <table class="table table-sm table-borderless">
-              
-                <tr>
-                  <th scope="row">Apr 24, 2023</th>
-                  <td>
-                    The Inagural meeting of the SIAM Student Chapter at the Technical University of Munich will take place on the 6th of June 2023 at 10:00 AM, in seminar room 02.07.023 of Mathematics-Informatics building in Garching. <a href="https://portal.mytum.de/campus/roomfinder/roomfinder_viewmap?mapid=121&amp;roomid=02.07.023@5607" rel="external nofollow noopener" target="_blank">See Roomfinder link</a>.
-
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-
-
-          <!-- Latest posts -->
-          <h2><a href="/blog/" style="color: inherit;">latest posts</a></h2>
-          <div class="news">
-            <div class="table-responsive">
-              <table class="table table-sm table-borderless">
-              
-                <tr>
-                  <th scope="row">Jul 20, 2023</th>
-                  <td>
-                    <a class="news-title" href="/blog/2023/sindy/">SINDY - Sparse Identification of non-linear dynamical systems.</a>
-                  </td>
-                </tr>
-              </table>
-            </div>
-          </div>
-
-
-          <!-- Selected papers -->
+  <header class="post-header">
+    <h1 class="post-title">SINDY - Sparse Identification of non-linear dynamical systems.</h1>
+    <p class="post-meta">July 20, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/systemsidentification">
+          <i class="fas fa-hashtag fa-sm"></i> SystemsIdentification</a>  
+          
+        ·  
+        <a href="/blog/category/projects">
+          <i class="fas fa-tag fa-sm"></i> projects</a>  
           
 
-          <!-- Social -->
-        </article>
+    </p>
+  </header>
 
+  <article class="post-content">
+    <p>This work is a recreation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113" rel="external nofollow noopener" target="_blank">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
+
+<p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Data driven methods are the modern day equivalent to Poincare’s work in the 19th century. A characteristic feature of these methods is determining the equations of motion underlying a given dynamical system, exclusively from time dependent observables, measured from that system.</p>
+
+<hr>
+<p>Consider this generic form of a dynamical system.</p>
+
+\[\begin{align}
+    \frac{dx(t)}{dt} = f(x(t)) \\ 
+    x(0) = x_0 \in \mathbb{R}^d
+\end{align}\]
+
+<p>Given \(X := [x(t_1),x(t_2),...,x(t_N)]\), we would like to infer \(f\) either symbolically or numerically.</p>
+
+<hr>
+
+<h3 id="sindy">SINDY</h3>
+
+<p>SINDY is a symbolic regression algorithm that identifies \(f\), provided one has access to the most apposite bases set, say \(\mathcal{B}\), that spans the function space \(\mathcal{F} \ni f\). It’s usually the case that for most systems, knowledge of \(\mathcal{B}\) is sparse at best; raising serious questions about the practicality of this method for data arising from real world applications. Nonetheless it is a nice method where one has expert knowledge about the system. The algorithm has four main steps.</p>
+
+<hr>
+
+<p><strong><em>Algorithm</em></strong></p>
+
+<ol>
+  <li>
+    <p>Evaluate \(\dot{X} := [\frac{dx(t_1)}{dt},\frac{dx(t_2)}{dt},...,\frac{dx(t_N)}{dt}] \in \mathbb{R}^{d \times N}\) using a sufficiently robust finite difference scheme.</p>
+  </li>
+  <li>
+    <p>Choose a bases set \(\mathcal{B} := \{b_1(x), b_2(x), ..., b_k(x)\}\) of functions.</p>
+  </li>
+  <li>
+    <p>Evalute \(\Theta(X) := \begin{bmatrix} b_1(x(t_1)) &amp;&amp; ... &amp;&amp; b_1(x(t_N)) \\ \vdots &amp;&amp;  &amp;&amp; \vdots \\  b_k(x(t_1)) &amp;&amp; ... &amp;&amp; b_k(x(t_1)) \\ \end{bmatrix} \in \mathbb{R}^{k \times d \times N}\)</p>
+  </li>
+  <li>
+    <p>If \(\dot{X} = K \: \Theta(X)\) where \(K \in \mathbb{R}^{k}\). Solve for \(K\) using linear least squares and a sparsity inducing regularizer.</p>
+  </li>
+</ol>
+
+<hr>
+
+<h3 id="examples">Examples</h3>
+
+<p>Here the algorithm is applied to commonly recurring examples in literature – Lorenz 69 attractor and a Lotka-Volterra model.</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<h4 id="lorenz-69-attractor">Lorenz 69 attractor</h4>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/sindy/Traj_Lorenz.png" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/sindy/Vel_Lorenz.png" alt="spline-sur">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column">
+    <img style="width:80%" src="/assets/sindy/Lorenz_Coeffs.png" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/sindy/Remade_Lorenz.png" alt="spline-sur">
+  </div>
+</div>
+
+<hr>
+
+<h4 id="lotka-volterra-model">Lotka Volterra model</h4>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/sindy/Traj_Lotka.png" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/sindy/Vel_Lotka.png" alt="spline-sur">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column">
+    <img style="width:80%" src="/assets/sindy/LV_Coeffs.png" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/sindy/Remade_Lotka.png" alt="spline-sur">
+  </div>
+</div>
+
+<hr>
+
+<h3 id="code">Code</h3>
+
+<p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
+
+<script src="https://gist.github.com/dynamic-queries/3edf052b43ec90467dc48f91fe3b552b.js"></script>
+
+
+  </article>
 </div>
 
     </div>
