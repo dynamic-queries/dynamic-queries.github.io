@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>(WIP) Exponential Integrators | Rahul Manavalan</title>
+    <title>(WIP) Wave equations | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="ODE Integrators for Stiff Differential Equations.">
+    <meta name="description" content="Analytical solutions and other fundamentals.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/blog/2023/expo_int/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/Temp_posts/2023-04-07-wave_eq/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +72,8 @@
               </li>
               
               <!-- Blog -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/blog/">Blog<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/blog/">Blog</a>
               </li>
 
               <!-- Other pages -->
@@ -121,13 +121,13 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">(WIP) Exponential Integrators</h1>
-    <p class="post-meta">May 26, 2023</p>
+    <h1 class="post-title">(WIP) Wave equations</h1>
+    <p class="post-meta">July 4, 2023</p>
     <p class="post-tags">
       <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
         ·  
-        <a href="/blog/tag/differentialequations">
-          <i class="fas fa-hashtag fa-sm"></i> DifferentialEquations</a>  
+        <a href="/blog/tag/fwi">
+          <i class="fas fa-hashtag fa-sm"></i> FWI</a>  
           
         ·  
         <a href="/blog/category/review">
@@ -138,55 +138,245 @@
   </header>
 
   <article class="post-content">
-    <h2 id="introduction">Introduction</h2>
-<p>Differential Equations are used as modeling tools in several scientific disciplines. Since the advent of affordable computing technologies, a prevalent theme in these fields is to numerically approximate the solutions to these differential equations using numerical integration.</p>
+    <h3 id="introduction">Introduction</h3>
 
-<p>Consider a first order differential equation, formulated as an initial value problem.</p>
+<p>Waves are ubiquitous in science and engineering. This article on waves tries to answer the following questions.</p>
+
+<div class="alert alert-block alert-info">
+    1. How are waves modeled? <br>
+    2. How are these models evaluated? <br>
+    3. Do there exist eigenmodes for these models? <br>
+    4. Is it possible to obtain a fundamental solution to these models?
+</div>
+
+<h3 id="modeling-waves">Modeling waves</h3>
+
+<p>Waves are disturbances of matter in a certain medium \(\Omega\). There are three quantities of interest when modeling waves.</p>
+<ul>
+  <li>Density \(\rho\) of matter in the medium.</li>
+  <li>Pressure \(P\) inside the medium.</li>
+  <li>Displacement \(u\) of matter in the medium.</li>
+</ul>
+
+<p>Defining a model, entails writing down consistent sets of equations relating \(\rho, P, \delta x\). The governing equations are usually based on a set of empirical observations. In this case, there are three:</p>
+
+<ol>
+  <li>When matter in \(\Omega\) moves, the density changes.</li>
+  <li>Change in \(\rho\) corresponds to a change in \(P\).</li>
+  <li>Inequalities in \(P\) generates motion of matter.</li>
+</ol>
+
+<p>Initially, let these quantities be defines by the following functions.</p>
+
+\[u(x,t=0) = f(x)\]
+
+\[\rho(x,t=0) = g(x)\]
+
+\[P(x,t=0) = h(x)\]
+
+<p>The equations relating these quantities are formally written as</p>
+
+\[F(\rho, P) = 0\]
+
+\[G(P, u) = 0\]
+
+\[H(\rho, u) = 0\]
+
+<p>Definitions for \(F,G,H\) are based on a number of considerations. We will examine each of these properly.</p>
+
+<h4 id="constitutive-relation-f">Constitutive relation \(F\)</h4>
+
+<ul>
+  <li>
+    <p>\(F\) solely depends on the properties of the medium.</p>
+  </li>
+  <li>
+    <p>For most materials, this does not depend on time.</p>
+  </li>
+  <li>
+    <p>It is also common to define these relationships in an ad-hoc consideration, based on some experiments. That is to say that the relationship is explicit. \(P(x) = f_c(\rho(x))\)</p>
+  </li>
+  <li>
+    <p>In case of an ideal gas, \(P(x) = \kappa \rho(x)\)</p>
+  </li>
+  <li>
+    <p>\(\kappa = R T\) is the universal gas constant multiplied by temperature, which we assume is constant.</p>
+  </li>
+  <li>
+    <p>This relationship is much more complicated in the case of wave propagation in other media.</p>
+  </li>
+</ul>
+
+<h4 id="equation-of-motion---g-h">Equation of motion - \(G, H\)</h4>
+
+<ul>
+  <li>
+    <p>Consider a small chunk of the medium \(\partial \Omega\) with volume \(\delta x\) and mass is \(\rho(x,t) \delta x\). This chunk is accelerated due to a change in pressure.</p>
+  </li>
+  <li>
+    <p>First, consider the conservation of mass</p>
+  </li>
+</ul>
 
 \[\begin{align}
-\label{eq:IVP}
-\frac{d}{dx}y(x) = f(y(x),x) \\
-y(x=0) = y_0 \in \mathbb{R}^n
+    \frac{Dm(x,t)}{Dt} = 0 \\ 
+    \frac{\partial m(x,t)}{\partial t} + v(x,t) \nabla m(x,t) = 0 \\ 
+     \frac{\partial \rho(x,t)}{\partial t} + v(x,t) \nabla \rho(x,t) = 0
 \end{align}\]
 
-<p>The central theme of numerical integration is to transform the solution of the IVP in (\ref{eq:IVP}) to the solution of the following quadrature problem.</p>
-
-\[\begin{equation}
-    \label{eq:quad}
-    y(x) = y_0 + \int_{x_0}^{x} dz\:f(z) = y_0 + \frac{1}{x-x_0} \int_{0}^{1} dq\:f(q) 
-\end{equation}\]
-
-<p>Admittedly, there are several techniques to approximate the integral in (\ref{eq:quad}). Here we are interested in a class of integrators that are suitable for stiff differential equations.</p>
-
-<h2 id="stiff-differential-equations">Stiff Differential Equations</h2>
-<p>Stiffness of differential equations is an ambiguous term. Hairer and Wanner famouosly write about stiff differential equations, <em>as equations where evaluation of solutions using explicit integration methods is too inefficient</em>. There have been other attempts to formalize this “definition” using the eigenfunctions of the differential operator. Intuitively, stiff differential equations are those with \(f(y(x),x)\) evolving in disparate scales along its different bases directions.</p>
-
-<h2 id="exponential-integrators">Exponential Integrators</h2>
-<p>The question of resolving the disparate timescales in \(f(y(x),x)\) is addressed in exponential integrators as follows.</p>
+<ul>
+  <li>Now, consider the conservation of forces on \(\partial \Omega\)</li>
+</ul>
 
 \[\begin{align}
-    \label{eq:exp-int}
-    \frac{d}{dx}y(x) = Ay(x) + g(y(x),x) \textrm{  [Linearization] }
+    \frac{\partial}{\partial t}m(x,t) v(x,t) + v(x,t) \nabla m(x,t) v(x,t) =  \delta x \frac{\partial P(x,t)}{\partial x} \\ 
+    \frac{\partial}{\partial t}\rho(x,t) v(x,t)  = - v(x,t) \nabla \rho(x,t) v(x,t) + \frac{\partial P(x,t)}{\partial x} \\ 
+    \frac{\partial v(x,t)}{\partial t} = \frac{1}{\rho(x,t) \delta x}\frac{\partial P(x,t)}{\partial x} - \frac{1}{\rho(x,t)}v(x,t) \frac{\partial \rho(x,t)}{\partial t} - \frac{1}{\rho(x,t)}v(x,t) \nabla \rho(x,t) v(x,t) \\ 
+    \frac{\partial }{\partial t} u(x,t) = v(x,t)
 \end{align}\]
 
-<p>The solution to the homogenous problem in (\ref{eq:exp-int}), is</p>
+<h4 id="special-case-i---acoustic-wave-equation-for-ideal-gas">Special case (i) - Acoustic wave equation for ideal gas</h4>
+
+<ol>
+  <li>Let \(\rho\) be time independent.</li>
+  <li>Let \(\rho (x) = \frac{\partial u(x)}{\partial x}\), implying \(\nabla \rho(x) = 0\)</li>
+</ol>
+
+<p>Under these assumptions, the above Euler equations reduces to the acoustic wave equation.</p>
 
 \[\begin{align}
-    \label{eq:exact-sol}
-    y(x) = \exp^{xA} y(0)
+    \label{eq:AWE-ideal}
+    \frac{\partial v}{\partial t} = \frac{\kappa}{\rho(x)} \frac{\partial^2}{\partial x^2} u(x,t) \\
+    \frac{\partial u}{\partial t} = v(x,t) \\
 \end{align}\]
 
+<p>It is common to define \(c(x) := \sqrt{\frac{\kappa}{\rho(x)}}\)</p>
+
+<h4 id="special-case-ii---acoustic-wave-equation-for-solid-media">Special case (ii) - Acoustic wave equation for solid media</h4>
+
+<ol>
+  <li>\(P(x) = \kappa(x) \rho(x)\) is a generic constitutive relation in the case of wave propagation in solids.</li>
+</ol>
+
+<p>Then</p>
+
+\[\begin{align}
+    \label{eq:AWE-solid}
+    \frac{\partial v}{\partial t} = \frac{1}{\rho(x)} \frac{\partial}{\partial x} \left[\kappa(x) \frac{\partial}{\partial x} u(x,t)\right] \\
+    \frac{\partial u}{\partial t} = v(x,t) \\
+\end{align}\]
+
+<p>would be the governing equation. Here the notion of a velocity field, \(c\) is difficult to define.</p>
+
+<h3 id="solutions-with-matrix-exponentials">Solutions with matrix exponentials</h3>
+
+<p>For (\ref{eq:AWE-ideal})</p>
+
 \[\begin{equation}
-    \label{eq:exp}
-    \exp^{zA} = \mathcal{I} + \frac{zA}{1!} + \frac{(zA)^2}{2!} + \frac{(zA)^3}{3!} + ...
+    \begin{bmatrix}
+        u \\
+        v
+    \end{bmatrix} = \exp \left[\left( \begin{matrix} 0 &amp;&amp; \mathcal{I} \\ \frac{\kappa}{\rho(x)} \frac{\partial^2}{\partial x^2} &amp;&amp; 0 \end{matrix}\right)t \right]\begin{bmatrix}
+        u_0 \\
+        v_0
+    \end{bmatrix}
 \end{equation}\]
 
-<p>For a generic heterogenity, \(g(x)\), the solution is expressed in terms of its propagator.</p>
+<p>is the formal analytical solution disregarding the boundary conditions.</p>
+
+<p>This form of the solution is less useful as one cannot say much about the qualitative aspects of the solution. Instead if \(A \in \mathbb{R}^{n \times n}\), then</p>
 
 \[\begin{equation}
-    \label{eq:hetero}
-    y(x) = \exp^{xA} y(0) + \int dz \: \exp^{(x-z)A} g(y(z),z)
+    exp(A) = \mathcal{I} + \frac{A}{1!} + \frac{A^2}{2!} + \frac{A^3}{3!} + ...
 \end{equation}\]
+
+<p>In this case,</p>
+
+\[\begin{equation}
+    A := D =  \begin{bmatrix}
+         0 &amp;&amp; \mathcal{I} \\ \frac{\kappa}{\rho(x)} \frac{\partial^2}{\partial x^2} &amp;&amp; 0
+    \end{bmatrix}
+\end{equation}\]
+
+<p>For brevity, let
+\(\begin{equation}
+    P := \frac{\kappa}{\rho(x)} \frac{\partial^2}{\partial x^2} \textrm{ and } D := \begin{bmatrix}
+        0 &amp;&amp; \mathcal{I} \\ 
+        P &amp;&amp; 0
+    \end{bmatrix}
+\end{equation}\)</p>
+
+<p>The structure of \(D\) allows for the following properties.</p>
+
+\[\begin{equation}
+    D^2 = \begin{bmatrix}
+        P &amp;&amp; 0 \\ 
+        0 &amp;&amp; P
+    \end{bmatrix}, 
+    D^3 = \begin{bmatrix}
+        0 &amp;&amp; P \\ 
+        P^2 &amp;&amp; 0
+    \end{bmatrix}
+\end{equation}\]
+
+<p>The matrix exponential is given as</p>
+
+\[\begin{equation}
+    exp(Dt) = \frac{t^0}{0!} \begin{bmatrix} \mathcal{I} &amp;&amp; 0 \\ 0 &amp;&amp; \mathcal{I} \end{bmatrix} + \frac{t}{1!} \begin{bmatrix} 0 &amp;&amp; \mathcal{I} \\ P &amp;&amp; 0\end{bmatrix} + \frac{t^2}{2!} \begin{bmatrix} P &amp;&amp; 0 \\ 0 &amp;&amp; P \end{bmatrix} + \frac{t^3}{3!} \begin{bmatrix} 0 &amp;&amp; P \\ P^2 &amp;&amp; 0\end{bmatrix} + \dots
+\end{equation}\]
+
+<p>Or succinctly,</p>
+
+\[\begin{equation}
+    exp(Dt) = \lim_{N \mapsto \infty}\sum_{j=0}^{\frac{N}{2}-1} \left[ \frac{t^{j}}{j!} P^{j} \begin{bmatrix} \mathcal{I} &amp;&amp; 0 \\ 0 &amp;&amp; \mathcal{I} \end{bmatrix} + \frac{t^{j+1}}{(j+1) !} P^j \begin{bmatrix} 0 &amp;&amp; \mathcal{I} \\ P &amp;&amp; 0\end{bmatrix} \right]
+\end{equation}\]
+
+\[\begin{equation}
+    exp(Dt) = \lim_{N \mapsto \infty}\sum_{j=0}^{\frac{N}{2}-1} \frac{t^j}{j!} P^j \begin{bmatrix} \mathcal{I} &amp;&amp; \frac{t}{j+1} \mathcal{I} \\ \frac{t}{j+1} P &amp;&amp; \mathcal{I} \end{bmatrix}
+\end{equation}\]
+
+\[\begin{equation}
+    exp(Dt) = \lim_{N \mapsto \infty} \begin{bmatrix} \sum_{j=0}^{\frac{N}{2}-1} \frac{t^j}{j!} P^j  &amp;&amp; \sum_{j=0}^{\frac{N}{2}-1} \frac{t^{j+1}}{(j+1)!} P^j \\   \sum_{j=0}^{\frac{N}{2}-1} \frac{t^{j+1}}{(j+1)!} P^{j+1} &amp;&amp; \sum_{j=0}^{\frac{N}{2}-1} \frac{t^j}{j!} P^j \end{bmatrix}
+\end{equation}\]
+
+\[\begin{equation}
+    exp(Dt) = \begin{bmatrix} exp(tP) &amp;&amp; P^{-1}(-\mathcal{I} + \exp(tP)) \\ -\mathcal{I} + \exp(tP) &amp;&amp; exp(tP) \end{bmatrix}
+\end{equation}\]
+
+<p>This gives us a closed form solution to the acoustic wave equation, modeling wave propagation through an ideal gas. That is</p>
+
+\[\begin{equation}
+    \label{eq:closed_form}
+    \begin{bmatrix} u(x,t) \\ v(x,t) \end{bmatrix} =  \begin{bmatrix} \left[\exp(tP)\right] \: u(x,0) + \left[P^{-1}(-\mathcal{I} + \exp(tP))\right] \:  v(x,0)  \\ \left[-\mathcal{I} + \exp(tP)\right] u(x,0) + \left[\exp(tP)\right] v(x,0)\end{bmatrix}
+\end{equation}\]
+
+<h3 id="eigenfunctions-of-operators-in-acoustic-wave-equations">Eigenfunctions of operators in acoustic wave equations</h3>
+
+<p><span style="color:red"> WIP </span></p>
+
+<h3 id="fundamental-solutions--greens-functions">Fundamental solutions – Green’s functions</h3>
+
+<p><span style="color:red"> WIP </span></p>
+
+<h3 id="inversion">Inversion</h3>
+<p>A common theme in all scattering problems is that \(\frac{\kappa}{\rho(x)}\) needs to be inferred from partial observations of \(u\). The closed form solution in (\ref{eq:closed_form}) can inturn be written down as the following optimization problem.</p>
+
+\[\begin{equation}
+    \arg \min_{\phi \in \mathcal{H}} \left[\left\|u(x,t) - e^{t \phi(x) \frac{\partial^2}{\partial x^2}} u(x,0) - P^{-1}\left(-\mathcal{I} + e^{t \phi(x) \frac{\partial^2}{\partial x^2}}\right) v(x,0) \right\|_p + \left\| v(x,t) - e^{t \phi(x) \frac{\partial^2}{\partial x^2}} v(x,0) - \left(-\mathcal{I} + e^{t \phi(x) \frac{\partial^2}{\partial x^2}} \right) u(x,0)\right\|_p \right]
+\end{equation}\]
+
+<p>There are two computations in this problem that are not obvious.</p>
+
+<ol>
+  <li>The matrix exponential, which should constitute the bulk of the computation.</li>
+  <li>\(v(x,t) = \frac{\partial u(x,t)}{\partial t}\) when observations of \(u(x,t)\) is noisy. Common means to obtain noisy derivatives is total variational derivative computations.</li>
+</ol>
+
+<h3 id="algorithmic-details">Algorithmic details</h3>
+
+<h4 id="matrix-exponential">Matrix exponential</h4>
+
+<h4 id="total-variational-derivative">Total variational derivative</h4>
 
   </article>
 </div>

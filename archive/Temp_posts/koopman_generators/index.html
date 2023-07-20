@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>para-NN | Rahul Manavalan</title>
+    <title>Parsimoniuously learning Koopman generators | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="Learning parallel in time integrators with neural networks.">
+    <meta name="description" content="Greens function based methods for inferring Koopman generators.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/projects/mshoot/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/Temp_posts/koopman_generators/">
     
     <!-- Dark Mode -->
     
@@ -120,94 +120,179 @@
         <div class="post">
 
           <header class="post-header">
-            <h1 class="post-title">para-NN</h1>
-            <p class="post-description">Learning parallel in time integrators with neural networks.</p>
+            <h1 class="post-title">Parsimoniuously learning Koopman generators</h1>
+            <p class="post-description">Greens function based methods for inferring Koopman generators.</p>
           </header>
 
           <article>
-            <hr>
+            <h3 id="deterministic-dynamical-system">Deterministic Dynamical system</h3>
 
-<h2 id="parallel-time-integration">Parallel Time Integration</h2>
-<p>Consider a system of ordinary differential equations, usually arising from the discretization of a partial differential equation in Eucledian space.</p>
+<p>Consider a dynamical system, given by</p>
 
-\[\begin{equation}
-    \label{eq:ODE}
-    \frac{d}{dt}y(t) = f(y(t),t)
-\end{equation}\]
+\[\begin{align}
+    \label{eq:DS}
+    \frac{d}{dt} x(t) = f(x(t),t) \\ 
+    x(0) = x_0 \in \mathbb{R}^d \\ 
+    t \in \mathbb{R}^{+} \\ 
+    f: x \times t \mapsto \mathbb{R}^d
+\end{align}\]
 
-\[\begin{equation}
-    \label{eq:IC}
-    y(0) = y_0 \in \mathbb{R}^d
-\end{equation}\]
+<p>\(f\) in general is assumed to be an arbitrary non-linear function. The Koopman operator framework is based on this following insight:</p>
 
-<p>Due to the causal nature of the solution to (\ref{eq:ODE}-\ref{eq:IC}), time integration of this problem has been carried out largely sequentially. Parallel in time integration method undertake an alternative approach.</p>
+<div class="alert alert-block alert-info">
+    When a given function belonging to a function space is projected to a sufficiently higher dimensional function space, any non-linear operator on that former function space, becomes linear in the latter.
+</div>
 
-<p>Here the monolithic equation in (\ref{eq:ODE}-\ref{eq:IC}) is partioned into \(N\) different sub-problems in the time domain, that is \(\forall \: i \in [0,T-1]\),</p>
-
-\[\begin{equation}
-    \label{eq:Parallel}
-    \frac{d}{dt}y_i(t) = f(y_i(t),t)
-\end{equation}\]
+<p>Followingly, let \(\phi\) be an observable of the dynamical system, which is commonly chosen to be a real or complex valued function. That is</p>
 
 \[\begin{equation}
-    \label{eq:IC Parallel}
-    y_{i}(t_i) = Y_i \in \mathbb{R}^d
+    \phi : x \mapsto \mathbb{R} \textrm{ or } \mathbb{C}
 \end{equation}\]
+
+<p>With these considerations, the Koopman operator formulation of (\ref{eq:DS}) is</p>
 
 \[\begin{equation}
-    \label{eq:IC Parallel Initial}
-    Y_0 = y_{i}(0)
+    x(t) := \Phi_t (x_0)  = [\phi^{-1} \circ K^t \circ \phi](x_0)
 \end{equation}\]
 
-<p>subject to constraints governing the consistent of the \(y_i\) at the interfaces.</p>
+<p>Here \(K^t\) is the family of Koopman operators corresponding to time \(t\).</p>
+
+<p>Motivated by the temporal dependance of \(K\), it is normal to ask : Can one define a time dependent differential equation that generates the family \(K^t\)?</p>
+
+<p>For any \(\tau, \eta \in \mathbb{R}^{+}\), consider the following:</p>
 
 <p>\(\begin{align}
-    \label{eq:constraints}
-    Y_0 = y(0) \\ 
-    Y_{j} = y_{j-1}(t_{j},Y_{j-1})
+    \lim_{(\tau-\eta) \mapsto 0} \frac{1}{\tau - \eta} \left[K^{\tau} \circ \phi - K^{\eta} \circ \phi\right]
 \end{align}\)
-where \(j \in [1,T-1]\).</p>
+Or equivalently,
+\(\begin{align}
+    \label{eq:generator}
+    \frac{d}{dt}\phi(x(t)) =  \left[\frac{d \phi}{dx}(x(t))\right]^T f(x(t),t)
+\end{align}\)</p>
 
-<p>If \(Y = [Y_0, Y_1, ..., Y_{T-1}]\), then the constraints form a non-linear system of equations.</p>
+<p>Right hand side of equation (\ref{eq:generator}) is the Koopman generator for a vector field \(f\). Analytical solutions to (\ref{eq:generator}) seldom exist, due to the non-linearity of \(f\).</p>
+
+<h3 id="greens-function-formulation">Green’s function formulation</h3>
+
+<p>The generator is fortunately a linear operator.</p>
 
 \[\begin{equation}
-    \label{eq:non-linear}
-    F(Y) = 0
+    \mathcal{L} \: \Box := \sum_{i=1}^{d} f_i \frac{d}{dx_i} \Box  
 \end{equation}\]
 
-<p>whose solution is promptly obtained from Newton’s iteration.</p>
+<p>Intuitively, it is known that for any linear operator \(\mathcal{L}\) there exists a Green’s function \(\mathcal{G}\).</p>
 
-\[\begin{equation}
-    \label{eq:Newton}
-    Y^{k+1} = Y^{k} - \nabla_Y F(Y^{k})^{-1} F(Y^k)
-\end{equation}\]
+<p>In this case,</p>
 
-<p>The Jacobian for (\ref{eq:non-linear}) has a sparse, diagonal structure
-\(\begin{equation}
-    \label{eq:jac}
-    J := \nabla_Y F = \begin{bmatrix}
-    I&amp; &amp; &amp; &amp; &amp;\\
-    \frac{\partial y_1}{\partial Y_0}&amp;I&amp;&amp;&amp;&amp; \\
-    &amp;\frac{\partial y_2}{\partial Y_1}&amp;I&amp;&amp;&amp; \\ 
-    &amp;&amp;\ddots &amp;\ddots&amp;\\
-    &amp;&amp;&amp;\frac{\partial y_{T-1}}{\partial Y_{T-2}}&amp;I \\
-    \end{bmatrix}
-\end{equation}\)
-yielding a closed form solution to (\ref{eq:Newton}).</p>
+\[\begin{align}
+    \frac{d}{dt}\phi(x(t)) = \mathcal{L} \phi(x(t)) \\ 
+\end{align}\]
 
-<p>\(\begin{equation}
-    \label{eq:closed-form-1}
-    Y_0^{k+1} = y(0)
-\end{equation}\)
-\(\begin{equation}
-    \label{eq:closed-form-2}
-    Y_n^{k+1} = y_{n-1}(t_n, Y_{n-1}^k) + \frac{\partial y_{n-1}}{\partial Y_{n-1}}(t_n, Y_{n-1}^k) (Y_{n-1}^{k+1}-Y_{n-1}^{k})
-\end{equation}\)</p>
+<p>with solution</p>
 
-<p>This equation is still implicit.</p>
+\[\phi(x) = \int_{\Omega} \mathcal{G}(x,y) \: \frac{d\phi(y)}{dt} \: dy\]
 
-<h2 id="contributions">Contributions</h2>
-<p>Usually, \(y_j\) in (\ref{eq:closed-form-2}) are evaluated from one-step integrators such as <strong>RK4, Tsit5</strong> and the like. Here, we parametrize \(y_j\) using a neural network with an explicit time integrator structure, namely \(y_{NN}\). Subsequently, the derivative \(\frac{\partial y_{j}}{\partial Y_{j}}\) is computed with automatic differentiation, alleviating the need for explicity discretizing \(\frac{\partial y_{j}}{\partial Y_{j}}\). It is expected that, the learned time-integrator, is customized for parallel execution and for the predefined problem, whose solutions were used for training.</p>
+<h5 id="existence-of-mathcalg-for-mathcall">Existence of \(\mathcal{G}\) for \(\mathcal{L}\)</h5>
+<p><span style="color:red"> WIP </span></p>
+
+<h5 id="learning-mathcalg">Learning \(\mathcal{G}\)</h5>
+<p>There are a number of alternatives here to effectively learn the Green’s function. Almost all these methods invariably involves using a neural network to parameterize \(\mathcal{G}\). Some of them include.</p>
+
+<ul>
+  <li>Learning \(\mathcal{G}\) in the Fourier space.</li>
+</ul>
+
+\[\begin{align}
+    \mathcal{F}\left(\phi(x)\right) = \mathcal{F}\left(\mathcal{G}(x,y)\right) \times \mathcal{F}\left(\frac{d\phi(y)}{dt}\right) \\ 
+    R:= \mathcal{F}\left(\mathcal{G}(x,y)\right) =  \frac{ \mathcal{F}\left(\phi(x)\right)}{\mathcal{F}\left(\frac{d\phi(y)}{dt}\right)}
+\end{align}\]
+
+<ul>
+  <li>Learning \(\mathcal{G}\) in Euclidian space with deep neural networks.</li>
+</ul>
+
+<p><span style="color:red"> WIP </span></p>
+
+<ul>
+  <li>Learning \(\mathcal{G}\) in Euclidian space with sampling neural networks.</li>
+</ul>
+
+<p><span style="color:red"> WIP </span></p>
+
+<h3 id="examples">Examples</h3>
+
+<p>In the following, the efficacy of our method is compared  with EDMD and gEDMD based on two metrics.</p>
+
+<p>We demonstrate this on several examples that have appeared in literature surrounding Koopman operators.</p>
+
+<h5 id="1-systems-identification">1. Systems identification</h5>
+
+<h6 id="lorenz-69-attractor">Lorenz 69 attractor</h6>
+<p><img style="width:75%" src="/assets/pKoopman/lorenz.svg" alt="spline-sur"></p>
+
+<h6 id="lotka-volterra">Lotka volterra</h6>
+<p><img style="width:75%" src="/assets/pKoopman/lotka.svg" alt="spline-sur"></p>
+
+<h6 id="van-der-pol-oscillator">Van der Pol oscillator</h6>
+<p><img style="width:75%" src="/assets/pKoopman/vanderpol.svg" alt="spline-sur"></p>
+
+<h5 id="2-non-intrusive-model-order-reduction">2. Non-intrusive model order reduction</h5>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<h6 id="acoustic-wave-equation">Acoustic Wave equation</h6>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/pKoopman/wave.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/pKoopman/contour_wave.svg" alt="spline-sur">
+  </div>
+</div>
+
+<h6 id="schrodingers-equation-with-double-well-potential">Schrodinger’s equation with double well potential</h6>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/pKoopman/SE_implicit.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/pKoopman/contour_SE.svg" alt="spline-sur">
+  </div>
+</div>
+
+<h6 id="sis-reaction-diffusion-model">SIS Reaction Diffusion Model</h6>
+
+<h5 id="3-control-of-non-linear-dynamical-systems">3. Control of non-linear dynamical systems</h5>
+
+<h6 id="feedback-control-of-bi-linear-motor">Feedback control of bi-linear motor</h6>
+
+<h6 id="control-of-time-dependent-kdv-equation">Control of time dependent KdV equation</h6>
+
+<h6 id="control-of-burgers-equation">Control of Burger’s equation</h6>
+
+<h5 id="4-systems-identification-with-real-world-data">4. Systems identification with real world data</h5>
+
+<h6 id="pedestrian-dynamics">Pedestrian dynamics</h6>
+
+<h6 id="brain-dynamics">Brain dynamics</h6>
+
+<h6 id="epidemics">Epidemics</h6>
 
           </article>
 

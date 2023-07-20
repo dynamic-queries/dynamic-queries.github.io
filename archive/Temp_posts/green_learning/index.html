@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>OperatorML | Rahul Manavalan</title>
+    <title>Green learning | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-">
+    <meta name="description" content="Learning Green's functions for non-homogenous differential equations.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -34,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/blog/tag/operatorml/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/Temp_posts/green_learning/">
     
     <!-- Dark Mode -->
     
@@ -73,8 +72,8 @@
               </li>
               
               <!-- Blog -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/blog/">Blog<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/blog/">Blog</a>
               </li>
 
               <!-- Other pages -->
@@ -117,29 +116,128 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <div class="post">
+      <!-- page.html -->
+        <div class="post">
 
-  <header class="post-header">
-    <h1 class="post-title"> <i class="fas fa-hashtag fa-sm"></i> OperatorML </h1>
-    <p class="post-description"> an archive of posts with this tag </p>
-  </header>
+          <header class="post-header">
+            <h1 class="post-title">Green learning</h1>
+            <p class="post-description">Learning Green's functions for non-homogenous differential equations.</p>
+          </header>
 
-  <article>
-    <div class="table-responsive">
-      <table class="table table-sm table-borderless">
-        
-        <tr>
-          <th scope="row">Jun 8, 2023</th>
-          <td>
-              <a class="post-link" href="/blog/2023/frobenius_perron/">(WIP) Frobenius Perron Operator</a>
-          </td>
-        </tr>
-      
-      </table>
-    </div>
-  </article>
+          <article>
+            <h3 id="introduction">Introduction</h3>
 
-</div>
+<p>Green’s functions are fascinating mathematical objects.</p>
+
+<p>Consider
+\(\begin{align}
+    x \in \Omega \subseteq \mathbb{R}^d \\ 
+    y \in \Delta \subseteq \mathbb{R}^m \\ 
+    z \in \Upsilon \subseteq \mathbb{R}^n \\ 
+    \mathcal{F} \ni f:x \mapsto y \\
+    \mathcal{G} \ni g:x \mapsto z \\
+    \mathcal{L}: f \mapsto g
+\end{align}\)</p>
+
+<p>If \(\mathcal{L}\) is linear, then</p>
+
+\[\begin{align}
+    g(x) = \int_{\Omega} dy\:G(x,y) \: f(y)
+\end{align}\]
+
+<p>Intuitively, given a linear operator \(\mathcal{L}\), the Green’s function \(G_{\mathcal{L}}\) prescribes a computational routine where, performing a specific bases transformation of the input function \(f\) results in the output function \(g\).</p>
+
+<h3 id="learning-from-data">Learning from data</h3>
+
+<p>Recently, learning dynamical systems from data is gaining popularity, largely due to the increasingly cheaper means to collect, store and transmit data. From these considerations, it is natural to ask, given a reference dataset \(D=\{(\hat{f}_i,\hat{g}_i): i \in \mathbb{N}\}\) with parameterized measurements \(\hat{f}, \hat{g}\), what is the Green’s function corresponding to the dynamical system generating this data.</p>
+
+<p>A trivial idea, that is also quite easy to compute is to parameterize \(G\) using a neural network.
+\(\begin{equation}
+    \label{eq:NN}
+   g(x) = \int_{\Omega} dy\:G_{NN}(x,y) \: f(y) 
+\end{equation}\)</p>
+
+<p>Depending on the quadrature scheme used to evalute this integral, there can be different formulations of (\ref{eq:NN}) (subtly represented as the quadrature operator \(\mathcal{Q}\)). In any case, this will always result in a linear transform:</p>
+
+\[\begin{align}
+    \label{eq:disc-NN}
+    \hat{g}(x_i) = \mathcal{Q} [\mathcal{K_{x,y}} \: \mathcal{a} \circledcirc \hat{f}(y_j)] \\ 
+    \mathcal{Q}^{\dagger} \hat{g}(x_i) =  [\mathcal{K_{x,y}} \: \mathcal{a} \circledcirc \hat{f}(y_j)] \\
+    l := \frac{\mathcal{Q}^{\dagger} \hat{g}(x_i)}{\hat{f}(y_j)} = \mathcal{K_{x,y}} \: \mathcal{a}
+\end{align}\]
+
+<p>This needs some clarification. The inputs to the \(G_{NN}\) are \(x_i, y_j\). However, in the orginal inference problem, only \(\hat{f}(x_i)\) and \(\hat{g}(y_j)\) are available. In order to exploit, the linear representation of \(G_{NN}\), one has to recast the inference problem as one that learns \(G_{NN}\) with the following reference data \(D_r = \{([x_i, y_j],l_{i,j}) : i,j \in \mathbb{N}\}\).</p>
+
+<h4 id="quadrature-operators">Quadrature operators</h4>
+<p>Assuming that, inferring \(a\) using a least squares procedure is sufficiently robust, the stability of the new inference scheme depends largely on the stability of the numerical algorithm used to compute \(\mathcal{Q}^{\dagger}\). Common choices include:</p>
+
+<ul>
+  <li>Riemanian quadrature \(\mathcal{Q}_{R}\)</li>
+  <li>Gaussian quadrature \(\mathcal{Q}_{G}\)</li>
+  <li>Other weighted polynomial quadrature</li>
+</ul>
+
+<p>In what follows, the spectrum of the different integration schemes are examined.</p>
+
+<p><a href="">… insert ideas about spectra of the quadrature operators … </a></p>
+
+<h3 id="universal-approximation-for-rational-activation-functions">Universal approximation for rational activation functions</h3>
+<p><a href="">Boulle</a> showed that rational activation functions are superior to their traditionally used counterparts, for the purpose of learning Green’s functions. The sampling algorithm, used in linearizing \(G_{NN}\), has been proven to be a universal approximator for ReLU and tanh functions alone. Here we extend this result to the case of rational activation functions, as defined in <a href="">Boulle</a>.</p>
+
+<h3 id="examples">Examples</h3>
+
+<h4 id="linear-ordinary-differential-equations">Linear ordinary differential equations</h4>
+
+<h4 id="linear-partial-differential-equations">Linear partial differential equations</h4>
+
+<h5 id="time-independent-case">Time independent case</h5>
+
+<h6 id="diffusion-equation">Diffusion equation</h6>
+
+<h6 id="euler-beam-equation">Euler beam equation</h6>
+
+<h5 id="time-dependent-case">Time dependent case</h5>
+
+<h6 id="stokes-equation">Stokes equation</h6>
+
+<h6 id="burgers-equation">Burger’s equation</h6>
+
+<h6 id="acoustic-wave-equation">Acoustic Wave equation</h6>
+
+<h6 id="maxwells-equations">Maxwell’s equations</h6>
+
+<h6 id="schrodingers-equation">Schrodinger’s equation</h6>
+
+<h4 id="non-linear-differential-equations">Non-linear differential equations</h4>
+<p>It is known that in an appropritely chosen feature space, there exist linear duals to non-linear operators. These linear operators are inturn inferred using kernel methods. Here, we propose learning the Green’s functions of these globally linearized operators, paving the way for analyzing the properties of a non-linear operator, in a linearized setting. The problem of coming up with a suitable definition for the feature space remains open and must be considered on a case-wise basis.</p>
+
+<h6 id="lorenz-69-attractor">Lorenz 69 attractor</h6>
+
+<h6 id="robertsons-reaction-network">Robertson’s reaction network</h6>
+
+<h6 id="non-linear-schrodingers-equation">Non-linear Schrodinger’s equation</h6>
+
+<h6 id="allen-cahn-equation">Allen Cahn equation</h6>
+
+<h6 id="kdv-equations">KdV equations</h6>
+
+<h3 id="engineering-applications">Engineering Applications</h3>
+<p>In this section, we demonstrate our method is applicable to several outer-loop applications that are of interest to the engineering community.</p>
+
+<h5 id="waveform-inversion">Waveform inversion</h5>
+
+<h5 id="flow-control">Flow control</h5>
+
+<h5 id="uncertainity-quantification-for-rate-coefficients-of-a-laser-model">Uncertainity quantification for rate coefficients of a LASER model</h5>
+
+<h3 id="conclusion-claims-and-expectations">Conclusion, claims and expectations</h3>
+<p>An efficient training procedure for learning the Green’s function for linear partial differential equations is presented. The proposed method is tested for several commonly occuring linear partial differential equations. Finally, the applicability of this method to three distinct outer-loop applications is demonstrated.</p>
+
+<p>Echoing the claims made in <a href="">Boulle</a>, our method represents a comparitively more interpretable inference algorithm for learning linear PDEs. It is our hope, that more engineering applications seek to digress from the black-box attributes of Neural Operators and make use of more transparent tools, that are available at their disposal.</p>
+
+          </article>
+
+        </div>
 
     </div>
 
