@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Projects | Rahul Manavalan</title>
+    <title>Learning Hamiltonians with GP | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A collection of academic projects.">
+    <meta name="description" content="Inferring invariants of dynamical systems with gaussian processes.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/projects/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/blog/2023/hamiltonian/">
     
     <!-- Dark Mode -->
     
@@ -72,25 +72,19 @@
               </li>
               
               <!-- Blog -->
-              <li class="nav-item ">
-                <a class="nav-link" href="/blog/">Blog</a>
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">Projects<span class="sr-only">(current)</span></a>
               </li>
 
               <!-- Other pages -->
               <li class="nav-item ">
                 <a class="nav-link" href="/cv/">CV</a>
               </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="/projects/">Projects<span class="sr-only">(current)</span></a>
-              </li>
               <li class="nav-item ">
                 <a class="nav-link" href="/collabs/">Collaborations</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" href="/teaching/">Teaching</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="/veritasium/">Veritas-Si-ium</a>
               </li>
 
               <!-- Toogle theme mode -->
@@ -116,107 +110,35 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">Projects</h1>
-            <p class="post-description">A collection of academic projects.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <!-- pages/projects.md -->
-<div class="projects">
-  <!-- Display categorized projects -->
-  <h2 class="category">2023</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/mlp/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">MLP</h3>
-            <p class="card-text">Efficient training procedure for Machine learning potentials</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
+  <header class="post-header">
+    <h1 class="post-title">Learning Hamiltonians with GP</h1>
+    <p class="post-meta">July 20, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/systemsidentification">
+          <i class="fas fa-hashtag fa-sm"></i> SystemsIdentification</a>  
+          
+        ·  
+        <a href="/blog/category/projects">
+          <i class="fas fa-tag fa-sm"></i> projects</a>  
+          
+
+    </p>
+  </header>
+
+  <article class="post-content">
+    <p>This work is a re-creation of a method for learning the Hamiltonian of a dynamical system from <a href="https://pubs.aip.org/aip/cha/article/29/12/121107/1027304/On-learning-Hamiltonian-systems-from-data" rel="external nofollow noopener" target="_blank">Bertlan and Dietrich</a>. The article also introduces the fundamentals of Gaussian processes .</p>
+
+<p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
+
+
+  </article>
 </div>
-
-    </div>
-  </div>
-  <h2 class="category">2022</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/mogp/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">MOGP</h3>
-            <p class="card-text">Multi-Output Gaussian Processes.</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
-
-    </div>
-  </div>
-  <h2 class="category">2021</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/hptn/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">HPTN</h3>
-            <p class="card-text">High Performance Tensor Networks - A DSL for tensor contractions.</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
-
-    </div>
-  </div>
-  <h2 class="category">2020</h2>
-  <!-- Generate cards for each project -->
-  <div class="container">
-    <div class="row row-cols-2">
-<div class="card-item col">
-<a href="/projects/qsolve/"><div class="card hoverable">
-      <div class="row g-0">
-<div class="col-md-12">
-<div class="card-body">
-            <h3 class="card-title text-lowercase">QSolve</h3>
-            <p class="card-text">Quantum Algorithms for solving linear systems.</p>
-            <div class="row ml-1 mr-1 p-0"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </a>
-</div>
-
-    </div>
-  </div>
-</div>
-
-          </article>
-
-        </div>
 
     </div>
 

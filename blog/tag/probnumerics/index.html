@@ -10,9 +10,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>QSolve | Rahul Manavalan</title>
+    <title>ProbNumerics | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="Quantum Algorithms for solving linear systems.">
+    <meta name="description" content="A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +34,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/projects/qsolve/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/blog/tag/probnumerics/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +73,8 @@
               </li>
               
               <!-- Blog -->
-              <li class="nav-item ">
-                <a class="nav-link" href="/blog/">Blog</a>
+              <li class="nav-item active">
+                <a class="nav-link" href="/blog/">Projects<span class="sr-only">(current)</span></a>
               </li>
 
               <!-- Other pages -->
@@ -81,16 +82,10 @@
                 <a class="nav-link" href="/cv/">CV</a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" href="/projects/">Projects</a>
-              </li>
-              <li class="nav-item ">
                 <a class="nav-link" href="/collabs/">Collaborations</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" href="/teaching/">Teaching</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="/veritasium/">Veritas-Si-ium</a>
               </li>
 
               <!-- Toogle theme mode -->
@@ -116,125 +111,29 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <div class="post">
 
-          <header class="post-header">
-            <h1 class="post-title">QSolve</h1>
-            <p class="post-description">Quantum Algorithms for solving linear systems.</p>
-          </header>
+  <header class="post-header">
+    <h1 class="post-title"> <i class="fas fa-hashtag fa-sm"></i> ProbNumerics </h1>
+    <p class="post-description"> an archive of posts with this tag </p>
+  </header>
 
-          <article>
-            <p>Solving linear systems is at the heart of all scientific computing applications. It is based on this notion, in mathematics, of converting a new problem into a problem that you already know how to solve. Incidentally, the field of machine learning (generative models with diffusion), statistics and other natural sciences also have vested interests in improving the state of the art of linear solvers.</p>
+  <article>
+    <div class="table-responsive">
+      <table class="table table-sm table-borderless">
+        
+        <tr>
+          <th scope="row">Jul 21, 2023</th>
+          <td>
+              <a class="post-link" href="/blog/2023/ode_filters/">ODE Filters</a>
+          </td>
+        </tr>
+      
+      </table>
+    </div>
+  </article>
 
-<p>In this work, I investigate the applicability of solving partial differential equations using linear solvers designed for quantum computers.</p>
-
-<h4 id="problem-setup">Problem setup</h4>
-<p>Consider a linear system \(Ax=b\) where \(x,b \in \mathbb{R}^d\) and \(A \in \mathbb{R}^{d \times d}\).</p>
-
-<p>Geometrically, this equation can be viewed as determining the projections of a given vector \(b\) in some vector space \(\mathcal{S}\) onto a different bases set \(A\) that also spans \(\mathcal{S}\). So in a way, the task of solving a linear system, is the task of orthogonalizing \(A\).</p>
-
-<h4 id="orthogonalization--the-trivial-solution">Orthogonalization – the trivial solution</h4>
-<p>If \(Q\) is orthogonal to \(A\) ,that is, \(QA = \mathcal{I}\), then
-\(\begin{align}
-    Ax = b \\ 
-    QAx = Qb \\ 
-    x = Qb
-\end{align}\)</p>
-
-<p>There are countless orthogonalization schemes that are available in literature. Some of the commonly used ones include:</p>
-
-<div class="alert alert-block alert-success">
-   1. Gram Schmidt projection <br>
-   2. Householder reflection <br>
 </div>
-
-<p>Despite the ideological simplicity, solving linear systems with orthogonalization methods is suboptimal in comparison with other Kyrlov based iterative methods. Nonetheless it serves as a nice method which could be geometrically interpreted. For a more detailed exposition, see <a href="https://people.math.sc.edu/Burkardt/m_src/kelley/kelley.html" rel="external nofollow noopener" target="_blank">Kelly</a>.</p>
-
-<h4 id="hhl-algorithms--the-quantum-solution">HHL algorithms – the quantum solution</h4>
-<p>Alternatively, there exist a family of algorithms called the HHL algorithms that provide exponential speedups over classical algorithms. Generally, HHL algorithms have a computational complexity of \(\mathcal{O}(log(d))\) compared to the \(\mathcal{O}(d^2)\) of conjugate gradient methods.</p>
-
-<p>HHL algorithms leverage the following property of the spectrum of \(A\).</p>
-
-<p>Let</p>
-
-\[\begin{equation}
-    \label{eq:Eig}
-    A p_i = \lambda_i p_i
-\end{equation}\]
-
-<p>be the eigenproblem with eigenvalues – \(\{\lambda_i\}_{i=1}^{d}\) and eigenvectors – \(\{p_i\}_{i=1}^{d}\). Then the inverse operator \(A^{-1}\) satisfies</p>
-
-\[\begin{equation}
-    A^{-1} p_i = \frac{1}{\lambda_i} p_i
-\end{equation}\]
-
-<p>Ideally, if one solves the eigenproblem in (\ref{eq:Eig}), then inverting a matrix is as trivial as computing the reciprocal of its eigenvalues. For the rest of this section, I will discuss the bare-bone algorithms that will be used for efficiently performing this inversion.</p>
-
-<h5 id="1-quantum-fourier-transform">1. Quantum Fourier Transform</h5>
-<p>This algorithm is used to compute the Fourier transform of function on a quantum computer. Let \(q \in \mathbb{R}^m\) be a vector (discrete version of a function). Its discrete Fourier transform is given by</p>
-
-\[\begin{equation}
-    \mathcal{F}(q_k) = \sum_{j=0}^{m-1} exp(i\:2\pi\frac{jk}{m}) \: q_j
-\end{equation}\]
-
-<p>If \(\hat{q_j}\) are the individual bases in the real space, then let the fourier bases be denoted by \(\hat{p_k}\). Such that \(\hat{p} = \sum_k \alpha_{p_k} \hat{p_k}\) and \(\hat{q} = \sum_j \alpha_{q_j} \hat{q_j}\).</p>
-
-<p>Analogously, the quantum Fourier transform can be written in terms of its orthogonal bases as:</p>
-
-\[\begin{equation}
-    \hat{p} := \mathcal{F}(\hat{q}) = \sum_j \alpha_{q_j} \mathcal{F} \left[ \hat{q_j} \right]
-\end{equation}\]
-
-\[\begin{equation}
-    \mathcal{F} \left[ \hat{q_j} \right] = \sum_k exp(i\:2\pi\frac{q_j k}{m}) \: \hat{k}
-\end{equation}\]
-
-<p>where \(q_j,k\) are components of \(\hat{q_j},\hat{k}\) respectively.</p>
-
-<p>If \(m = 2^n\)</p>
-
-\[\begin{equation}
-    \mathcal{F} \left[ q_j \right] = \sum_k exp(i\:2\pi\frac{q_j k}{2^n}) \: \hat{k}
-\end{equation}\]
-
-<p>Let \(k = \sum_{l=0}^{n-1} 2^l \: k_l\) and \(\frac{k}{2^n} = \sum_{j=1}^{n} 2^{-l} \hat{k_l}\), then</p>
-
-\[\begin{equation}
-    \sum_k exp(i\:2\pi\frac{q_j k}{2^n}) \: k = \sum_{k_1 \in \{0,1\}} \sum_{k_2 \in \{0,1\}}...\sum_{k_n \in \{0,1\}} exp(i\:2\pi q_j \sum_{l=1}^{n} 2^{-l} k_l) \bigotimes_{l=1}^{n} \hat{k_l} 
-\end{equation}\]
-
-\[\begin{equation}
-    \sum_k exp(i\:2\pi\frac{q_j k}{2^n}) \: k = \sum_{k_1 \in \{0,1\}} \sum_{k_2 \in \{0,1\}}...\sum_{k_n \in \{0,1\}} \bigotimes_{l=1}^{n} exp(i\:2\pi q_j  2^{-l} k_l) \bigotimes_{l=1}^{n} \hat{k_l}
-\end{equation}\]
-
-\[\begin{equation}
-    \sum_k exp(i\:2\pi\frac{q_j k}{2^n}) \: k = \sum_{k_1 \in \{0,1\}} \sum_{k_2 \in \{0,1\}}...\sum_{k_n \in \{0,1\}} \bigotimes_{l=1}^{n} exp(i\:2\pi q_j  2^{-l} k_l) \hat{k_l} 
-\end{equation}\]
-
-\[\begin{equation}
-    \sum_k exp(i\:2\pi\frac{q_j k}{2^n}) \: k = \bigotimes_{l=1}^{n} \sum_{k_l \in \{0,1\}} exp(i\:2\pi q_j  2^{-l} k_l) \hat{k_l} 
-\end{equation}\]
-
-\[\begin{equation}
-    \sum_k exp(i\:2\pi\frac{q_j k}{2^n}) \: k = \bigotimes_{l=1}^{n} \left[ \hat{0} + exp(i\:2\pi q_j  2^{-l}) \hat{1} \right]
-\end{equation}\]
-
-<p>This transformation allows one to efficiently write down QFT, efficiently as linear algebraic operations (alternatively as a quantum circuit). I will discuss this computation in the rest of the section.</p>
-
-<h5 id="2-quantum-phase-estimation">2. Quantum Phase Estimation</h5>
-
-<h5 id="3-quantum-scalar-inversion">3. Quantum Scalar Inversion</h5>
-
-<h4 id="solving-pdes-with-hhl-algorithms">Solving PDEs with HHL algorithms</h4>
-
-<h5 id="diffusion-equation">Diffusion equation</h5>
-
-<h5 id="wave-equation">Wave equation</h5>
-
-          </article>
-
-        </div>
 
     </div>
 

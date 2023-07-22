@@ -1,5 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-20T15:56:42+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">SINDY - Sparse Identification of non-linear dynamical systems.</title><link href="https://dynamic-queries.github.io/blog/2023/sindy/" rel="alternate" type="text/html" title="SINDY - Sparse Identification of non-linear dynamical systems." /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sindy</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sindy/"><![CDATA[<p>This work is a recreation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-22T11:41:18+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Random feature potentials</title><link href="https://dynamic-queries.github.io/blog/2023/random_models/" rel="alternate" type="text/html" title="Random feature potentials" /><published>2023-07-22T08:00:00+00:00</published><updated>2023-07-22T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/random_models</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/random_models/"><![CDATA[<p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/">Chrisitian Mendl</a> and <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
+
+<p><em>All ideas, figures, equations, examples and code, unless cited, are a work of my own.</em></p>]]></content><author><name></name></author><category term="projects" /><category term="Surrogatization" /><summary type="html"><![CDATA[Inferring potential energy surfaces with random feature models.]]></summary></entry><entry><title type="html">Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/" rel="alternate" type="text/html" title="Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/bayesian_inversion</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
+
+<p><em>All ideas, figures, equations, examples and code, unless cited are a work of my own.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p><strong>Waveform inversion</strong> is principally parameter estimation with three insights.</p>
+
+<ol>
+  <li>The parameter is a field over some domain \(\Omega\).</li>
+  <li>Only partial observations of the quantity of interest are available.</li>
+  <li>Observables are obtained from evaluating a family of wave propagation models.</li>
+</ol>
+
+<p>Consider a simple example of an acoustic wave equation.</p>
+
+\[\begin{align}
+    x \in \Omega \subset \mathbb{R} \\ 
+    t \in \mathbb{R}^+ \\ 
+    \frac{\partial}{\partial t}  u(x,t) = \frac{\partial^2}{\partial x^2} \left[\frac{1}{c(x)^2} u(x,t)\right] \\ 
+    u(x,0) = f(x) \\ 
+    \frac{\partial }{\partial t}u(x,0) = g(x) \\
+    u(y,t) = 0 \quad \forall y \in \delta \Omega
+\end{align}\]
+
+<p>Here \(f,g\) are suitably chosen initial conditions that would sustain elastic progation of a wave in \(\Omega\). In the context of waveform inversion, \(c(x)\) is the parameter and \(u(z,t) \: \forall z \in \hat{\Omega} \subset \Omega\) is the observable. For the sake of this article, consider the following example for \(c,u\).</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/bayesian/parameter.svg" alt="spline-sim" />
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/bayesian/observable.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<p>The goal is to reconstruct \(c(x)\) (<em>to the left</em>) from \(u(z,t)\) (<em>to the right</em>) measured at \(z=z_0\) where \(z_0 \in \Omega\). The optimal \(c^{*}(x)\) is the minimizer to</p>
+
+\[\begin{align}
+  \arg \min_{\hat{c} \in \mathcal{H}} \| \hat{u}(z_0,t; \hat{c}(x)) - u(z_0,t)\|
+\end{align}\]
+
+<p>where \(\hat{u}(x,t)\) is evaluated by solving</p>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Full waveform inversion with MCMC, HMC, NUTS]]></summary></entry><entry><title type="html">ODE Filters</title><link href="https://dynamic-queries.github.io/blog/2023/ode_filters/" rel="alternate" type="text/html" title="ODE Filters" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/ode_filters</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/ode_filters/"><![CDATA[]]></content><author><name></name></author><category term="projects" /><category term="ProbNumerics" /><summary type="html"><![CDATA[Integrating ODEs with Gaussian filters]]></summary></entry><entry><title type="html">SINDY - Sparse Identification of non-linear dynamical systems.</title><link href="https://dynamic-queries.github.io/blog/2023/sindy/" rel="alternate" type="text/html" title="SINDY - Sparse Identification of non-linear dynamical systems." /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sindy</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sindy/"><![CDATA[<p>This work is a re-creation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
 
 <p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
 
@@ -66,6 +126,21 @@
 
 <h4 id="lorenz-69-attractor">Lorenz 69 attractor</h4>
 
+<p>The following non-linear ODE with a specific configuration of parameters has been the poster-child of chaotic attractors for several decades now.</p>
+
+\[\begin{align}
+  \dot{x}(t) = \sigma (y - x)\\
+  \dot{y}(t) = x(\rho - z) - y\\
+  \dot{z}(t) = xy - \beta z\\ 
+  \sigma = 10 \\ 
+  \rho = 28 \\ 
+  \beta = \frac{8}{3} \\ 
+  \begin{bmatrix} x_0 \\ y_0 \\ z_0  \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} \\ 
+  t \in [0,100]
+\end{align}\]
+
+<p>Viewed clockwise, the figure below shows i) Trajectories of the attractor obtained from a numerical integrator, ii) Time derivative of the trajectories, iii) Chosen bases functions \(\mathcal{B}\) and the corresponding weights and iv) the reconstructed attractor.</p>
+
 <div class="row">
   <div class="column">
     <img style="width:100%" src="/assets/sindy/Traj_Lorenz.png" alt="spline-sim" />
@@ -87,6 +162,21 @@
 <hr />
 
 <h4 id="lotka-volterra-model">Lotka Volterra model</h4>
+
+<p>Prey predator models are the staple for several ecological, biological and even plasma physical applications. A common model with a single species of prey and predator is shown below.</p>
+
+\[\begin{align}
+  \dot{x}(t) = \alpha x(t) + \beta x(t)y(t) \\ 
+  \dot{y}(t) = \gamma x(t)y(t) - \delta y(t) \\
+  \alpha = 0.7 \\
+  \beta = -0.3 \\ 
+  \gamma = -0.3 \\ 
+  \delta = 0.4 \\ 
+  \begin{bmatrix} x_0 \\ y_0  \end{bmatrix} = \begin{bmatrix} 1 \\ 1  \end{bmatrix} \\ 
+  t \in [0,100]
+\end{align}\]
+
+<p>Akin to the Lorenz attractor, the SINDY algorithm is used to infer the bases weights and the trajetories are then reconstructed.</p>
 
 <div class="row">
   <div class="column">
@@ -112,4 +202,114 @@
 
 <p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
 
-<script src="https://gist.github.com/dynamic-queries/3edf052b43ec90467dc48f91fe3b552b.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Symbolic regression.]]></summary></entry></feed>
+<script src="https://gist.github.com/dynamic-queries/3edf052b43ec90467dc48f91fe3b552b.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Symbolic regression.]]></summary></entry><entry><title type="html">Full Waveform inversion</title><link href="https://dynamic-queries.github.io/blog/2023/fwi/" rel="alternate" type="text/html" title="Full Waveform inversion" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/fwi</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/fwi/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>. Part of this work was presented at <a href="https://meetings.siam.org/sess/dsp_talk.cfm?p=125969">SIAM CSE 2023 in Amsterdam</a></p>
+
+<p><em>All ideas, figures, equations, examples and code are a work of my own.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Ultrasonic imaging is a versatile tool for visualizing the subsurface properties of structures, which are not readily available for physical observation. In the last few decades this method has proliferated all walks of life, with applications ranging from medical imaging to non-destructive testing in engineering and the like. There have also been several adapatations such as photo-acoustic imaging which is a crucial tool in imaging microscopic elements of biological matter.</p>
+
+<p>Here I am interested in non-destructive testing for engineering structures. Consider the idealized scenario illustrated below.</p>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:70%" class="center" src="/assets/FWI_edit/outline.svg" alt="spline-sur" /></p>
+
+<p>There is a rectangular domain with a defect in it. One does not know apriori how the defect looks like. But one has access to sensors measuring the amplitude of waves on the surface of the domain. Full waveform inversion concerns reconstructing the shape of the defect from these measured signals.</p>
+
+<h3 id="method">Method</h3>
+
+<p>In an ideal setting, the waves inside the domain \(\Omega\) can be assumed to propagate with velocity \(\forall x \in \Omega \quad c: x \mapsto \mathbb{R}\) and evolving in accordance with the acoustic wave equation.</p>
+
+\[\begin{align}
+    \frac{\partial^2 u(x,t)}{\partial t^2} = \frac{\partial^2 }{\partial x^2}\left[\frac{1}{c(x)^2}u(x,t)\right] \\ 
+    u(x,0) = f(x) \\ 
+    \frac{\partial u(x,0)}{\partial t} = g(x) \\ 
+    u(y,t) = 0 \:\: \forall y \in \delta \Omega
+\end{align}\]
+
+<p>Here, I assume that the shape, \(s(x)\) of the defect is related to the velocity \(c(x)\) through \(s(x) = \phi(c(x))\) for some known invertible function \(\phi\). From this, it can be argued that inferring \(c(x)\) from reference measurement \(u_m(z,t) \:\: \forall z \in \Omega_s\) is, in effect, full-wave form inversion. Or equivalently one seeks the minimizer for the following:</p>
+
+\[\begin{equation}
+    \arg \min_{c \in \mathcal{H}} \|u(z,t;c(x)) - u_m(z,t)\|
+\end{equation}\]
+
+<h3 id="procedure">Procedure</h3>
+
+<p>I illustrate my approach to this problem with a synthetic example.</p>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems," /><category term="Surrogatization" /><summary type="html"><![CDATA[Computational Non-destructive testing]]></summary></entry><entry><title type="html">Learning Hamiltonians with GP</title><link href="https://dynamic-queries.github.io/blog/2023/hamiltonian/" rel="alternate" type="text/html" title="Learning Hamiltonians with GP" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/hamiltonian</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/hamiltonian/"><![CDATA[<p>This work is a re-creation of a method for learning the Hamiltonian of a dynamical system from <a href="https://pubs.aip.org/aip/cha/article/29/12/121107/1027304/On-learning-Hamiltonian-systems-from-data">Bertlan and Dietrich</a>. The article also introduces the fundamentals of Gaussian processes .</p>
+
+<p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Inferring invariants of dynamical systems with gaussian processes.]]></summary></entry><entry><title type="html">Multi-output Gaussian processes</title><link href="https://dynamic-queries.github.io/blog/2023/mogp/" rel="alternate" type="text/html" title="Multi-output Gaussian processes" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/mogp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/mogp/"><![CDATA[<h3 id="introduction">Introduction</h3>
+<p>Gaussian processes are a popular <strong>Bayesian</strong> <strong>learning</strong> framework.</p>
+
+<p>A typical <em>learning problem</em> consists of approximating an approximation \(\hat{f}\) to the function \(f:x \mapsto y \quad \forall x,y \in \Omega \subset \mathbb{R}^d\), given evaluations of the function at certain input points, that is \(\mathcal{D} = \{(x_i, f_i) : i \in \mathbb{N}\}\).</p>
+
+<p><em>Bayesian inference</em> assumes that the input \(x\) and the outputs \(y\) are random variables with some densities \(P_x, P_y\) respectively. These densities are related by</p>
+
+\[P(x,y) = P(y | x) P(x) = P(x | y) P(y)\]
+
+<p>Note that we do not have a closed form for any of these probability functions and estimating probability densities from data is in itself a hard problem. Instead, we make guesses about what these functions might be. Historically, each of these probability functions have their own names, namely</p>
+
+<ol>
+  <li>\(P(y)\) – Prior</li>
+  <li>\(P(x | y)\) – Likelihood</li>
+  <li>\(P(x)\) – Marginal</li>
+  <li>\(P(y | x)\) – Posterior</li>
+</ol>
+
+<p>Commonly, one assumes a functional form for the prior. The posterior is the updated version of the prior, once we have seen the reference data.</p>
+
+<h3 id="single-output-gp">Single Output GP</h3>
+
+<p>Further, samples \(y,x\) are assumed to be related via</p>
+
+\[y = f(x)\]
+
+\[f:x \mapsto y \quad \forall x,y \in \Omega\]
+
+<p>Here \(f\) is assumed to be any non-linear function. One can project \(x\) onto a higher dimensional space spanned by the bases generated from a kernel function \(\kappa\), also known as the <strong>kernel trick</strong>, where the non-linearity of \(f\) is transformed into a linearity. Without any loss of generality, we can assume that any non-linear function can be transformed into a linear map.</p>
+
+\[y = Wx + b\]
+
+\[W \in \mathbb{R}^{d \times d} \: \textrm{ and } b \in \mathbb{R}^d\]
+
+<p>With this parameteric form for the output, defining a prior for the weights, \(z := \begin{bmatrix} W &amp; b \end{bmatrix}\) is equivalent to defining a prior for the output, \(y\). Therefore in a single output GP, there are three random variables \(x,y,z\). Their joint probability distribution is given as</p>
+
+\[\begin{align}
+    P(x,y,z) = P(x,y|z) P(z) = P(z|x,y) P(x,y) \\
+ P(z|x,y) = \frac{P(x,y|z) P(z)}{P(x,y)} \\ 
+ = \frac{P(y|x,z) P(x,z)}{P(x,y)} \\
+  = \frac{P(y|x,z) P(x)P(z)}{P(y|x)P(x)}\\
+ P(z|x,y) \propto P(y|x,z) P(z)
+ \end{align}\]
+
+<p>Here, \(z \sim \mathcal{N}(0, \Sigma_z)\), that is</p>
+
+\[\begin{align}
+    P(z) = \frac{1}{\sqrt{(2\pi)^d |\Sigma_z|}} \exp\left(-\frac{1}{2} z^T \Sigma_z^{-1} z\right)
+\end{align}\]
+
+<p>Further, the likelihood is defined with the assumption that each component of \(x\) is independent of one another. This is why this inference procedure is called single output Gaussian process. That is</p>
+
+\[\begin{align}
+    P(y|x,z) = \prod_{i=1}^{d} \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(-\frac{1}{2}\left(\frac{y_i - (W_i x_i + b_i)}{\sigma}\right)^2\right) \\ 
+    P(y|x,z) = \frac{1}{(\sqrt{2\pi \sigma^2})^d} \exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^{d} (y_i - (W_i x_i + b_i))^2\right) \\ 
+    = \frac{1}{\sqrt{(2\pi)^d |\Sigma_y|}} \exp\left(-\frac{1}{2}(y - (W x + b))^T \Sigma_y^{-1} (y - (W x + b))\right)
+\end{align}\]
+
+<p>From this \(P(y|x,z)\) is a multivariate normal distribution \(\mathcal{N}(Wx+b, \Sigma_y)\).</p>
+
+<p>Further one can write down the posterior as</p>
+
+\[\begin{align}
+    P(z|x,y) \propto P(y|x,z) P(z) \\ 
+    = \frac{1}{(2\pi)^d \sqrt{|\Sigma_z||\Sigma_y|}} \exp\left(-\frac{1}{2} \left[z^T \Sigma_z^{-1} z + (y - (W x + b))^T \Sigma_y^{-1} (y - (W x + b)) \right]\right) \\ 
+    = \frac{1}{(2\pi)^d \sqrt{|\Sigma_z||\Sigma_y|}} \exp\left(-\frac{1}{2} \left[z^T \Sigma_z^{-1} z + (y - z x')^T \Sigma_y^{-1} (y - z x') \right]\right)
+\end{align}\]]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Learning mutivariate dynamical systems with GPs]]></summary></entry></feed>

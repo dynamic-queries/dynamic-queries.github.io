@@ -73,7 +73,7 @@
               
               <!-- Blog -->
               <li class="nav-item active">
-                <a class="nav-link" href="/blog/">Blog<span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/blog/">Projects<span class="sr-only">(current)</span></a>
               </li>
 
               <!-- Other pages -->
@@ -81,16 +81,10 @@
                 <a class="nav-link" href="/cv/">CV</a>
               </li>
               <li class="nav-item ">
-                <a class="nav-link" href="/projects/">Projects</a>
-              </li>
-              <li class="nav-item ">
                 <a class="nav-link" href="/collabs/">Collaborations</a>
               </li>
               <li class="nav-item ">
                 <a class="nav-link" href="/teaching/">Teaching</a>
-              </li>
-              <li class="nav-item ">
-                <a class="nav-link" href="/veritasium/">Veritas-Si-ium</a>
               </li>
 
               <!-- Toogle theme mode -->
@@ -138,7 +132,7 @@
   </header>
 
   <article class="post-content">
-    <p>This work is a recreation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113" rel="external nofollow noopener" target="_blank">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
+    <p>This work is a re-creation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113" rel="external nofollow noopener" target="_blank">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
 
 <p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
 
@@ -205,6 +199,21 @@
 
 <h4 id="lorenz-69-attractor">Lorenz 69 attractor</h4>
 
+<p>The following non-linear ODE with a specific configuration of parameters has been the poster-child of chaotic attractors for several decades now.</p>
+
+\[\begin{align}
+  \dot{x}(t) = \sigma (y - x)\\
+  \dot{y}(t) = x(\rho - z) - y\\
+  \dot{z}(t) = xy - \beta z\\ 
+  \sigma = 10 \\ 
+  \rho = 28 \\ 
+  \beta = \frac{8}{3} \\ 
+  \begin{bmatrix} x_0 \\ y_0 \\ z_0  \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} \\ 
+  t \in [0,100]
+\end{align}\]
+
+<p>Viewed clockwise, the figure below shows i) Trajectories of the attractor obtained from a numerical integrator, ii) Time derivative of the trajectories, iii) Chosen bases functions \(\mathcal{B}\) and the corresponding weights and iv) the reconstructed attractor.</p>
+
 <div class="row">
   <div class="column">
     <img style="width:100%" src="/assets/sindy/Traj_Lorenz.png" alt="spline-sim">
@@ -226,6 +235,21 @@
 <hr>
 
 <h4 id="lotka-volterra-model">Lotka Volterra model</h4>
+
+<p>Prey predator models are the staple for several ecological, biological and even plasma physical applications. A common model with a single species of prey and predator is shown below.</p>
+
+\[\begin{align}
+  \dot{x}(t) = \alpha x(t) + \beta x(t)y(t) \\ 
+  \dot{y}(t) = \gamma x(t)y(t) - \delta y(t) \\
+  \alpha = 0.7 \\
+  \beta = -0.3 \\ 
+  \gamma = -0.3 \\ 
+  \delta = 0.4 \\ 
+  \begin{bmatrix} x_0 \\ y_0  \end{bmatrix} = \begin{bmatrix} 1 \\ 1  \end{bmatrix} \\ 
+  t \in [0,100]
+\end{align}\]
+
+<p>Akin to the Lorenz attractor, the SINDY algorithm is used to infer the bases weights and the trajetories are then reconstructed.</p>
 
 <div class="row">
   <div class="column">
