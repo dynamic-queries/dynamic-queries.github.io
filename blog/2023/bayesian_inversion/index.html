@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Bayesian Waveform Inversion | Rahul Manavalan</title>
+    <title>(Original work) Bayesian Waveform Inversion | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
     <meta name="description" content="Full waveform inversion with MCMC, HMC, NUTS">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
@@ -115,7 +115,7 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Bayesian Waveform Inversion</h1>
+    <h1 class="post-title">(Original work) Bayesian Waveform Inversion</h1>
     <p class="post-meta">July 21, 2023</p>
     <p class="post-tags">
       <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
@@ -184,13 +184,100 @@
   </div>
 </div>
 
-<p>The goal is to reconstruct \(c(x)\) (<em>to the left</em>) from \(u(z,t)\) (<em>to the right</em>) measured at \(z=z_0\) where \(z_0 \in \Omega\). The optimal \(c^{*}(x)\) is the minimizer to</p>
+<p>The goal is to reconstruct \(c(x)\) (<em>to the left</em>) from \(u(z,t)\) (<em>to the right</em>) measured at \(z=\{z_0, z_i\}\) where \(z_i \in \Omega\). The optimal \(c^{*}(x)\) is the minimizer to</p>
 
 \[\begin{align}
-  \arg \min_{\hat{c} \in \mathcal{H}} \| \hat{u}(z_0,t; \hat{c}(x)) - u(z_0,t)\|
+  \label{eq:opt}
+  \arg \min_{\hat{c} \in \mathcal{H}} \sum_{i}\| \hat{u}(z_i,t; \hat{c}(x)) - u(z_i,t)\|
 \end{align}\]
 
-<p>where \(\hat{u}(x,t)\) is evaluated by solving</p>
+<p>where \(\hat{u}(z_0,t)\) is evaluated by solving the acoustic wave equation using a robust finite difference method <em>(see code)</em>.</p>
+
+<h3 id="parameter-estimation">Parameter estimation</h3>
+<p>Estimating \(c(x)\) is non-trivial. Firstly, one has to choose an appropriate bases to parameterize this function. This of course varies on a case by case basis. For the example above, radial bases functions are good approximants. Therefore,</p>
+
+\[\begin{align}
+  c(x) = \sum_{i=1}^{N} a_i \phi_i (x) \\ 
+  \phi_i(x) := \phi(x;x_i,\mu) = \exp\left[{-\left(\frac{x-x_0}{\mu}\right)^2}\right] \\ 
+  N = 5
+\end{align}\]
+
+<p>Therefore the parameterization space is now \(\mathcal{A} \ni a\).</p>
+
+<p>\(N\) is, by design, chosen sufficiently small to faciliate comparison with Bayesian optimization.</p>
+
+<h4 id="frequentist-estimation">Frequentist estimation</h4>
+<p>Problem (\ref{eq:opt}) is ill-posed in the sense of Hadamard. As a result, it is initially solved with tradional gradient based optimization algorithms with suitable regularization. The algorithms used in this pursuit, are briefy outlined and the “best possible” reconstructions are presented.</p>
+
+<p>The reconstructions here, must be taken with a grain of salt, for it is entirely possible to come up with an excellent initial guess that could converge to the actual \(c(x)\) accurately.</p>
+
+<p>Furthermore, it is observed that the reconstructions are sensitive to the choice of the type of regularization and the magnitude of the regularization constant. Common regularizations to an \(l_2\) loss includes weighted norms of inputs, finite difference of \(l_2\) loss with respect to time, fourier coefficients of \(l_2\) loss and so on.</p>
+
+<p>In the presented cases, \(l_2\) Tikhonov regularization is used. The values of the regularization constants and the number of iterations used for each of these algorithms is indicated below.</p>
+
+<h5 id="adam">ADAM</h5>
+
+<hr>
+<p><em>Algorithm</em></p>
+
+<hr>
+
+<p>Regularization constant \(\lambda = 2.01 \pm 10^{-4}\)</p>
+
+<p><img style="width:60%" src="/assets/bayesian/recon_parameter_adam.svg" alt="spline-sur"></p>
+
+<h5 id="bfgs">BFGS</h5>
+
+<hr>
+<p><em>Algorithm</em></p>
+
+<hr>
+
+<p>Regularization constant \(\lambda = 0.399 \pm 10^{-3}\)</p>
+
+<p><img style="width:60%" src="/assets/bayesian/recon_parameter_bfgs.svg" alt="spline-sur"></p>
+
+<h5 id="issues">Issues</h5>
+
+<p>There are two difficulties that one encounters with the frequentist estimation while treating an ill-conditioned problem such as this one.</p>
+
+<ol>
+  <li>Good initial guesses are vital for fast convergence.</li>
+  <li>Estimation is very sensitive to the value of \(\lambda\).</li>
+</ol>
+
+<p>Elaborating on (2), consider the following reconstructions with BFGS optimization for \(\lambda = 0.397,\:0.399\:,0.40\:,0.402\)  respectively.</p>
+
+<div class="row">
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.397.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.399.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.4.svg" alt="spline-sur">
+  </div>
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.402.svg" alt="spline-sur">
+  </div>
+</div>
+
+<p>Such sensitivity makes any practical grid search (which is performed at a much higher resolution) useless, questioning the practicality of such optimization routines for practical applications.</p>
+
+<h4 id="bayesian-estimation">Bayesian estimation</h4>
+<p>Plagued by the ill-posedness of frequentist estimation, it seems appropriate to turn to Bayesian estimation. Granted, one does need a good prior for Bayesian methods to make computational sense, however Bayesian inverse problems are well posed (As highlighted in <a href="https://www.cambridge.org/core/journals/acta-numerica/article/abs/inverse-problems-a-bayesian-perspective/587A3A0D480A1A7C2B1B284BCEDF7E23" rel="external nofollow noopener" target="_blank">Stuart</a>). In what follows, two classes of Bayesian state estimation methods – MCMC and HMC are used to estimate \(c(x)\). Relative merits and pitfalls, in contrast with frequentist methods are discussed.</p>
+
+<h5 id="markov-chain-monte-carlo">Markov Chain Monte carlo</h5>
+
+<h5 id="hamiltonian-monte-carlo">Hamiltonian Monte carlo</h5>
+
+<h3 id="code">Code</h3>
+
+<p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
+
+<script src="https://gist.github.com/dynamic-queries/3473ab7b87744cd1ad07cddd74eabd03.js"></script>
+
 
   </article>
 </div>

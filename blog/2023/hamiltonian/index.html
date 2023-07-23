@@ -132,10 +132,32 @@
   </header>
 
   <article class="post-content">
-    <p>This work is a re-creation of a method for learning the Hamiltonian of a dynamical system from <a href="https://pubs.aip.org/aip/cha/article/29/12/121107/1027304/On-learning-Hamiltonian-systems-from-data" rel="external nofollow noopener" target="_blank">Bertlan and Dietrich</a>. The article also introduces the fundamentals of Gaussian processes .</p>
+    <p>This work is a re-creation of a method for learning the Hamiltonian of a dynamical system from <a href="https://pubs.aip.org/aip/cha/article/29/12/121107/1027304/On-learning-Hamiltonian-systems-from-data" rel="external nofollow noopener" target="_blank">Bertlan and Dietrich</a>.</p>
 
 <p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
 
+<h3 id="introduction">Introduction</h3>
+
+<p>Most physical systems lend themselves to description using Hamiltonian mechanics. Briefly put:</p>
+
+<p>For an \(N\) body system living in \(d\) dimensions, the classical mechanical state of the system is described sufficiently using a pair of canonical coordinates \(q,p \in \mathbb{R}^{dN}\). For an evolutionary system, the canonical coordinates depend on time. Evidently, such evolutions are governed by Newton’s equations. However, Netwon’s equation are bulky to compute, analyze for large \(N\). This problem was recognized by Hamilton and subsequently led to what is now referred to the Hamiltonian formulation of classical mechanics.</p>
+
+<p>Hamilton postulated that there exists a function \(H : q \times p \mapsto \mathbb{R}\) – the Hamiltonian. The evolution equations in this framework were given by the following PDE:</p>
+
+\[\begin{align}
+    \frac{\partial}{\partial t} q(t) = \frac{\partial H}{\partial p}\\ 
+    \frac{\partial}{\partial t} p(t) = -\frac{\partial H}{\partial q}
+\end{align}\]
+
+<p>Or more compactly</p>
+
+\[{\partial_t} z := {\partial_t}\begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} \mathcal{0} &amp;&amp;  \mathcal{I} \\ -\mathcal{I} &amp;&amp; \mathcal{0} \end{bmatrix} \partial_{\begin{bmatrix} q &amp; p \end{bmatrix}^{T}} H(q,p)\]
+
+<p>Given observations \(\left([q(t_1),q(t_2),...,q(t_m)],[p(t_1),p(t_2),...,p(t_m)]\right)\), I am interested in learning \(H\) using a Gaussian process.</p>
+
+<h3 id="method">Method</h3>
+
+<p>Let \(H \sim \mathcal{GP(\mu_z,\kappa(z,z'))}\).</p>
 
   </article>
 </div>
