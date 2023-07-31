@@ -1,7 +1,88 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-23T00:40:42+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-31T08:20:04+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
 </subtitle><entry><title type="html">(Original work) Random feature potentials</title><link href="https://dynamic-queries.github.io/blog/2023/random_models/" rel="alternate" type="text/html" title="(Original work) Random feature potentials" /><published>2023-07-22T08:00:00+00:00</published><updated>2023-07-22T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/random_models</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/random_models/"><![CDATA[<p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/">Chrisitian Mendl</a> and <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
 
-<p><em>All ideas, figures, equations, examples and code, unless cited, are a work of my own.</em></p>]]></content><author><name></name></author><category term="projects" /><category term="Surrogatization" /><summary type="html"><![CDATA[Inferring potential energy surfaces with random feature models.]]></summary></entry><entry><title type="html">Learning effective SDEs with neural networks</title><link href="https://dynamic-queries.github.io/blog/2023/sde/" rel="alternate" type="text/html" title="Learning effective SDEs with neural networks" /><published>2023-07-22T00:00:00+00:00</published><updated>2023-07-22T00:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sde</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sde/"><![CDATA[<p>This work is a re-creation of a method for learning effective stochastic differential equations modeling a dynamical system from <a href="https://arxiv.org/abs/2106.09004">Dietrich et al</a>. It also introduces numerical methods for integrating stochastic differential equations.</p>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><category term="SDEs" /><summary type="html"><![CDATA[Coarse grained modeling]]></summary></entry><entry><title type="html">(Original work) Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/" rel="alternate" type="text/html" title="(Original work) Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/bayesian_inversion</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
+<p><em>All ideas, figures, equations, examples and code, unless cited, are a work of my own.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>The importance of understanding the composition and behaviour of molecules is well established. Scientific disciplines such as chemistry, molecular biology, drug discovery and others, rely on molecular dynamics simulations as their core computational tool. 
+Tradionally, MD has been and to some extent still is, dependent on empirical force fields for estimating the interaction forces among molecules.</p>
+
+<p>These empirical models are a simplification at best. The “proper” way to evaluate the forces in a molecular dynamics simulation is to use first principle calculations that solves the stationary Schrodinger’s equations. But self-consistent loop sub-routines in most first principle calculations are too expensive to simulate molecules realistically for time domains where phenomena of interest emerge.</p>
+
+<p>This brings us to the fore of research today, where machine learning algorithms (deep learning, especially) has been co-opted to “learn” the rules of quantum mechanics from huge clusters of molecular data, generated from first principle calculations. The models used are the usual suspects – neural networks, gaussian processes and other kernel methods.</p>
+
+<p>In this work, we investigate the efficacy of random feature models as suitable surrogates for learning the ground state potentials of molecular systems.</p>
+
+<p><em>I am aware that these two topics are esoteric in their own right. Therefore, I provide a quick interlude that discusses the notions of 1) Potential energy surfaces of molecular systems and 2) Random feature models as function approximation tools.</em></p>
+
+<h3 id="interlude">Interlude</h3>
+
+<h4 id="potential-energy-surfaces">Potential energy surfaces</h4>
+
+<h4 id="random-feature-models">Random feature models</h4>
+<p>Consider a sufficiently regular function \(f:x \mapsto y\). Then one can find bases functions \(\phi_i(x; \theta)\) with parameteric dependence on \(\theta\) such that</p>
+
+\[\begin{align}
+    f(x) \approx \sum_i a_i \phi_i(x; \theta)
+\end{align}\]
+
+<p>This is a common feature in most function approximation schemes. In particular, if one uses a neural network with one hidden layer:</p>
+
+\[\begin{align}
+    \label{eq:randomNN}
+    f(x) \approx W_2 \: \rho \left(W_1 x  + b_1 \right)
+\end{align}\]
+
+<p>Tradionally, one randomly chooses the parameters which are subsequently trained with a gradient based algorithm. If one assumes that the weights \(\theta= \{W_1, W_2, b_1\}\) follow a probability distribution \(p_{\theta}\), during training this distribution is modified with every epoch.</p>
+
+<p>Random feature models, on the otherhand,  sample \(\theta \sim \mathcal{U}_{\theta}\) from a uniform distribution (which requires no training). As surprising it is, it has been shown with uniform sampling of \(\theta\) in (\ref{eq:randomNN}), used in conjunction with \(\rho = \{cos, tanh, relu\}\) is a universal approximator. Further, one can define a litany of heuristics to define ad-hoc “probability” functions \(p_i\), which when used for sampling should yield more accurate approximations at the same cost.</p>
+
+<p>Shown below is the function \(x \mapsto sin(x)\) trained with an ADAM optimizer and one sampled using the sampling algorithm (I will discuss this next.). The prediction from the sampling algorithm is one shot, requiring no iterative training training, that is characteristic of all gradient based training methods.</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/single_output.svg" alt="spline-sim" />
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/single_sampling.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<p>This is also the case for a multioutput function such as</p>
+
+\[x \mapsto \begin{bmatrix} sin(4x) \\ cos(4x) \\ sin(4x) \: cos(4x)\end{bmatrix}\]
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/multi_output.svg" alt="spline-sim" />
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/multi_sampling.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<h3 id="code">Code</h3>
+
+<h5 id="random-feature-model-for-approximating-simple-functions">Random feature model for approximating simple functions</h5>
+
+<script src="https://gist.github.com/dynamic-queries/7fe5162d9f355fe9e7414cf50a8fdfa0.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="Surrogatization" /><summary type="html"><![CDATA[Inferring potential energy surfaces with random feature models.]]></summary></entry><entry><title type="html">(Original work) Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/" rel="alternate" type="text/html" title="(Original work) Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/bayesian_inversion</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
 
 <p><em>All ideas, figures, equations, examples and code, unless cited are a work of my own.</em></p>
 
@@ -20,7 +101,7 @@
 \[\begin{align}
     x \in \Omega \subset \mathbb{R} \\ 
     t \in \mathbb{R}^+ \\ 
-    \frac{\partial}{\partial t}  u(x,t) = \frac{\partial^2}{\partial x^2} \left[\frac{1}{c(x)^2} u(x,t)\right] \\ 
+    \frac{\partial}{\partial t}  u(x,t) = \frac{\partial^2}{\partial x^2} \left[c(x)^2 u(x,t)\right] \\ 
     u(x,0) = f(x) \\ 
     \frac{\partial }{\partial t}u(x,0) = g(x) \\
     u(y,t) = 0 \quad \forall y \in \delta \Omega
@@ -82,27 +163,86 @@
 
 <p>Furthermore, it is observed that the reconstructions are sensitive to the choice of the type of regularization and the magnitude of the regularization constant. Common regularizations to an \(l_2\) loss includes weighted norms of inputs, finite difference of \(l_2\) loss with respect to time, fourier coefficients of \(l_2\) loss and so on.</p>
 
-<p>In the presented cases, \(l_2\) Tikhonov regularization is used. The values of the regularization constants and the number of iterations used for each of these algorithms is indicated below.</p>
+<p>In the presented cases, \(l_2\) Tikhonov regularization is used. That is</p>
+
+\[\begin{align}
+  \arg \min_{a \in \mathcal{A}} \sum_{i}\| \hat{u}(z_i,t; \hat{c}(x;a)) - u(z_i,t)\| + \lambda \| \hat{c}(x;a) \|
+\end{align}\]
+
+<p>The values of the regularization constants and the number of iterations used for each of these algorithms is indicated below.</p>
 
 <h5 id="adam">ADAM</h5>
 
+<p>This is a first order optimization algorithm introduced in 2014 by <a href="https://arxiv.org/abs/1412.6980">Kingma</a>. It is a variant of momentum based methods such as Adagrad and Nesterov optimization methods. Generically, if \(f_{\theta}\) is the objective function that needs to be optimized with respect to the parameters \(\theta\), it is done so as follows.</p>
+
 <hr />
-<p><em>Algorithm</em></p>
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Intitialize:</p>
+<ol>
+  <li>Constants \(\beta_1 = 0.9, \beta_2 = 0.999, \alpha = 0.001 , \epsilon=10^{-8}\)</li>
+  <li>Initial positions and velocities \(m_0 = 0, v_0 = 0\)</li>
+  <li>Make a “good initial guess” \(\theta_0\)</li>
+</ol>
+
+<p>For the \(t^{th}\) iteration:</p>
+
+<ol>
+  <li>Evaluate the gradient of the function \(g_t := \nabla_{\theta} f_{\theta_{t-1}}\)</li>
+  <li>Compute “position” term : \(m_t = \frac{\beta_1}{1 - \beta_1 ^ t} m_{t-1} + \frac{1-\beta_1}{1 - \beta_1 ^ t} g_t\)</li>
+  <li>Compute “momentum” term : \(v_t = \frac{\beta_2}{1 - \beta_2 ^ t} v_{t-1} + \frac{1-\beta_2}{1 - \beta_2 ^ t} g_t^2\)</li>
+  <li>Update parameters : \(\theta_t = \theta_{t-1} - \alpha \frac{m_t}{\sqrt{v_t} + \epsilon}\)</li>
+</ol>
+
+<p>For \(t \in [1,\textrm{maxiters}] \subset \mathbb{N}\)</p>
+
+<ol>
+  <li>Repeat the four previous steps.</li>
+</ol>
 
 <hr />
 
-<p>Regularization constant \(\lambda = 2.01 \pm 10^{-4}\)</p>
+<p>Using the previous algorithm and with a regularization constant \(\lambda = 2.01 \pm 10^{-4}\), one obtains the following reconstruction.</p>
 
 <p><img style="width:60%" src="/assets/bayesian/recon_parameter_adam.svg" alt="spline-sur" /></p>
 
 <h5 id="bfgs">BFGS</h5>
 
+<p>One can also use, higher order optimization methods that make use of  \(\nabla_{\theta}(\nabla_{\theta} f_{\theta})\). Alas, computing the Hessian for every iteration is computationally expensive.
+<a href="https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm">BFGS method</a> is a quasi-Netwon method which instead of computing the entire Hessian, approximates it with several evalutions of the gradient of \(f_{\theta}\).</p>
+
+<p>Akin, to the previous section, one obtains a minimizer \(\theta^*\) for \(f_{\theta}\) as follows.</p>
+
 <hr />
-<p><em>Algorithm</em></p>
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Initialize:</p>
+
+<ol>
+  <li>Initial Hessian approximant and initial learning rate : \(B_0 = \mathcal{I}, \alpha_0 = 10^{-2}\)</li>
+  <li>Make a “good initial guess” \(\theta_0\)</li>
+</ol>
+
+<p>For every \(k^{th}\) iteration:</p>
+
+<ol>
+  <li>Estimate new search direction, \(p_k\) by solving \(B_{k-1} p_k = -\nabla_{\theta} f_{\theta_{k-1}}\)</li>
+  <li>Estimate step size, \(\alpha_k\) by solving \(\arg \min_{\alpha_k} f_{\theta}(\theta_{k-1} + \alpha_k p_k)\)</li>
+  <li>Compute new direction \(\theta_{k} = \theta_{k-1} + \alpha_k p_k\)</li>
+  <li>Estimate update vector \(y_k = \nabla_{\theta} f(\theta_{k}) - \nabla_{\theta} f(\theta_{k-1})\)</li>
+  <li>Let \(s_k = \alpha_k p_k\)</li>
+  <li>Update Hessian approximant \(B_{k} = B_{k-1} + \frac{y_k y_k^T}{y_k^T s_k} + \frac{B_{k-1} s_k^T s_k B_{k-1}^T}{s_k^T B_{k-1} s_k}\)</li>
+</ol>
+
+<p>For \(k \in [1,\textrm{maxiters}] \subset \mathbb{N}\)</p>
+
+<ol>
+  <li>Repeat the six previous steps.</li>
+</ol>
 
 <hr />
 
-<p>Regularization constant \(\lambda = 0.399 \pm 10^{-3}\)</p>
+<p>Using the previous algorithm and with a regularization constant \(\lambda = 0.399 \pm 10^{-3}\), one obtains the following reconstruction.</p>
 
 <p><img style="width:60%" src="/assets/bayesian/recon_parameter_bfgs.svg" alt="spline-sur" /></p>
 
@@ -135,17 +275,107 @@
 <p>Such sensitivity makes any practical grid search (which is performed at a much higher resolution) useless, questioning the practicality of such optimization routines for practical applications.</p>
 
 <h4 id="bayesian-estimation">Bayesian estimation</h4>
-<p>Plagued by the ill-posedness of frequentist estimation, it seems appropriate to turn to Bayesian estimation. Granted, one does need a good prior for Bayesian methods to make computational sense, however Bayesian inverse problems are well posed (As highlighted in <a href="https://www.cambridge.org/core/journals/acta-numerica/article/abs/inverse-problems-a-bayesian-perspective/587A3A0D480A1A7C2B1B284BCEDF7E23">Stuart</a>). In what follows, two classes of Bayesian state estimation methods – MCMC and HMC are used to estimate \(c(x)\). Relative merits and pitfalls, in contrast with frequentist methods are discussed.</p>
+<p>Plagued by the ill-posedness of frequentist estimation, it seems appropriate to turn to Bayesian estimation. Granted, one does need a good prior for Bayesian methods to make computational sense, however Bayesian inverse problems are well posed (As highlighted in <a href="https://www.cambridge.org/core/journals/acta-numerica/article/abs/inverse-problems-a-bayesian-perspective/587A3A0D480A1A7C2B1B284BCEDF7E23">Stuart</a>).</p>
+
+<p>Appropriately, the Bayes rule for this inference problem can be written as</p>
+
+\[\begin{align}
+  p(a | u(z)) = \frac{p(u(z)|a)\:p(a)}{p(u(z))}
+\end{align}\]
+
+<p>It is known that, esimating the marginal density \(p(u(z))\) is computationlly intractable. Therefore, in what follows two classes of Bayesian state estimation methods – MCMC and HMC (and its variants) are used to estimate \(p(a|u(z))\) from which one can compute the expectation, variance and other higher order moments of \(\hat{c}(x;a)\).</p>
 
 <h5 id="markov-chain-monte-carlo">Markov Chain Monte carlo</h5>
 
+<h6 id="metropolis-hasting-sampling">Metropolis Hasting sampling</h6>
+
+<h6 id="gibbs-sampling">Gibbs sampling</h6>
+
 <h5 id="hamiltonian-monte-carlo">Hamiltonian Monte carlo</h5>
+
+<h6 id="plain-hmc">Plain HMC</h6>
+
+<h6 id="no-u-turn-sampling-hmc">No U-turn sampling HMC</h6>
 
 <h3 id="code">Code</h3>
 
 <p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
 
-<script src="https://gist.github.com/dynamic-queries/3473ab7b87744cd1ad07cddd74eabd03.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Full waveform inversion with MCMC, HMC, NUTS]]></summary></entry><entry><title type="html">ODE Filters</title><link href="https://dynamic-queries.github.io/blog/2023/ode_filters/" rel="alternate" type="text/html" title="ODE Filters" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/ode_filters</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/ode_filters/"><![CDATA[]]></content><author><name></name></author><category term="projects" /><category term="ProbNumerics" /><summary type="html"><![CDATA[Integrating ODEs with Gaussian filters]]></summary></entry><entry><title type="html">SINDY - Sparse Identification of non-linear dynamical systems.</title><link href="https://dynamic-queries.github.io/blog/2023/sindy/" rel="alternate" type="text/html" title="SINDY - Sparse Identification of non-linear dynamical systems." /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sindy</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sindy/"><![CDATA[<p>This work is a re-creation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
+<script src="https://gist.github.com/dynamic-queries/3473ab7b87744cd1ad07cddd74eabd03.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Full waveform inversion with MCMC, HMC, NUTS]]></summary></entry><entry><title type="html">(Original work) Latent space Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI/" rel="alternate" type="text/html" title="(Original work) Latent space Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI/"><![CDATA[<h3 id="introduction">Introduction</h3>
+<p>Waveform inversion concerns reconstructing velocity fields from remotely measured wave signals. It has been common practice to optimize for velocity fields parameterized as indicator functions. Considering the ill-posed nature of inversion, the trend is to turn to Bayesian inversion methods, which can be formulated as well posed problems. In addition, Bayesian methods provides one, an estimate of the uncertainity in prediction, which is ever so crucial, should waveform inversion be used for resource sensitive applications.</p>
+
+<p>Despite all evidences pointing towards adopting Bayesian parameter estimation for waveform inversion, it is still not common practice in the FWI community; largely because Bayesian methods are extremely expensive for models with large parameters.</p>
+
+<p>In this work, we use the time honored practice of seeking latent space representations for families of velocity fields. Subsequently we demonstrate that Bayesian waveform inversion in these latent spaces becomes computational tractable.</p>
+
+<h3 id="latent-spaces">Latent spaces</h3>
+
+<p>We begin with some observations. More specifically, we consider some velocity fields that are commonplace in the inversion literature – seismic and otherwise.</p>
+
+<h4 id="fourier-space-representations">Fourier space representations</h4>
+<p>Initially, we seek Fourier space latent representation of the fields. Initial observations indicate that one can do away with more than 80% of the Fourier bases functions and still obtain a qualitatively good estimate of the velocity field at the cost of mapping to and back from the Fourier space. (This is realized with <strong>fft</strong>.)</p>
+
+<h5 id="primitives">Primitives</h5>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 20px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/latent/circle.svg" alt="spline-sim" />
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/latent/square.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<div class="row">
+   <div class="column">
+    <img style="width:100%" src="/assets/latent/2circle.svg" alt="spline-sur" />
+    </div>
+   <div class="column">
+    <img style="width:100%" src="/assets/latent/circle4.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<h5 id="velocity-classes">Velocity classes</h5>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/latent/simple.svg" alt="spline-sim" />
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/latent/complex.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<div class="row">
+   <div class="column">
+    <img style="width:100%" src="/assets/latent/Csimple.svg" alt="spline-sur" />
+    </div>
+   <div class="column">
+    <img style="width:100%" src="/assets/latent/Ccomplex.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<p>One should note that, for discontinuous functions, high frequency Fourier bases functions become increasingly relevant. While, this was not so debilitating for the examples in the Primitive section, it is clear that seismic velocity fields cannot be robustly parameterized.</p>
+
+<h4 id="learned-latent-space-representations">Learned latent space representations</h4>
+
+<p>This leads us to learning the latent space representations using <a href="https://arxiv.org/abs/1906.02691">variational autoencoders</a>.</p>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Waveform inversion on parsimonious models]]></summary></entry><entry><title type="html">SINDY - Sparse Identification of non-linear dynamical systems.</title><link href="https://dynamic-queries.github.io/blog/2023/sindy/" rel="alternate" type="text/html" title="SINDY - Sparse Identification of non-linear dynamical systems." /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sindy</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sindy/"><![CDATA[<p>This work is a re-creation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
 
 <p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
 
@@ -316,7 +546,7 @@
 <p>In an ideal setting, the waves inside the domain \(\Omega\) can be assumed to propagate with velocity \(\forall x \in \Omega \quad c: x \mapsto \mathbb{R}\) and evolving in accordance with the acoustic wave equation.</p>
 
 \[\begin{align}
-    \frac{\partial^2 u(x,t)}{\partial t^2} = \frac{\partial^2 }{\partial x^2}\left[\frac{1}{c(x)^2}u(x,t)\right] \\ 
+    \frac{\partial^2 u(x,t)}{\partial t^2} = \frac{\partial^2 }{\partial x^2}\left[c(x)^2 u(x,t)\right] \\ 
     u(x,0) = f(x) \\ 
     \frac{\partial u(x,0)}{\partial t} = g(x) \\ 
     u(y,t) = 0 \:\: \forall y \in \delta \Omega
@@ -343,6 +573,7 @@
 <p>Hamilton postulated that there exists a function \(H : q \times p \mapsto \mathbb{R}\) – the Hamiltonian. The evolution equations in this framework were given by the following PDE:</p>
 
 \[\begin{align}
+    \label{eq:Ham}
     \frac{\partial}{\partial t} q(t) = \frac{\partial H}{\partial p}\\ 
     \frac{\partial}{\partial t} p(t) = -\frac{\partial H}{\partial q}
 \end{align}\]
@@ -355,7 +586,88 @@
 
 <h3 id="method">Method</h3>
 
-<p>Let \(H \sim \mathcal{GP(\mu_z,\kappa(z,z'))}\).</p>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Inferring invariants of dynamical systems with gaussian processes.]]></summary></entry><entry><title type="html">Multi-output Gaussian processes</title><link href="https://dynamic-queries.github.io/blog/2023/mogp/" rel="alternate" type="text/html" title="Multi-output Gaussian processes" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/mogp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/mogp/"><![CDATA[<h3 id="introduction">Introduction</h3>
+<p>Let \(H(z) \sim \mathcal{GP(\mu_z,\kappa(z,z'))}\).</p>
+
+\[\begin{align}
+  \mathbb{E}(H(z^*)) = k(z^* ,z)\: k(z ,z')^{-1}\:H(z') \\
+  \frac{\partial}{\partial z^*}\mathbb{E}(H(z^*)) = \mathcal{J}^{-1} \frac{\partial z^*}{\partial t} \\
+  \left[\frac{\partial}{\partial z^*}k(z^* ,z)\right]\: \left[k(z ,z')\right]^{-1}\:H(z') =\mathcal{J}^{-1} \frac{\partial z^*}{\partial t} 
+\end{align}\]
+
+<p>Here, \(z^*\) and \(\frac{\partial z^*}{\partial t}\) are known reference points. \(z'\) are the validation points where the derivative of the Hamiltonian is not known. In order to determine this, one proceeds according to the following algorithm.</p>
+
+<hr />
+
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Given</p>
+<ol>
+  <li>Snapshots \(z^*(t_d) = \left[z^*(1), z^*(2) ... z^*(T) \right]\)</li>
+  <li>Query points \(z_1, z_2, ...,z_N\)</li>
+  <li>Covariance kernel \(\kappa\)</li>
+</ol>
+
+<p>Do</p>
+<ol>
+  <li>Evaluate \(\frac{d z^*}{dt}\) using any higher order finite difference scheme.</li>
+  <li>Setup \(b:=\mathcal{J}^{-1} \: \frac{d z^*}{dt}\)</li>
+  <li>Compute \(K_{zz'} \in \mathbb{R}^{N \times N}\) where \(K_{zz'}^{i,j} := \kappa(z^i,z^j)\)</li>
+  <li>Invert \(K_{zz'}\)</li>
+  <li>Compute \(M \in \mathbb{R}^{2dN \times N}\) where \(M^{:,j} := \frac{\partial}{\partial z^*} \kappa(z^*,z)\)</li>
+  <li>Evaluate inference matrix \(I := M K_{zz'}^{-1}\)</li>
+  <li>Solve \(I H_{z'} = b\) for \(H_{z'}\)</li>
+</ol>
+
+<hr />
+
+<h3 id="examples">Examples</h3>
+
+<h5 id="simple-non-linear-pendulum">Simple non-linear pendulum</h5>
+
+<p>A pendulum is a prototypical example of a Hamiltonian dynamical system. As shown below it is a one-dimensional dynamical system, described by the amplitude of oscillations \(\theta\) and its time derivative \(\dot{\theta}\).</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:15%" class="center" src="/assets/hamiltonian/pendulum.svg" alt="spline-sur" /></p>
+
+<p>The equations of motion of a pendulum is the classical equation 
+\(\begin{align}
+    \frac{d^2 \theta}{dt^2} = -\frac{g}{l} sin(\theta)   
+\end{align}\)
+which when solved for an ensemble of initial conditions, results in its phase space. The phase space and its tangent bundle (its derivative) is shown below.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/hamiltonian/mini_sampled_trajectories.svg" alt="spline-sim" />
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/hamiltonian/mini_sampled_velocities.svg" alt="spline-sur" />
+  </div>
+</div>
+
+<p>Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (<em>The figures above show 500 unique samples in red.</em>)</p>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Inferring invariants of dynamical systems with gaussian processes.]]></summary></entry><entry><title type="html">Multi-output Gaussian processes</title><link href="https://dynamic-queries.github.io/blog/2023/mogp/" rel="alternate" type="text/html" title="Multi-output Gaussian processes" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/mogp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/mogp/"><![CDATA[<h3 id="introduction">Introduction</h3>
 <p>Gaussian processes are a popular <strong>Bayesian</strong> <strong>learning</strong> framework.</p>
 
 <p>A typical <em>learning problem</em> consists of approximating an approximation \(\hat{f}\) to the function \(f:x \mapsto y \quad \forall x,y \in \Omega \subset \mathbb{R}^d\), given evaluations of the function at certain input points, that is \(\mathcal{D} = \{(x_i, f_i) : i \in \mathbb{N}\}\).</p>

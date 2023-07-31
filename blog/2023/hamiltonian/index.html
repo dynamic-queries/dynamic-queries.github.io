@@ -81,6 +81,9 @@
                 <a class="nav-link" href="/cv/">CV</a>
               </li>
               <li class="nav-item ">
+                <a class="nav-link" href="/talks/">Posters and Publications</a>
+              </li>
+              <li class="nav-item ">
                 <a class="nav-link" href="/collabs/">Collaborations</a>
               </li>
               <li class="nav-item ">
@@ -145,6 +148,7 @@
 <p>Hamilton postulated that there exists a function \(H : q \times p \mapsto \mathbb{R}\) – the Hamiltonian. The evolution equations in this framework were given by the following PDE:</p>
 
 \[\begin{align}
+    \label{eq:Ham}
     \frac{\partial}{\partial t} q(t) = \frac{\partial H}{\partial p}\\ 
     \frac{\partial}{\partial t} p(t) = -\frac{\partial H}{\partial q}
 \end{align}\]
@@ -157,7 +161,88 @@
 
 <h3 id="method">Method</h3>
 
-<p>Let \(H \sim \mathcal{GP(\mu_z,\kappa(z,z'))}\).</p>
+<p>Let \(H(z) \sim \mathcal{GP(\mu_z,\kappa(z,z'))}\).</p>
+
+\[\begin{align}
+  \mathbb{E}(H(z^*)) = k(z^* ,z)\: k(z ,z')^{-1}\:H(z') \\
+  \frac{\partial}{\partial z^*}\mathbb{E}(H(z^*)) = \mathcal{J}^{-1} \frac{\partial z^*}{\partial t} \\
+  \left[\frac{\partial}{\partial z^*}k(z^* ,z)\right]\: \left[k(z ,z')\right]^{-1}\:H(z') =\mathcal{J}^{-1} \frac{\partial z^*}{\partial t} 
+\end{align}\]
+
+<p>Here, \(z^*\) and \(\frac{\partial z^*}{\partial t}\) are known reference points. \(z'\) are the validation points where the derivative of the Hamiltonian is not known. In order to determine this, one proceeds according to the following algorithm.</p>
+
+<hr>
+
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Given</p>
+<ol>
+  <li>Snapshots \(z^*(t_d) = \left[z^*(1), z^*(2) ... z^*(T) \right]\)</li>
+  <li>Query points \(z_1, z_2, ...,z_N\)</li>
+  <li>Covariance kernel \(\kappa\)</li>
+</ol>
+
+<p>Do</p>
+<ol>
+  <li>Evaluate \(\frac{d z^*}{dt}\) using any higher order finite difference scheme.</li>
+  <li>Setup \(b:=\mathcal{J}^{-1} \: \frac{d z^*}{dt}\)</li>
+  <li>Compute \(K_{zz'} \in \mathbb{R}^{N \times N}\) where \(K_{zz'}^{i,j} := \kappa(z^i,z^j)\)</li>
+  <li>Invert \(K_{zz'}\)</li>
+  <li>Compute \(M \in \mathbb{R}^{2dN \times N}\) where \(M^{:,j} := \frac{\partial}{\partial z^*} \kappa(z^*,z)\)</li>
+  <li>Evaluate inference matrix \(I := M K_{zz'}^{-1}\)</li>
+  <li>Solve \(I H_{z'} = b\) for \(H_{z'}\)</li>
+</ol>
+
+<hr>
+
+<h3 id="examples">Examples</h3>
+
+<h5 id="simple-non-linear-pendulum">Simple non-linear pendulum</h5>
+
+<p>A pendulum is a prototypical example of a Hamiltonian dynamical system. As shown below it is a one-dimensional dynamical system, described by the amplitude of oscillations \(\theta\) and its time derivative \(\dot{\theta}\).</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:15%" class="center" src="/assets/hamiltonian/pendulum.svg" alt="spline-sur"></p>
+
+<p>The equations of motion of a pendulum is the classical equation 
+\(\begin{align}
+    \frac{d^2 \theta}{dt^2} = -\frac{g}{l} sin(\theta)   
+\end{align}\)
+which when solved for an ensemble of initial conditions, results in its phase space. The phase space and its tangent bundle (its derivative) is shown below.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/hamiltonian/mini_sampled_trajectories.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/hamiltonian/mini_sampled_velocities.svg" alt="spline-sur">
+  </div>
+</div>
+
+<p>Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (<em>The figures above show 500 unique samples in red.</em>)</p>
 
   </article>
 </div>

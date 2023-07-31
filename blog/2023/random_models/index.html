@@ -81,6 +81,9 @@
                 <a class="nav-link" href="/cv/">CV</a>
               </li>
               <li class="nav-item ">
+                <a class="nav-link" href="/talks/">Posters and Publications</a>
+              </li>
+              <li class="nav-item ">
                 <a class="nav-link" href="/collabs/">Collaborations</a>
               </li>
               <li class="nav-item ">
@@ -135,6 +138,88 @@
     <p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/" rel="external nofollow noopener" target="_blank">Chrisitian Mendl</a> and <a href="https://fd-research.com/" rel="external nofollow noopener" target="_blank">Felix Dietrich</a>.</p>
 
 <p><em>All ideas, figures, equations, examples and code, unless cited, are a work of my own.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>The importance of understanding the composition and behaviour of molecules is well established. Scientific disciplines such as chemistry, molecular biology, drug discovery and others, rely on molecular dynamics simulations as their core computational tool. 
+Tradionally, MD has been and to some extent still is, dependent on empirical force fields for estimating the interaction forces among molecules.</p>
+
+<p>These empirical models are a simplification at best. The “proper” way to evaluate the forces in a molecular dynamics simulation is to use first principle calculations that solves the stationary Schrodinger’s equations. But self-consistent loop sub-routines in most first principle calculations are too expensive to simulate molecules realistically for time domains where phenomena of interest emerge.</p>
+
+<p>This brings us to the fore of research today, where machine learning algorithms (deep learning, especially) has been co-opted to “learn” the rules of quantum mechanics from huge clusters of molecular data, generated from first principle calculations. The models used are the usual suspects – neural networks, gaussian processes and other kernel methods.</p>
+
+<p>In this work, we investigate the efficacy of random feature models as suitable surrogates for learning the ground state potentials of molecular systems.</p>
+
+<p><em>I am aware that these two topics are esoteric in their own right. Therefore, I provide a quick interlude that discusses the notions of 1) Potential energy surfaces of molecular systems and 2) Random feature models as function approximation tools.</em></p>
+
+<h3 id="interlude">Interlude</h3>
+
+<h4 id="potential-energy-surfaces">Potential energy surfaces</h4>
+
+<h4 id="random-feature-models">Random feature models</h4>
+<p>Consider a sufficiently regular function \(f:x \mapsto y\). Then one can find bases functions \(\phi_i(x; \theta)\) with parameteric dependence on \(\theta\) such that</p>
+
+\[\begin{align}
+    f(x) \approx \sum_i a_i \phi_i(x; \theta)
+\end{align}\]
+
+<p>This is a common feature in most function approximation schemes. In particular, if one uses a neural network with one hidden layer:</p>
+
+\[\begin{align}
+    \label{eq:randomNN}
+    f(x) \approx W_2 \: \rho \left(W_1 x  + b_1 \right)
+\end{align}\]
+
+<p>Tradionally, one randomly chooses the parameters which are subsequently trained with a gradient based algorithm. If one assumes that the weights \(\theta= \{W_1, W_2, b_1\}\) follow a probability distribution \(p_{\theta}\), during training this distribution is modified with every epoch.</p>
+
+<p>Random feature models, on the otherhand,  sample \(\theta \sim \mathcal{U}_{\theta}\) from a uniform distribution (which requires no training). As surprising it is, it has been shown with uniform sampling of \(\theta\) in (\ref{eq:randomNN}), used in conjunction with \(\rho = \{cos, tanh, relu\}\) is a universal approximator. Further, one can define a litany of heuristics to define ad-hoc “probability” functions \(p_i\), which when used for sampling should yield more accurate approximations at the same cost.</p>
+
+<p>Shown below is the function \(x \mapsto sin(x)\) trained with an ADAM optimizer and one sampled using the sampling algorithm (I will discuss this next.). The prediction from the sampling algorithm is one shot, requiring no iterative training training, that is characteristic of all gradient based training methods.</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/single_output.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/single_sampling.svg" alt="spline-sur">
+  </div>
+</div>
+
+<p>This is also the case for a multioutput function such as</p>
+
+\[x \mapsto \begin{bmatrix} sin(4x) \\ cos(4x) \\ sin(4x) \: cos(4x)\end{bmatrix}\]
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/multi_output.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/random_feature/multi_sampling.svg" alt="spline-sur">
+  </div>
+</div>
+
+<h3 id="code">Code</h3>
+
+<h5 id="random-feature-model-for-approximating-simple-functions">Random feature model for approximating simple functions</h5>
+
+<script src="https://gist.github.com/dynamic-queries/7fe5162d9f355fe9e7414cf50a8fdfa0.js"></script>
+
 
   </article>
 </div>

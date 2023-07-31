@@ -25,12 +25,8 @@
 <lastmod>2023-07-21T08:00:00+00:00</lastmod>
 </url>
 <url>
-<loc>https://dynamic-queries.github.io/blog/2023/ode_filters/</loc>
+<loc>https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI/</loc>
 <lastmod>2023-07-21T08:00:00+00:00</lastmod>
-</url>
-<url>
-<loc>https://dynamic-queries.github.io/blog/2023/sde/</loc>
-<lastmod>2023-07-22T00:00:00+00:00</lastmod>
 </url>
 <url>
 <loc>https://dynamic-queries.github.io/blog/2023/random_models/</loc>
@@ -38,7 +34,7 @@
 </url>
 <url>
 <loc>https://dynamic-queries.github.io/veritasium/physarum/</loc>
-<lastmod>2023-07-23T00:40:42+00:00</lastmod>
+<lastmod>2023-07-31T08:20:04+00:00</lastmod>
 </url>
 <url>
 <loc>https://dynamic-queries.github.io/archive/Temp_posts/2023-04-07-wave_eq/</loc>
@@ -89,6 +85,9 @@
 <loc>https://dynamic-queries.github.io/repositories/</loc>
 </url>
 <url>
+<loc>https://dynamic-queries.github.io/talks/</loc>
+</url>
+<url>
 <loc>https://dynamic-queries.github.io/teaching/</loc>
 </url>
 <url>
@@ -102,12 +101,6 @@
 </url>
 <url>
 <loc>https://dynamic-queries.github.io/blog/tag/inverseproblems/</loc>
-</url>
-<url>
-<loc>https://dynamic-queries.github.io/blog/tag/probnumerics/</loc>
-</url>
-<url>
-<loc>https://dynamic-queries.github.io/blog/tag/sdes/</loc>
 </url>
 <url>
 <loc>https://dynamic-queries.github.io/blog/category/projects/</loc>
