@@ -23,6 +23,7 @@ Hamilton postulated that there exists a function $$H : q \times p \mapsto \mathb
 
 $$
 \begin{align}
+    \label{eq:Ham}
     \frac{\partial}{\partial t} q(t) = \frac{\partial H}{\partial p}\\ 
     \frac{\partial}{\partial t} p(t) = -\frac{\partial H}{\partial q}
 \end{align}
@@ -38,4 +39,87 @@ Given observations $$\left([q(t_1),q(t_2),...,q(t_m)],[p(t_1),p(t_2),...,p(t_m)]
 
 ### Method
 
-Let $$ H \sim \mathcal{GP(\mu_z,\kappa(z,z'))}$$. 
+Let $$ H(z) \sim \mathcal{GP(\mu_z,\kappa(z,z'))}$$. 
+
+$$
+\begin{align}
+  \mathbb{E}(H(z^*)) = k(z^* ,z)\: k(z ,z')^{-1}\:H(z') \\
+  \frac{\partial}{\partial z^*}\mathbb{E}(H(z^*)) = \mathcal{J}^{-1} \frac{\partial z^*}{\partial t} \\
+  \left[\frac{\partial}{\partial z^*}k(z^* ,z)\right]\: \left[k(z ,z')\right]^{-1}\:H(z') =\mathcal{J}^{-1} \frac{\partial z^*}{\partial t} 
+\end{align}
+$$
+
+Here, $$z^*$$ and $$\frac{\partial z^*}{\partial t}$$ are known reference points. $$z'$$ are the validation points where the derivative of the Hamiltonian is not known. In order to determine this, one proceeds according to the following algorithm.
+
+---
+
+***Algorithm***
+
+Given 
+1. Snapshots $$z^*(t_d) = \left[z^*(1), z^*(2) ... z^*(T) \right]$$
+2. Query points $$z_1, z_2, ...,z_N$$
+3. Covariance kernel $$\kappa$$
+
+Do
+1. Evaluate $$\frac{d z^*}{dt}$$ using any higher order finite difference scheme.
+2. Setup $$b:=\mathcal{J}^{-1} \: \frac{d z^*}{dt}$$
+3. Compute $$K_{zz'} \in \mathbb{R}^{N \times N}$$ where $$K_{zz'}^{i,j} := \kappa(z^i,z^j)$$
+4. Invert $$K_{zz'}$$
+5. Compute $$M \in \mathbb{R}^{2dN \times N}$$ where $$M^{:,j} := \frac{\partial}{\partial z^*} \kappa(z^*,z)$$
+6. Evaluate inference matrix $$I := M K_{zz'}^{-1}$$
+7. Solve $$I H_{z'} = b$$ for $$H_{z'}$$
+
+
+---
+
+### Examples
+
+##### Simple non-linear pendulum
+
+A pendulum is a prototypical example of a Hamiltonian dynamical system. As shown below it is a one-dimensional dynamical system, described by the amplitude of oscillations $$\theta$$ and its time derivative $$\dot{\theta}$$.
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<img style="border:1px solid black;" class="center" src="/assets/hamiltonian/pendulum.svg" alt="spline-sur" style="width:15%">
+
+
+The equations of motion of a pendulum is the classical equation 
+$$
+\begin{align}
+    \frac{d^2 \theta}{dt^2} = -\frac{g}{l} sin(\theta)   
+\end{align}
+$$
+which when solved for an ensemble of initial conditions, results in its phase space. The phase space and its tangent bundle (its derivative) is shown below.
+<div class="row">
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/hamiltonian/mini_sampled_trajectories.svg" alt="spline-sim" style="width:100%">
+  </div>
+  <div class="column">
+    <img style="border:1px solid black;" src="/assets/hamiltonian/mini_sampled_velocities.svg" alt="spline-sur" style="width:100%">
+  </div>
+</div> 
+
+Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (*The figures above show 500 unique samples in red.*)
