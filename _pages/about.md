@@ -18,14 +18,12 @@ latest_posts: true  # includes a list of the newest posts
 selected_papers: false # includes a list of papers marked as "selected={true}"
 social: false  # includes social icons at the bottom of the page
 ---
-I am a masters student and a student-researcher at the Technical University of Munich.
+I am a masters student and a student-researcher at the Technical University of Munich. I am an active proponent of 
+[John Tukey](https://nationalmedals.org/laureate/john-wilder-tukey/)'s -- "getting to play in everyone’s backyard" idea. Promptly, I am interested in all things [manifold learning](https://fdresearchblog.files.wordpress.com/2019/02/informal-introduction-to-manifold-learning.pdf) and its applications to Many Body Physics, Non-linear Model Order Reduction and other surrogates for large scale dynamical systems.
 
-I am an active proponent of 
-[John Tukey](https://nationalmedals.org/laureate/john-wilder-tukey/)'s -- "getting to play in everyone’s backyard" idea. 
+I am particularly intrigued by the duality of optimization landscapes and evolution potentials of large scale (especially quantum) dynamical systems.
 
-Promptly, I am interested in all things [manifold learning](https://fdresearchblog.files.wordpress.com/2019/02/informal-introduction-to-manifold-learning.pdf) and its applications to Many Body Physics, Non-linear Model Order Reduction and other surrogates for large scale dynamical systems.
-
-My research focuses on developing novel numerical and statistical methods for a litany of applications, among other things, computational fluid dynamics, quantum many body physics, waveform inversion and quantum chemistry.
+My research focuses on developing novel numerical and statistical methods for dynamical systems with applications spanning computational fluid dynamics, quantum many body physics, waveform inversion and quantum chemistry.
 
 
 I also founded the [SIAM Student Chapter](https://siam-munich-chapter.github.io/SIAM_Munich.io/) at the Technical University of Munich in 2023.

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Original work) Bayesian Waveform Inversion
+title: (Original Research) Bayesian Waveform Inversion
 date: 2023-07-21 08:00:00-0000
 description: Full waveform inversion with MCMC, HMC, NUTS
 tags: InverseProblems

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: (Original work) Random feature potentials
+title: (Original Research) Random feature potentials
 date: 2023-07-22 08:00:00-0000
 description: Inferring potential energy surfaces with random feature models.
 tags: Surrogatization

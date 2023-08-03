@@ -4,7 +4,7 @@ title: Learning Hamiltonians with GP
 date: 2023-07-20 08:00:00-0000
 description: Inferring invariants of dynamical systems with gaussian processes.
 tags: SystemsIdentification
-categories: projects
+categories: education
 related_posts: false
 urlcolor: "blue"
 ---
