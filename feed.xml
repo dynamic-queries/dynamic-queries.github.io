@@ -1,5 +1,55 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-07-31T08:20:04+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">(Original work) Random feature potentials</title><link href="https://dynamic-queries.github.io/blog/2023/random_models/" rel="alternate" type="text/html" title="(Original work) Random feature potentials" /><published>2023-07-22T08:00:00+00:00</published><updated>2023-07-22T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/random_models</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/random_models/"><![CDATA[<p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/">Chrisitian Mendl</a> and <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-08-03T20:00:54+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Physics informed Gaussian processes.</title><link href="https://dynamic-queries.github.io/blog/2023/pigp/" rel="alternate" type="text/html" title="Physics informed Gaussian processes." /><published>2023-08-01T00:00:00+00:00</published><updated>2023-08-01T00:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/pigp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/pigp/"><![CDATA[<p><em>This is preliminary research conducted during my Masters studies (2020-2022) at TUM with <a href="https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/">Ravi Kislaya</a>. Later, we realized that such an idea was already investigated in 2014 by P. Hennig et al., suspending futher investigation from our end.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Building on the previous post of inferring dynamical systems with <a href="https://dynamic-queries.github.io/blog/2023/mogp/">multi-output GPs</a>, we formulate learning a statistical model from data based on the structure of the mechanistic models underlying that dynamical system. To wit:</p>
+
+<p>Consider the dynamical system.
+\(\begin{align}
+    \frac{dx(t)}{dt} = f(x(t)) \\ 
+    x(0) = x_0 \in \mathbb{R}^d
+\end{align}\)</p>
+
+<p>If one has observables of this dynamical systems obtained at discrete time points such as \(X := [\hat{x}(t_1),\hat{x}(t_2),...,\hat{x}(t_N)]\) and the forcing function \(f(x)\), we would like to infer a statistical model (in this case, a GP) that aids as a reliable predictor for \(x(t)\). Here, GP is used as a surrogate and does not exactly fit the label of systems identification.</p>
+
+<h3 id="method">Method</h3>
+
+<p>This can be realized as follows. Let</p>
+
+\[x(t) \sim \mathcal{GP}(\mu(t), \kappa(t,t'))\]
+
+<p>Let \(\kappa\) be a sufficiently smooth covariance kernel. Then,</p>
+
+\[\partial_t \: x(t) \sim \mathcal{GP}(\partial_t \mu(t), \partial_t \partial_{t'} \: \kappa(t,t'))\]
+
+<p>From this, the log-likelihood can be written as</p>
+
+\[log \: p(x|\theta) := \sum_{i=1}^N \: \| \partial_t \: x(t_i) - f(x(t_i))\|_2 + \|\hat{x}(t_i) - x_i(t_i) \|_2\]
+
+<p>And as always one, chooses a zero mean Gaussian prior for a GP.</p>
+
+\[p(\theta) := \mathcal{N}(0,\kappa(t,t'))\]
+
+<p>Finally, one obtains the posterior by optimizing for the covariance kernel parameters.</p>
+
+<h3 id="examples">Examples</h3>
+
+<h5 id="logistic-equation">Logistic equation</h5>
+
+<h5 id="lotka-voltera-model">Lotka-Voltera model</h5>
+
+<h5 id="duffling-oscillator">Duffling oscillator</h5>
+
+<h5 id="robertsons-reaction-system">Robertson’s reaction system</h5>
+
+<h3 id="relationship-with-probabilistic-ode-solvers">Relationship with probabilistic ODE solvers</h3>
+
+<p>Probabilistic ODE solvers use the same method, but for the purpose of solving ODEs. However, when GPs are used as surrogates for finely discretized solutions to partial differential equations, incorporating the derivative information into the likelihood should result in improved inference, requiring fewer input reference datapoints. While the difference is subtle, it did not seem appropriate to further investigate this, considering that a large body of work had already been carried out on improving probabilistic integrators.</p>
+
+<h3 id="code">Code</h3>]]></content><author><name></name></author><category term="projects" /><category term="SDEs" /><summary type="html"><![CDATA[Structure aware identification of dynamical systems with GPs.]]></summary></entry><entry><title type="html">A Langevin MD simulator</title><link href="https://dynamic-queries.github.io/blog/2023/sde/" rel="alternate" type="text/html" title="A Langevin MD simulator" /><published>2023-08-01T00:00:00+00:00</published><updated>2023-08-01T00:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sde</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sde/"><![CDATA[<p><strong><em>This is an implementation of a Langevin Molecular dynamics simulator developed as part of my masters thesis. All figures, code are a work of my own.</em></strong></p>
+
+<h3 id="introduction">Introduction</h3>]]></content><author><name></name></author><category term="education" /><category term="SDEs" /><summary type="html"><![CDATA[With emphasis on numerical methods.]]></summary></entry><entry><title type="html">(Original Research) Random feature potentials</title><link href="https://dynamic-queries.github.io/blog/2023/random_models/" rel="alternate" type="text/html" title="(Original Research) Random feature potentials" /><published>2023-07-22T08:00:00+00:00</published><updated>2023-07-22T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/random_models</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/random_models/"><![CDATA[<p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/">Chrisitian Mendl</a> and <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
 
 <p><em>All ideas, figures, equations, examples and code, unless cited, are a work of my own.</em></p>
 
@@ -82,7 +132,7 @@ Tradionally, MD has been and to some extent still is, dependent on empirical for
 
 <h5 id="random-feature-model-for-approximating-simple-functions">Random feature model for approximating simple functions</h5>
 
-<script src="https://gist.github.com/dynamic-queries/7fe5162d9f355fe9e7414cf50a8fdfa0.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="Surrogatization" /><summary type="html"><![CDATA[Inferring potential energy surfaces with random feature models.]]></summary></entry><entry><title type="html">(Original work) Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/" rel="alternate" type="text/html" title="(Original work) Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/bayesian_inversion</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
+<script src="https://gist.github.com/dynamic-queries/7fe5162d9f355fe9e7414cf50a8fdfa0.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="Surrogatization" /><summary type="html"><![CDATA[Inferring potential energy surfaces with random feature models.]]></summary></entry><entry><title type="html">(Original Research) Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/" rel="alternate" type="text/html" title="(Original Research) Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/bayesian_inversion</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/bayesian_inversion/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
 
 <p><em>All ideas, figures, equations, examples and code, unless cited are a work of my own.</em></p>
 
@@ -301,7 +351,7 @@ Tradionally, MD has been and to some extent still is, dependent on empirical for
 
 <p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
 
-<script src="https://gist.github.com/dynamic-queries/3473ab7b87744cd1ad07cddd74eabd03.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Full waveform inversion with MCMC, HMC, NUTS]]></summary></entry><entry><title type="html">(Original work) Latent space Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI/" rel="alternate" type="text/html" title="(Original work) Latent space Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI/"><![CDATA[<h3 id="introduction">Introduction</h3>
+<script src="https://gist.github.com/dynamic-queries/3473ab7b87744cd1ad07cddd74eabd03.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Full waveform inversion with MCMC, HMC, NUTS]]></summary></entry><entry><title type="html">(Original Research) Latent space Bayesian Waveform Inversion</title><link href="https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI/" rel="alternate" type="text/html" title="(Original Research) Latent space Bayesian Waveform Inversion" /><published>2023-07-21T08:00:00+00:00</published><updated>2023-07-21T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/latent_space_bayesian_FWI/"><![CDATA[<h3 id="introduction">Introduction</h3>
 <p>Waveform inversion concerns reconstructing velocity fields from remotely measured wave signals. It has been common practice to optimize for velocity fields parameterized as indicator functions. Considering the ill-posed nature of inversion, the trend is to turn to Bayesian inversion methods, which can be formulated as well posed problems. In addition, Bayesian methods provides one, an estimate of the uncertainity in prediction, which is ever so crucial, should waveform inversion be used for resource sensitive applications.</p>
 
 <p>Despite all evidences pointing towards adopting Bayesian parameter estimation for waveform inversion, it is still not common practice in the FWI community; largely because Bayesian methods are extremely expensive for models with large parameters.</p>
@@ -375,7 +425,151 @@ Tradionally, MD has been and to some extent still is, dependent on empirical for
 
 <h4 id="learned-latent-space-representations">Learned latent space representations</h4>
 
-<p>This leads us to learning the latent space representations using <a href="https://arxiv.org/abs/1906.02691">variational autoencoders</a>.</p>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Waveform inversion on parsimonious models]]></summary></entry><entry><title type="html">SINDY - Sparse Identification of non-linear dynamical systems.</title><link href="https://dynamic-queries.github.io/blog/2023/sindy/" rel="alternate" type="text/html" title="SINDY - Sparse Identification of non-linear dynamical systems." /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sindy</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sindy/"><![CDATA[<p>This work is a re-creation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
+<p>This leads us to learning the latent space representations using <a href="https://arxiv.org/abs/1906.02691">variational autoencoders</a>.</p>
+
+<h5 id="autoencoders">Autoencoders</h5>
+
+<p>But let’s initially review autoencoders. Autoencoders are approximation methods for learning a latent space representation \(z\) for a given vector \(x\) in the observable space. The latent space representation is sometimes called an embedding. A generic autoencoder consists of – an encoder and a decoder (as shown below).</p>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:70%" class="center" src="/assets/latent/AE/outline.svg" alt="spline-sur" /></p>
+
+<p>Any \(x\) is hierarchically projected into a lower dimensional space upto the latent space using a dense fully connected neural network. This can also be realized using other network architectures such as CNNs and GNNs which can incorporate more inductive bias. The decoder is the mirror image of an encoder and aids in the reconstruction \(z \mapsto x\).</p>
+
+<p>For instance, a reconstruction of the MNIST handwritten images, by sampling from the latent space and reconstructing it back, is shown below. Here \(x \in \mathbb{R}^{28 \times 28}\) and \(z \in \mathbb{R}^2\). Coincidentally, the MNIST digits can be viewed as spline shaped defects embedded in the domain of interest (similar to the primitives in the Fourier representations section.)</p>
+<style>
+    .columnM {
+  float: left;
+  width: 25.00%;
+  margin : 0 0 0px 0px;
+  padding: 0px;
+}
+
+/* Clear floats after image containers */
+.rowM::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/0.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/1.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/2.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/3.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/4.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/5.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/6.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/7.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/8.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE/9.png" alt="spline-sur" />
+  </div>
+</div>
+
+<p>However, autoencoders are also notoriously hard to train; with gradient based optimization algorithms trapping themselves often in local minima.</p>
+
+<div class="row">
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/0.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/1.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/2.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/3.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/4.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/5.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/6.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/7.png" alt="spline-sur" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/8.png" alt="spline-sim" />
+  </div>
+  <div class="columnM">
+    <img style="width:100%" src="/assets/latent/AE_VF/9.png" alt="spline-sur" />
+  </div>
+</div>
+
+<p>This is the case with the results above, where the embeddings cannot sufficiently represent the different velocity fields faithfully. In light of this, it makes more sense to look into VAEs which have been shown to be more robust to this issue.</p>
+
+<h5 id="variational-autoencoders">Variational Autoencoders</h5>
+
+<p>Variational Autoencoders (VAEs) approach this representation learning problem from a Bayesian perspective. It assumes that there exists a joint probability distribution \(p(x,z)\). Then for a prior over \(z, p(z) \sim \mathcal{N}(\mu, \Sigma)\), one can find predictors for \(x\) using Bayes rule. That is,</p>
+
+\[\begin{align}
+    p(z|x) = \frac{p(x|z)\:p(z)}{p(x)}
+\end{align}\]
+
+<p>The marginal \(p(x)\) is untractable for most practical scenarios. However, one can use variational inference to estimate the posterior \(p(z|x)\) with \(q_{\theta}(z|x)\). That is, one can optimize for the parameters \(\theta\) by minimizing the Kullback-Leiber (KL) divergence between the two distributions. The backward KL divergence in this case is given by</p>
+
+\[\begin{align}
+  KL \left[q(z|x) || p(z|x)\right] := \int dz \: q(z|x) \: log\left[\frac{q(z|x)}{p(z|x)}\right]
+\end{align}\]
+
+<p>This ofcourse is intractable, since it still contains the marginal \(p(x)\). Fortunately the above expression can be re-written as follows</p>
+
+\[\begin{align}
+    EUBO := \int dz \: q(z|x) \: \left[log\left[q(x,z)\right] - log\left[q(z|x)\right]\right]  = -\int dz \: q(z|x) \: log\left[p(x)\right] +   KL \left[q(z|x) || p(z|x)\right] 
+\end{align}\]
+
+<p>Minimizing the left equation on the left hand side, also minimzes the KL divergence, since</p>
+
+\[\begin{align}
+  \int dz \: q(z|x) \: log\left[p(x)\right] \geq -EUBO 
+\end{align}\]
+
+<p>This is the evidence upper bound or the EUBO, which is actually tractable. In the context of the autoencoder,</p>
+
+<ol>
+  <li>\(q(z|x)\) is the probability distribution over predictions from the encoder.</li>
+  <li>\(p(x|z)\) is the same for the decoder.</li>
+  <li>\(p(z) \sim \mathcal{N}(\mu, \Sigma)\) is the prior.</li>
+</ol>
+
+<p>The general architecture of a VAE is as follows. Here, the output of the encoder is the mean \(\mu\) and the covariance matrix \(\Sigma\) of a multi-variate normal distribution \(\mathcal{N}\). The samples from \(z \sim \mathcal{N}\) constitutes the latent space variable.</p>
+
+<p><img style="width:70%" class="center" src="/assets/latent/vae_outline.svg" alt="spline-sur" /></p>
+
+<p>Training the VAE comprises minimizing the EUBO, for which one needs to make a few assumptions.</p>]]></content><author><name></name></author><category term="projects" /><category term="InverseProblems" /><summary type="html"><![CDATA[Waveform inversion on parsimonious models]]></summary></entry><entry><title type="html">SINDY - Sparse Identification of non-linear dynamical systems.</title><link href="https://dynamic-queries.github.io/blog/2023/sindy/" rel="alternate" type="text/html" title="SINDY - Sparse Identification of non-linear dynamical systems." /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sindy</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sindy/"><![CDATA[<p>This work is a re-creation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
 
 <p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
 
@@ -518,7 +712,7 @@ Tradionally, MD has been and to some extent still is, dependent on empirical for
 
 <p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
 
-<script src="https://gist.github.com/dynamic-queries/3edf052b43ec90467dc48f91fe3b552b.js"></script>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Symbolic regression.]]></summary></entry><entry><title type="html">(Original work) Full Waveform inversion</title><link href="https://dynamic-queries.github.io/blog/2023/fwi/" rel="alternate" type="text/html" title="(Original work) Full Waveform inversion" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/fwi</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/fwi/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>. Part of this work was presented at <a href="https://meetings.siam.org/sess/dsp_talk.cfm?p=125969">SIAM CSE 2023 in Amsterdam</a></p>
+<script src="https://gist.github.com/dynamic-queries/3edf052b43ec90467dc48f91fe3b552b.js"></script>]]></content><author><name></name></author><category term="education" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Symbolic regression.]]></summary></entry><entry><title type="html">(Original Research) Full Waveform inversion</title><link href="https://dynamic-queries.github.io/blog/2023/fwi/" rel="alternate" type="text/html" title="(Original Research) Full Waveform inversion" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/fwi</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/fwi/"><![CDATA[<p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/">Felix Dietrich</a>. Part of this work was presented at <a href="https://meetings.siam.org/sess/dsp_talk.cfm?p=125969">SIAM CSE 2023 in Amsterdam</a></p>
 
 <p><em>All ideas, figures, equations, examples and code are a work of my own.</em></p>
 
@@ -537,7 +731,7 @@ Tradionally, MD has been and to some extent still is, dependent on empirical for
 }
 </style>
 
-<p><img style="width:70%" class="center" src="/assets/FWI_edit/outline.svg" alt="spline-sur" /></p>
+<p><img style="width:50%" class="center" src="/assets/FWI_edit/outline.svg" alt="spline-sur" /></p>
 
 <p>There is a rectangular domain with a defect in it. One does not know apriori how the defect looks like. But one has access to sensors measuring the amplitude of waves on the surface of the domain. Full waveform inversion concerns reconstructing the shape of the defect from these measured signals.</p>
 
@@ -667,12 +861,12 @@ which when solved for an ensemble of initial conditions, results in its phase sp
   </div>
 </div>
 
-<p>Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (<em>The figures above show 500 unique samples in red.</em>)</p>]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Inferring invariants of dynamical systems with gaussian processes.]]></summary></entry><entry><title type="html">Multi-output Gaussian processes</title><link href="https://dynamic-queries.github.io/blog/2023/mogp/" rel="alternate" type="text/html" title="Multi-output Gaussian processes" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/mogp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/mogp/"><![CDATA[<h3 id="introduction">Introduction</h3>
+<p>Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (<em>The figures above show 500 unique samples in red.</em>)</p>]]></content><author><name></name></author><category term="education" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Inferring invariants of dynamical systems with gaussian processes.]]></summary></entry><entry><title type="html">Multi-output Gaussian processes</title><link href="https://dynamic-queries.github.io/blog/2023/mogp/" rel="alternate" type="text/html" title="Multi-output Gaussian processes" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/mogp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/mogp/"><![CDATA[<h3 id="introduction">Introduction</h3>
 <p>Gaussian processes are a popular <strong>Bayesian</strong> <strong>learning</strong> framework.</p>
 
 <p>A typical <em>learning problem</em> consists of approximating an approximation \(\hat{f}\) to the function \(f:x \mapsto y \quad \forall x,y \in \Omega \subset \mathbb{R}^d\), given evaluations of the function at certain input points, that is \(\mathcal{D} = \{(x_i, f_i) : i \in \mathbb{N}\}\).</p>
 
-<p><em>Bayesian inference</em> assumes that the input \(x\) and the outputs \(y\) are random variables with some densities \(P_x, P_y\) respectively. These densities are related by</p>
+<p><em>Bayesian inference</em> assumes that the input \(x\) and the outputs \(y\) are random variables. These densities are related by</p>
 
 \[P(x,y) = P(y | x) P(x) = P(x | y) P(y)\]
 
@@ -687,50 +881,130 @@ which when solved for an ensemble of initial conditions, results in its phase sp
 
 <p>Commonly, one assumes a functional form for the prior. The posterior is the updated version of the prior, once we have seen the reference data.</p>
 
-<h3 id="single-output-gp">Single Output GP</h3>
+<h3 id="gaussian-processes">Gaussian processes</h3>
 
-<p>Further, samples \(y,x\) are assumed to be related via</p>
+<p>If the likelihood and prior are Gaussian, then the Bayesian inference framework is a Gaussian process framework. In this case, the posterior has a closed form. I will discuss this in this section and write down the general inference procedure using Gaussian processes.</p>
 
-\[y = f(x)\]
-
-\[f:x \mapsto y \quad \forall x,y \in \Omega\]
-
-<p>Here \(f\) is assumed to be any non-linear function. One can project \(x\) onto a higher dimensional space spanned by the bases generated from a kernel function \(\kappa\), also known as the <strong>kernel trick</strong>, where the non-linearity of \(f\) is transformed into a linearity. Without any loss of generality, we can assume that any non-linear function can be transformed into a linear map.</p>
-
-\[y = Wx + b\]
-
-\[W \in \mathbb{R}^{d \times d} \: \textrm{ and } b \in \mathbb{R}^d\]
-
-<p>With this parameteric form for the output, defining a prior for the weights, \(z := \begin{bmatrix} W &amp; b \end{bmatrix}\) is equivalent to defining a prior for the output, \(y\). Therefore in a single output GP, there are three random variables \(x,y,z\). Their joint probability distribution is given as</p>
+<p>Let \(y:=f(x) \sim GP(\mu(x), \kappa(x,x';\theta))\) and let the discrete observations of \(x,y\) be stacked into tall vectors \(X,Y\) respectively. If one is interested in evaluating \(f\) at a new point \(x\), one need only compute the expectation of \(\mathcal{N}(\hat{\mu}_k, \hat{\Sigma}_k)\) such that</p>
 
 \[\begin{align}
-    P(x,y,z) = P(x,y|z) P(z) = P(z|x,y) P(x,y) \\
- P(z|x,y) = \frac{P(x,y|z) P(z)}{P(x,y)} \\ 
- = \frac{P(y|x,z) P(x,z)}{P(x,y)} \\
-  = \frac{P(y|x,z) P(x)P(z)}{P(y|x)P(x)}\\
- P(z|x,y) \propto P(y|x,z) P(z)
- \end{align}\]
-
-<p>Here, \(z \sim \mathcal{N}(0, \Sigma_z)\), that is</p>
-
-\[\begin{align}
-    P(z) = \frac{1}{\sqrt{(2\pi)^d |\Sigma_z|}} \exp\left(-\frac{1}{2} z^T \Sigma_z^{-1} z\right)
+    \hat{\mu} = K_{xX} \: (K_{XX} + \Lambda)^{-1} Y \\ 
+    \hat{\Sigma} = K_{xx'} - K_xX \: (K_{XX} + \Lambda)^{-1} K_{Xx'}
 \end{align}\]
 
-<p>Further, the likelihood is defined with the assumption that each component of \(x\) is independent of one another. This is why this inference procedure is called single output Gaussian process. That is</p>
+<p>Here \(K_{ab}^{ij} = \kappa(a[i],b[j];\theta_{k-1})\).</p>
 
-\[\begin{align}
-    P(y|x,z) = \prod_{i=1}^{d} \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(-\frac{1}{2}\left(\frac{y_i - (W_i x_i + b_i)}{\sigma}\right)^2\right) \\ 
-    P(y|x,z) = \frac{1}{(\sqrt{2\pi \sigma^2})^d} \exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^{d} (y_i - (W_i x_i + b_i))^2\right) \\ 
-    = \frac{1}{\sqrt{(2\pi)^d |\Sigma_y|}} \exp\left(-\frac{1}{2}(y - (W x + b))^T \Sigma_y^{-1} (y - (W x + b))\right)
-\end{align}\]
+<hr />
+<p><strong><em>Algorithm</em></strong></p>
 
-<p>From this \(P(y|x,z)\) is a multivariate normal distribution \(\mathcal{N}(Wx+b, \Sigma_y)\).</p>
+<p>Given:</p>
 
-<p>Further one can write down the posterior as</p>
+<ol>
+  <li>Covariance kernel \(\kappa\).</li>
+  <li>Reference data \(X,Y\)</li>
+  <li>Query points \(x\)</li>
+  <li>Threshold \(\epsilon\)</li>
+  <li>Noise covariance \(\Lambda\)</li>
+</ol>
 
-\[\begin{align}
-    P(z|x,y) \propto P(y|x,z) P(z) \\ 
-    = \frac{1}{(2\pi)^d \sqrt{|\Sigma_z||\Sigma_y|}} \exp\left(-\frac{1}{2} \left[z^T \Sigma_z^{-1} z + (y - (W x + b))^T \Sigma_y^{-1} (y - (W x + b)) \right]\right) \\ 
-    = \frac{1}{(2\pi)^d \sqrt{|\Sigma_z||\Sigma_y|}} \exp\left(-\frac{1}{2} \left[z^T \Sigma_z^{-1} z + (y - z x')^T \Sigma_y^{-1} (y - z x') \right]\right)
-\end{align}\]]]></content><author><name></name></author><category term="projects" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Learning mutivariate dynamical systems with GPs]]></summary></entry></feed>
+<p>For a given \(k\):</p>
+
+<ol>
+  <li>Evaluate \(K_{XX}\)</li>
+  <li>Compute \(y_k :=  K_{XX} \: (K_{XX} + \Lambda)^{-1} Y\)</li>
+  <li>Obtain discrepancy \(\mathcal{E}_k := \| y_k - Y\|\)</li>
+  <li>Compute \(G_k := \nabla_{\theta_{k-1}} \mathcal{E}\)</li>
+  <li>Update \(\theta_{k} := \theta_{k-1} - \alpha * G_k\)</li>
+</ol>
+
+<p>Until discrepancy \(\mathcal{E} &lt; \epsilon\):</p>
+
+<ol>
+  <li>Do the previous 6 steps.</li>
+  <li>Increment \(k\)</li>
+</ol>
+
+<p>Then,</p>
+
+<ol>
+  <li>Compute mean \(\hat{\mu}\) and covariance matrix \(\hat{\Sigma}\) with optimized \(\theta\).</li>
+  <li>Return \(\mathcal{N}(\hat{\mu},\hat{\Sigma})\)</li>
+</ol>
+
+<hr />
+
+<p>This procedure approximates any given function \(f\) from its samples. To illustrate this, consider the following example.</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/sinusoid_data.png" alt="spline-sim" />
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/initial_prediction.png" alt="spline-sur" />
+  </div>
+</div>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/final_prediction.png" alt="spline-sim" />
+  </div>
+</div>
+
+<p>With a squared exponential kernel, the sinusoidal function, before hyperparamter optimization is shown in the second figure and the prediction after optimization, is shown in the third. Note that variance in the prediction is high, for out of sample distributions as it should be.</p>
+
+<h3 id="multi-output-gaussian-processes">Multi-output Gaussian processes</h3>
+
+<p>The algorithm from the previous section is readily transferable to vector valued functions as well; with the added change that one uses kernel functions that are better suited for this application. A comprehensive review of vector values GP kernels can be found in <a href="https://arxiv.org/abs/1106.6251v2">Alvarez</a>.</p>
+
+<p>In the rest of the section, I will approximate the trajectories of the Lorenz attractor</p>
+
+<p>\(\begin{align}
+  \frac{d}{dt}\begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix}\sigma (y - x)\\
+  (\rho - z) - y\\
+  xy - \beta z \end{bmatrix} \\ 
+  \sigma = 10, \: 
+  \rho = 28, \: 
+  \beta = \frac{8}{3} \\ 
+\end{align}\)
+with suitable initial conditions. One such trajectory we are interested in, looks like</p>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:100%" class="center" src="/assets/gp/lorenz.svg" alt="spline-sur" /></p>
+
+<h4 id="independent-gps--igp">Independent GPs – IGP</h4>
+
+<p>Three independent GPs, each approximating \(x(t), y(t), z(t)\) require 100 randomly sampled points to make predictions (shown below) with a Matern kernel.</p>
+
+<p><img style="width:100%" class="center" src="/assets/gp/IGP_post.svg" alt="spline-sur" /></p>
+
+<p>This would be the minimum possible predictive accuracy that vector valued GP models need to realize. The divergence in \(\epsilon\) for \(t&gt;5.0\) is due to out of sampling error.</p>
+
+<h4 id="intrinsic-coregionalization-model--icm">Intrinsic coregionalization model – ICM</h4>
+
+<h4 id="latent-force-model--lfm">Latent force model – LFM</h4>
+
+<h4 id="process-convolution-model--pc">Process Convolution model – PC</h4>]]></content><author><name></name></author><category term="education" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Learning mutivariate dynamical systems with GPs]]></summary></entry></feed>

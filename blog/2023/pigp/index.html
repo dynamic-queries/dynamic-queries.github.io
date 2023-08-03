@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SINDY - Sparse Identification of non-linear dynamical systems. | Rahul Manavalan</title>
+    <title>Physics informed Gaussian processes. | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="Symbolic regression.">
+    <meta name="description" content="Structure aware identification of dynamical systems with GPs.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/blog/2023/sindy/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/blog/2023/pigp/">
     
     <!-- Dark Mode -->
     
@@ -118,168 +118,72 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">SINDY - Sparse Identification of non-linear dynamical systems.</h1>
-    <p class="post-meta">July 20, 2023</p>
+    <h1 class="post-title">Physics informed Gaussian processes.</h1>
+    <p class="post-meta">August 1, 2023</p>
     <p class="post-tags">
       <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
         ·  
-        <a href="/blog/tag/systemsidentification">
-          <i class="fas fa-hashtag fa-sm"></i> SystemsIdentification</a>  
+        <a href="/blog/tag/sdes">
+          <i class="fas fa-hashtag fa-sm"></i> SDEs</a>  
           
         ·  
-        <a href="/blog/category/education">
-          <i class="fas fa-tag fa-sm"></i> education</a>  
+        <a href="/blog/category/projects">
+          <i class="fas fa-tag fa-sm"></i> projects</a>  
           
 
     </p>
   </header>
 
   <article class="post-content">
-    <p>This work is a re-creation of a symbolic regression method from <a href="https://www.pnas.org/doi/10.1073/pnas.1517384113" rel="external nofollow noopener" target="_blank">Brunton and Kutz</a>. The article is meant to be a quick summary of this method.</p>
-
-<p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
+    <p><em>This is preliminary research conducted during my Masters studies (2020-2022) at TUM with <a href="https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/" rel="external nofollow noopener" target="_blank">Ravi Kislaya</a>. Later, we realized that such an idea was already investigated in 2014 by P. Hennig et al., suspending futher investigation from our end.</em></p>
 
 <h3 id="introduction">Introduction</h3>
 
-<p>Data driven methods are the modern day equivalent to Poincare’s work in the 19th century. A characteristic feature of these methods is determining the equations of motion underlying a given dynamical system, exclusively from time dependent observables, measured from that system.</p>
+<p>Building on the previous post of inferring dynamical systems with <a href="https://dynamic-queries.github.io/blog/2023/mogp/">multi-output GPs</a>, we formulate learning a statistical model from data based on the structure of the mechanistic models underlying that dynamical system. To wit:</p>
 
-<hr>
-<p>Consider this generic form of a dynamical system.</p>
-
-\[\begin{align}
+<p>Consider the dynamical system.
+\(\begin{align}
     \frac{dx(t)}{dt} = f(x(t)) \\ 
     x(0) = x_0 \in \mathbb{R}^d
-\end{align}\]
+\end{align}\)</p>
 
-<p>Given \(X := [x(t_1),x(t_2),...,x(t_N)]\), we would like to infer \(f\) either symbolically or numerically.</p>
+<p>If one has observables of this dynamical systems obtained at discrete time points such as \(X := [\hat{x}(t_1),\hat{x}(t_2),...,\hat{x}(t_N)]\) and the forcing function \(f(x)\), we would like to infer a statistical model (in this case, a GP) that aids as a reliable predictor for \(x(t)\). Here, GP is used as a surrogate and does not exactly fit the label of systems identification.</p>
 
-<hr>
+<h3 id="method">Method</h3>
 
-<h3 id="sindy">SINDY</h3>
+<p>This can be realized as follows. Let</p>
 
-<p>SINDY is a symbolic regression algorithm that identifies \(f\), provided one has access to the most apposite bases set, say \(\mathcal{B}\), that spans the function space \(\mathcal{F} \ni f\). It’s usually the case that for most systems, knowledge of \(\mathcal{B}\) is sparse at best; raising serious questions about the practicality of this method for data arising from real world applications. Nonetheless it is a nice method where one has expert knowledge about the system. The algorithm has four main steps.</p>
+\[x(t) \sim \mathcal{GP}(\mu(t), \kappa(t,t'))\]
 
-<hr>
+<p>Let \(\kappa\) be a sufficiently smooth covariance kernel. Then,</p>
 
-<p><strong><em>Algorithm</em></strong></p>
+\[\partial_t \: x(t) \sim \mathcal{GP}(\partial_t \mu(t), \partial_t \partial_{t'} \: \kappa(t,t'))\]
 
-<ol>
-  <li>
-    <p>Evaluate \(\dot{X} := [\frac{dx(t_1)}{dt},\frac{dx(t_2)}{dt},...,\frac{dx(t_N)}{dt}] \in \mathbb{R}^{d \times N}\) using a sufficiently robust finite difference scheme.</p>
-  </li>
-  <li>
-    <p>Choose a bases set \(\mathcal{B} := \{b_1(x), b_2(x), ..., b_k(x)\}\) of functions.</p>
-  </li>
-  <li>
-    <p>Evalute \(\Theta(X) := \begin{bmatrix} b_1(x(t_1)) &amp;&amp; ... &amp;&amp; b_1(x(t_N)) \\ \vdots &amp;&amp;  &amp;&amp; \vdots \\  b_k(x(t_1)) &amp;&amp; ... &amp;&amp; b_k(x(t_1)) \\ \end{bmatrix} \in \mathbb{R}^{k \times d \times N}\)</p>
-  </li>
-  <li>
-    <p>If \(\dot{X} = K \: \Theta(X)\) where \(K \in \mathbb{R}^{k}\). Solve for \(K\) using linear least squares and a sparsity inducing regularizer.</p>
-  </li>
-</ol>
+<p>From this, the log-likelihood can be written as</p>
 
-<hr>
+\[log \: p(x|\theta) := \sum_{i=1}^N \: \| \partial_t \: x(t_i) - f(x(t_i))\|_2 + \|\hat{x}(t_i) - x_i(t_i) \|_2\]
+
+<p>And as always one, chooses a zero mean Gaussian prior for a GP.</p>
+
+\[p(\theta) := \mathcal{N}(0,\kappa(t,t'))\]
+
+<p>Finally, one obtains the posterior by optimizing for the covariance kernel parameters.</p>
 
 <h3 id="examples">Examples</h3>
 
-<p>Here the algorithm is applied to commonly recurring examples in literature – Lorenz 69 attractor and a Lotka-Volterra model.</p>
+<h5 id="logistic-equation">Logistic equation</h5>
 
-<style>
-    .column {
-  float: left;
-  width: 50.00%;
-  margin : 0 0 0px 0px;
-  padding: 2px;
-}
+<h5 id="lotka-voltera-model">Lotka-Voltera model</h5>
 
-/* Clear floats after image containers */
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-</style>
+<h5 id="duffling-oscillator">Duffling oscillator</h5>
 
-<h4 id="lorenz-69-attractor">Lorenz 69 attractor</h4>
+<h5 id="robertsons-reaction-system">Robertson’s reaction system</h5>
 
-<p>The following non-linear ODE with a specific configuration of parameters has been the poster-child of chaotic attractors for several decades now.</p>
+<h3 id="relationship-with-probabilistic-ode-solvers">Relationship with probabilistic ODE solvers</h3>
 
-\[\begin{align}
-  \dot{x}(t) = \sigma (y - x)\\
-  \dot{y}(t) = x(\rho - z) - y\\
-  \dot{z}(t) = xy - \beta z\\ 
-  \sigma = 10 \\ 
-  \rho = 28 \\ 
-  \beta = \frac{8}{3} \\ 
-  \begin{bmatrix} x_0 \\ y_0 \\ z_0  \end{bmatrix} = \begin{bmatrix} 1 \\ 0 \\ 0 \end{bmatrix} \\ 
-  t \in [0,100]
-\end{align}\]
-
-<p>Viewed clockwise, the figure below shows i) Trajectories of the attractor obtained from a numerical integrator, ii) Time derivative of the trajectories, iii) Chosen bases functions \(\mathcal{B}\) and the corresponding weights and iv) the reconstructed attractor.</p>
-
-<div class="row">
-  <div class="column">
-    <img style="width:100%" src="/assets/sindy/Traj_Lorenz.png" alt="spline-sim">
-  </div>
-  <div class="column">
-    <img style="width:100%" src="/assets/sindy/Vel_Lorenz.png" alt="spline-sur">
-  </div>
-</div>
-
-<div class="row">
-  <div class="column">
-    <img style="width:80%" src="/assets/sindy/Lorenz_Coeffs.png" alt="spline-sim">
-  </div>
-  <div class="column">
-    <img style="width:100%" src="/assets/sindy/Remade_Lorenz.png" alt="spline-sur">
-  </div>
-</div>
-
-<hr>
-
-<h4 id="lotka-volterra-model">Lotka Volterra model</h4>
-
-<p>Prey predator models are the staple for several ecological, biological and even plasma physical applications. A common model with a single species of prey and predator is shown below.</p>
-
-\[\begin{align}
-  \dot{x}(t) = \alpha x(t) + \beta x(t)y(t) \\ 
-  \dot{y}(t) = \gamma x(t)y(t) - \delta y(t) \\
-  \alpha = 0.7 \\
-  \beta = -0.3 \\ 
-  \gamma = -0.3 \\ 
-  \delta = 0.4 \\ 
-  \begin{bmatrix} x_0 \\ y_0  \end{bmatrix} = \begin{bmatrix} 1 \\ 1  \end{bmatrix} \\ 
-  t \in [0,100]
-\end{align}\]
-
-<p>Akin to the Lorenz attractor, the SINDY algorithm is used to infer the bases weights and the trajetories are then reconstructed.</p>
-
-<div class="row">
-  <div class="column">
-    <img style="width:100%" src="/assets/sindy/Traj_Lotka.png" alt="spline-sim">
-  </div>
-  <div class="column">
-    <img style="width:100%" src="/assets/sindy/Vel_Lotka.png" alt="spline-sur">
-  </div>
-</div>
-
-<div class="row">
-  <div class="column">
-    <img style="width:80%" src="/assets/sindy/LV_Coeffs.png" alt="spline-sim">
-  </div>
-  <div class="column">
-    <img style="width:100%" src="/assets/sindy/Remade_Lotka.png" alt="spline-sur">
-  </div>
-</div>
-
-<hr>
+<p>Probabilistic ODE solvers use the same method, but for the purpose of solving ODEs. However, when GPs are used as surrogates for finely discretized solutions to partial differential equations, incorporating the derivative information into the likelihood should result in improved inference, requiring fewer input reference datapoints. While the difference is subtle, it did not seem appropriate to further investigate this, considering that a large body of work had already been carried out on improving probabilistic integrators.</p>
 
 <h3 id="code">Code</h3>
-
-<p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
-
-<script src="https://gist.github.com/dynamic-queries/3edf052b43ec90467dc48f91fe3b552b.js"></script>
-
 
   </article>
 </div>

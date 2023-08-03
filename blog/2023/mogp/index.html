@@ -127,8 +127,8 @@
           <i class="fas fa-hashtag fa-sm"></i> SystemsIdentification</a>  
           
         ·  
-        <a href="/blog/category/projects">
-          <i class="fas fa-tag fa-sm"></i> projects</a>  
+        <a href="/blog/category/education">
+          <i class="fas fa-tag fa-sm"></i> education</a>  
           
 
     </p>
@@ -140,7 +140,7 @@
 
 <p>A typical <em>learning problem</em> consists of approximating an approximation \(\hat{f}\) to the function \(f:x \mapsto y \quad \forall x,y \in \Omega \subset \mathbb{R}^d\), given evaluations of the function at certain input points, that is \(\mathcal{D} = \{(x_i, f_i) : i \in \mathbb{N}\}\).</p>
 
-<p><em>Bayesian inference</em> assumes that the input \(x\) and the outputs \(y\) are random variables with some densities \(P_x, P_y\) respectively. These densities are related by</p>
+<p><em>Bayesian inference</em> assumes that the input \(x\) and the outputs \(y\) are random variables. These densities are related by</p>
 
 \[P(x,y) = P(y | x) P(x) = P(x | y) P(y)\]
 
@@ -155,53 +155,133 @@
 
 <p>Commonly, one assumes a functional form for the prior. The posterior is the updated version of the prior, once we have seen the reference data.</p>
 
-<h3 id="single-output-gp">Single Output GP</h3>
+<h3 id="gaussian-processes">Gaussian processes</h3>
 
-<p>Further, samples \(y,x\) are assumed to be related via</p>
+<p>If the likelihood and prior are Gaussian, then the Bayesian inference framework is a Gaussian process framework. In this case, the posterior has a closed form. I will discuss this in this section and write down the general inference procedure using Gaussian processes.</p>
 
-\[y = f(x)\]
-
-\[f:x \mapsto y \quad \forall x,y \in \Omega\]
-
-<p>Here \(f\) is assumed to be any non-linear function. One can project \(x\) onto a higher dimensional space spanned by the bases generated from a kernel function \(\kappa\), also known as the <strong>kernel trick</strong>, where the non-linearity of \(f\) is transformed into a linearity. Without any loss of generality, we can assume that any non-linear function can be transformed into a linear map.</p>
-
-\[y = Wx + b\]
-
-\[W \in \mathbb{R}^{d \times d} \: \textrm{ and } b \in \mathbb{R}^d\]
-
-<p>With this parameteric form for the output, defining a prior for the weights, \(z := \begin{bmatrix} W &amp; b \end{bmatrix}\) is equivalent to defining a prior for the output, \(y\). Therefore in a single output GP, there are three random variables \(x,y,z\). Their joint probability distribution is given as</p>
+<p>Let \(y:=f(x) \sim GP(\mu(x), \kappa(x,x';\theta))\) and let the discrete observations of \(x,y\) be stacked into tall vectors \(X,Y\) respectively. If one is interested in evaluating \(f\) at a new point \(x\), one need only compute the expectation of \(\mathcal{N}(\hat{\mu}_k, \hat{\Sigma}_k)\) such that</p>
 
 \[\begin{align}
-    P(x,y,z) = P(x,y|z) P(z) = P(z|x,y) P(x,y) \\
- P(z|x,y) = \frac{P(x,y|z) P(z)}{P(x,y)} \\ 
- = \frac{P(y|x,z) P(x,z)}{P(x,y)} \\
-  = \frac{P(y|x,z) P(x)P(z)}{P(y|x)P(x)}\\
- P(z|x,y) \propto P(y|x,z) P(z)
- \end{align}\]
-
-<p>Here, \(z \sim \mathcal{N}(0, \Sigma_z)\), that is</p>
-
-\[\begin{align}
-    P(z) = \frac{1}{\sqrt{(2\pi)^d |\Sigma_z|}} \exp\left(-\frac{1}{2} z^T \Sigma_z^{-1} z\right)
+    \hat{\mu} = K_{xX} \: (K_{XX} + \Lambda)^{-1} Y \\ 
+    \hat{\Sigma} = K_{xx'} - K_xX \: (K_{XX} + \Lambda)^{-1} K_{Xx'}
 \end{align}\]
 
-<p>Further, the likelihood is defined with the assumption that each component of \(x\) is independent of one another. This is why this inference procedure is called single output Gaussian process. That is</p>
+<p>Here \(K_{ab}^{ij} = \kappa(a[i],b[j];\theta_{k-1})\).</p>
 
-\[\begin{align}
-    P(y|x,z) = \prod_{i=1}^{d} \frac{1}{\sqrt{2\pi \sigma^2}} \exp\left(-\frac{1}{2}\left(\frac{y_i - (W_i x_i + b_i)}{\sigma}\right)^2\right) \\ 
-    P(y|x,z) = \frac{1}{(\sqrt{2\pi \sigma^2})^d} \exp\left(-\frac{1}{2\sigma^2}\sum_{i=1}^{d} (y_i - (W_i x_i + b_i))^2\right) \\ 
-    = \frac{1}{\sqrt{(2\pi)^d |\Sigma_y|}} \exp\left(-\frac{1}{2}(y - (W x + b))^T \Sigma_y^{-1} (y - (W x + b))\right)
-\end{align}\]
+<hr>
+<p><strong><em>Algorithm</em></strong></p>
 
-<p>From this \(P(y|x,z)\) is a multivariate normal distribution \(\mathcal{N}(Wx+b, \Sigma_y)\).</p>
+<p>Given:</p>
 
-<p>Further one can write down the posterior as</p>
+<ol>
+  <li>Covariance kernel \(\kappa\).</li>
+  <li>Reference data \(X,Y\)</li>
+  <li>Query points \(x\)</li>
+  <li>Threshold \(\epsilon\)</li>
+  <li>Noise covariance \(\Lambda\)</li>
+</ol>
 
-\[\begin{align}
-    P(z|x,y) \propto P(y|x,z) P(z) \\ 
-    = \frac{1}{(2\pi)^d \sqrt{|\Sigma_z||\Sigma_y|}} \exp\left(-\frac{1}{2} \left[z^T \Sigma_z^{-1} z + (y - (W x + b))^T \Sigma_y^{-1} (y - (W x + b)) \right]\right) \\ 
-    = \frac{1}{(2\pi)^d \sqrt{|\Sigma_z||\Sigma_y|}} \exp\left(-\frac{1}{2} \left[z^T \Sigma_z^{-1} z + (y - z x')^T \Sigma_y^{-1} (y - z x') \right]\right)
-\end{align}\]
+<p>For a given \(k\):</p>
+
+<ol>
+  <li>Evaluate \(K_{XX}\)</li>
+  <li>Compute \(y_k :=  K_{XX} \: (K_{XX} + \Lambda)^{-1} Y\)</li>
+  <li>Obtain discrepancy \(\mathcal{E}_k := \| y_k - Y\|\)</li>
+  <li>Compute \(G_k := \nabla_{\theta_{k-1}} \mathcal{E}\)</li>
+  <li>Update \(\theta_{k} := \theta_{k-1} - \alpha * G_k\)</li>
+</ol>
+
+<p>Until discrepancy \(\mathcal{E} &lt; \epsilon\):</p>
+
+<ol>
+  <li>Do the previous 6 steps.</li>
+  <li>Increment \(k\)</li>
+</ol>
+
+<p>Then,</p>
+
+<ol>
+  <li>Compute mean \(\hat{\mu}\) and covariance matrix \(\hat{\Sigma}\) with optimized \(\theta\).</li>
+  <li>Return \(\mathcal{N}(\hat{\mu},\hat{\Sigma})\)</li>
+</ol>
+
+<hr>
+
+<p>This procedure approximates any given function \(f\) from its samples. To illustrate this, consider the following example.</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/sinusoid_data.png" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/initial_prediction.png" alt="spline-sur">
+  </div>
+</div>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/final_prediction.png" alt="spline-sim">
+  </div>
+</div>
+
+<p>With a squared exponential kernel, the sinusoidal function, before hyperparamter optimization is shown in the second figure and the prediction after optimization, is shown in the third. Note that variance in the prediction is high, for out of sample distributions as it should be.</p>
+
+<h3 id="multi-output-gaussian-processes">Multi-output Gaussian processes</h3>
+
+<p>The algorithm from the previous section is readily transferable to vector valued functions as well; with the added change that one uses kernel functions that are better suited for this application. A comprehensive review of vector values GP kernels can be found in <a href="https://arxiv.org/abs/1106.6251v2" rel="external nofollow noopener" target="_blank">Alvarez</a>.</p>
+
+<p>In the rest of the section, I will approximate the trajectories of the Lorenz attractor</p>
+
+<p>\(\begin{align}
+  \frac{d}{dt}\begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix}\sigma (y - x)\\
+  (\rho - z) - y\\
+  xy - \beta z \end{bmatrix} \\ 
+  \sigma = 10, \: 
+  \rho = 28, \: 
+  \beta = \frac{8}{3} \\ 
+\end{align}\)
+with suitable initial conditions. One such trajectory we are interested in, looks like</p>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:100%" class="center" src="/assets/gp/lorenz.svg" alt="spline-sur"></p>
+
+<h4 id="independent-gps--igp">Independent GPs – IGP</h4>
+
+<p>Three independent GPs, each approximating \(x(t), y(t), z(t)\) require 100 randomly sampled points to make predictions (shown below) with a Matern kernel.</p>
+
+<p><img style="width:100%" class="center" src="/assets/gp/IGP_post.svg" alt="spline-sur"></p>
+
+<p>This would be the minimum possible predictive accuracy that vector valued GP models need to realize. The divergence in \(\epsilon\) for \(t&gt;5.0\) is due to out of sampling error.</p>
+
+<h4 id="intrinsic-coregionalization-model--icm">Intrinsic coregionalization model – ICM</h4>
+
+<h4 id="latent-force-model--lfm">Latent force model – LFM</h4>
+
+<h4 id="process-convolution-model--pc">Process Convolution model – PC</h4>
 
   </article>
 </div>
