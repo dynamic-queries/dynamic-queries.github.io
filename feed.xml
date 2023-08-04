@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-08-03T20:00:54+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-</subtitle><entry><title type="html">Physics informed Gaussian processes.</title><link href="https://dynamic-queries.github.io/blog/2023/pigp/" rel="alternate" type="text/html" title="Physics informed Gaussian processes." /><published>2023-08-01T00:00:00+00:00</published><updated>2023-08-01T00:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/pigp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/pigp/"><![CDATA[<p><em>This is preliminary research conducted during my Masters studies (2020-2022) at TUM with <a href="https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/">Ravi Kislaya</a>. Later, we realized that such an idea was already investigated in 2014 by P. Hennig et al., suspending futher investigation from our end.</em></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en"><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="https://dynamic-queries.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://dynamic-queries.github.io/" rel="alternate" type="text/html" hreflang="en" /><updated>2023-08-04T17:16:00+00:00</updated><id>https://dynamic-queries.github.io/feed.xml</id><title type="html">Rahul Manavalan</title><subtitle>A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
+</subtitle><entry><title type="html">Physics informed Gaussian processes.</title><link href="https://dynamic-queries.github.io/blog/2023/pigp/" rel="alternate" type="text/html" title="Physics informed Gaussian processes." /><published>2023-08-01T00:00:00+00:00</published><updated>2023-08-01T00:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/pigp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/pigp/"><![CDATA[<p><em>This is preliminary research conducted during my Masters studies (2020-2022) at TUM with <a href="https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/">Ravi Kislaya</a></em>.</p>
 
 <h3 id="introduction">Introduction</h3>
 
@@ -31,7 +31,7 @@
 
 \[p(\theta) := \mathcal{N}(0,\kappa(t,t'))\]
 
-<p>Finally, one obtains the posterior by optimizing for the covariance kernel parameters.</p>
+<p>There are a couple of approaches to this inference procedure. One could write down an expression for the posterior and perform MAP. Otherwise, one can do variational inference. We demonstrate both these procedures in the following example.</p>
 
 <h3 id="examples">Examples</h3>
 
@@ -47,9 +47,138 @@
 
 <p>Probabilistic ODE solvers use the same method, but for the purpose of solving ODEs. However, when GPs are used as surrogates for finely discretized solutions to partial differential equations, incorporating the derivative information into the likelihood should result in improved inference, requiring fewer input reference datapoints. While the difference is subtle, it did not seem appropriate to further investigate this, considering that a large body of work had already been carried out on improving probabilistic integrators.</p>
 
-<h3 id="code">Code</h3>]]></content><author><name></name></author><category term="projects" /><category term="SDEs" /><summary type="html"><![CDATA[Structure aware identification of dynamical systems with GPs.]]></summary></entry><entry><title type="html">A Langevin MD simulator</title><link href="https://dynamic-queries.github.io/blog/2023/sde/" rel="alternate" type="text/html" title="A Langevin MD simulator" /><published>2023-08-01T00:00:00+00:00</published><updated>2023-08-01T00:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sde</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sde/"><![CDATA[<p><strong><em>This is an implementation of a Langevin Molecular dynamics simulator developed as part of my masters thesis. All figures, code are a work of my own.</em></strong></p>
+<h3 id="code">Code</h3>]]></content><author><name></name></author><category term="projects" /><category term="SDEs" /><summary type="html"><![CDATA[Structure aware identification of dynamical systems with GPs.]]></summary></entry><entry><title type="html">A Langevin SDE simulator</title><link href="https://dynamic-queries.github.io/blog/2023/sde/" rel="alternate" type="text/html" title="A Langevin SDE simulator" /><published>2023-08-01T00:00:00+00:00</published><updated>2023-08-01T00:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/sde</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/sde/"><![CDATA[<p><em>This is an implementation of a Langevin dynamics simulator developed as part of my masters thesis. All figures, code are a work of my own.</em></p>
 
-<h3 id="introduction">Introduction</h3>]]></content><author><name></name></author><category term="education" /><category term="SDEs" /><summary type="html"><![CDATA[With emphasis on numerical methods.]]></summary></entry><entry><title type="html">(Original Research) Random feature potentials</title><link href="https://dynamic-queries.github.io/blog/2023/random_models/" rel="alternate" type="text/html" title="(Original Research) Random feature potentials" /><published>2023-07-22T08:00:00+00:00</published><updated>2023-07-22T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/random_models</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/random_models/"><![CDATA[<p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/">Chrisitian Mendl</a> and <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
+<h3 id="introduction">Introduction</h3>
+
+<p>Consider a physical system \(\mathcal{S}\) with \(N\) molecules. Each of this molecule can occupy some portion of the Euclidian space \(q \in \Omega \subset \mathbb{R}^{3N}\) and have a velocity  \(p \in \mathcal{T}\Omega \subset \mathbb{R}^{3N}\). These quantities are sometimes called the canonical coordinates of \(\mathcal{S}\). It is often true, that one is interested more in the average properties of this molecular system, such as the temperature, pressure, enthalpy; and less in the actual trajectories of these molecules. It suffices to say, if there exists a probability distribution over \(\Omega \times \mathcal{T}\Omega\), say \(P(q,p)\) then any macroscopic property of interest \(\Phi\), can be obtained from the following integral</p>
+
+\[\begin{align}
+    \Phi := \mathbb{E}\left[\phi(q)\right] = \int P(q,p) \: \phi(q) \: dp \: dq 
+\end{align}\]
+
+<p>where \(\phi(q)\) is a constitutive relation, that we know from prior experience. (More or less)</p>
+
+<p>But the question of how one arrives at \(P(q,p)\) still remains to be answered. Typically, this is done by sampling sufficiently many realizations from this distribution using some Monte Carlo scheme. Solving the Langevin SDE leads to one such Monte Carlo method, whose trajectories sufficently samples \(P(q,p)\). In its most generic form, the Langevin equation is as follows.</p>
+
+\[\begin{align}
+        d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} M^{-1}p \: dt \\ -\nabla_q U(q) \: dt- \gamma p \: dt+ \sigma M^{-1/2} \: dW(t) \end{bmatrix}
+    \end{align}\]
+
+<p>\(U : q \mapsto \mathbb{R}\) is the potential energy function. \(M, \gamma, \sigma\) are parameters used in tuning the simulation. \(W(t)\) is a Wiener process. Sometimes referred to as Brownian motion; for \(t,s,k,l \in [0,T]\) a Wiener process is defined as follows:</p>
+
+\[\begin{align}
+        W(0) = 0 \\ 
+        \forall s&gt;t \quad W(s)-W(t) \sim \sqrt{s-t}\:\mathcal{N}(0,1) \\ 
+        W(s)-W(t) \textrm{ and } W(l)-W(k) \textrm{ are indepenedent of each other.}
+    \end{align}\]
+
+<p>For most practical purposes the Langevin SDE needs to be numerically simulated. This entails making time discretizations. It is usually true that the equations are stiff and small time discretization steps need to be taken for accurately simulating \(P(q,p)\). On the other hand, it could also be that smaller time steps, would require significantly longer computational runs before the entire distribution can be sampled. This “chicken and egg” dilemma, presents the need for numerical integrators that can efficiently simulate the Langevin equation without compromising accuracy.</p>
+
+<p>This article discusses some of these numerical schemes, provides implementations of these methods and illustrates them on the classical harmonic and double well potentials.</p>
+
+<h3 id="operator-splitting">Operator splitting</h3>
+
+<p>Operator splitting is a numerical approximation technique, where the vector field of an ordinary differential equation is complicated, but can be decomposed into an additive sum of terms that are trivial when treated individually. In the context of the Langevin SDE, this is</p>
+
+\[\begin{align}
+        d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} M^{-1}p \\ 0 \end{bmatrix} \: dt  + \begin{bmatrix} 0 \\ -\nabla_q U(q)  \end{bmatrix} \: dt + \begin{bmatrix} 0 \\  -\gamma p \: dt + \sigma M^{-1/2} \: dW(t) \end{bmatrix}
+    \end{align}\]
+
+<p>Here, each of the terms on the right hand side, is tractable – some analytically and the one with \(U\) numerically.</p>
+
+<hr />
+
+<p>Formally let the solution to</p>
+
+\[\begin{align}
+    d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} M^{-1}p \\ 0 \end{bmatrix} \: dt
+\end{align}\]
+
+<p>be</p>
+
+\[\begin{align}
+    \phi_A(t) := \begin{bmatrix} q(t) \\ p(t) \end{bmatrix}_A = \begin{bmatrix} e^{M^{-1}t}q(0) \\ p(0) \end{bmatrix}
+\end{align}\]
+
+<p>And the solution to</p>
+
+\[\begin{align}
+    d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} 0  \\ -\gamma p \: dt + \sigma M^{-1/2} \: dW(t)\end{bmatrix}
+\end{align}\]
+
+<p>be</p>
+
+\[\begin{align}
+    \phi_O(t) := \begin{bmatrix} q(t) \\ p(t) \end{bmatrix}_O = \begin{bmatrix} q(0) \\ e^{-\gamma t} p(0) + \frac{\sigma}{\sqrt{2 \gamma}} \sqrt{1-e^{-2\gamma t}} M^{-1/2} R(t)\end{bmatrix}
+\end{align}\]
+
+<p>where \(R(t) \sim \mathcal{N}(0,1)\).</p>
+
+<p>Finally, there exists no analytical solution to</p>
+
+\[\begin{align}
+    d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} 0  \\ -\nabla_q U(q)\end{bmatrix} \: dt
+\end{align}\]
+
+<p>in the general case and needs to be simulated numerically. We call this solution</p>
+
+\[\begin{align}
+    \phi_B(t) := \begin{bmatrix} q(t) \\ p(t) \end{bmatrix}_B
+\end{align}\]
+
+<hr />
+
+<p>The idea behind operator splitting is to compose these individual solutions in a specific sequence that results in minimum error. For this Langevin problem, <a href="https://arxiv.org/abs/1304.3269">Leimkuhler</a> considered several sequences. We will discuss two of them.</p>
+
+<h5 id="baoab">BAOAB</h5>
+
+\[\begin{align}
+    \phi(t+\tau) := \phi_B \left(t+\frac{\tau}{2}\right) \circ \phi_A \left(t+\frac{\tau}{2}\right) \circ \phi_O(t + \tau) \circ \phi_A \left(t+\frac{\tau}{2}\right) \circ \phi_B \left(t+\frac{\tau}{2}\right)
+\end{align}\]
+
+<h5 id="aboba">ABOBA</h5>
+
+\[\begin{align}
+    \phi(t+\tau) := \phi_A \left(t+\frac{\tau}{2}\right) \circ \phi_B \left(t+\frac{\tau}{2}\right) \circ \phi_O(t + \tau) \circ \phi_B \left(t+\frac{\tau}{2}\right) \circ \phi_A \left(t+\frac{\tau}{2}\right)
+\end{align}\]
+
+<h3 id="examples">Examples</h3>
+
+<p>In the following, we consider one dimensional molecular systems. That is \(q,p \in \mathbb{R}^N\). With these assumptions, the simulated trajectories and their distributions, along with the energies are shown below.</p>
+
+<h4 id="one-body-system">One body system</h4>
+<p>Here \(N=1\)</p>
+<h5 id="simple-harmonic-oscillator">Simple Harmonic oscillator</h5>
+
+\[\begin{align}
+    U(q) = \frac{1}{2} k(q-c)^2
+\end{align}\]
+
+<h5 id="double-well-potential-oscillator">Double Well potential oscillator</h5>
+
+\[\begin{align}
+    U(q) = \frac{1}{4} k(q-a)^2(q+a)^2
+\end{align}\]
+
+<h4 id="two-body-systems">Two body systems</h4>
+
+<p>Here \(N=2\), that is \(q := \begin{bmatrix} q_1 \\ q_2 \end{bmatrix}\)</p>
+
+<h5 id="double-well-with-pairwise-harmonic-potential">Double well with pairwise harmonic potential</h5>
+
+\[\begin{align}
+    U(q_1) = \frac{1}{4} k(q_1-a)^2(q_1-b)^2 + \frac{1}{2} k(q_1-q_2)^2
+\end{align}\]
+
+<h5 id="double-well-with-soft-bound-potential">Double well with soft-bound potential</h5>
+
+\[\begin{align}
+    U(q_1) = \frac{1}{4} k(q_1-a)^2(q_1-b)^2 + V(q_1, q_2) \\ 
+    V(q_1, q_2) = \begin{cases} cos\left(1 + \frac{ (q_2 - q_1) \pi }{r_c}\right) \quad r&lt;r_c \\ 0 \quad r \geq r_c \end{cases}
+\end{align}\]
+
+<p>Extending these simulations to higher dimensions is trivial, but remains out of the scope of this article.</p>]]></content><author><name></name></author><category term="education" /><category term="SDEs" /><summary type="html"><![CDATA[With emphasis on numerical methods.]]></summary></entry><entry><title type="html">(Original Research) Random feature potentials</title><link href="https://dynamic-queries.github.io/blog/2023/random_models/" rel="alternate" type="text/html" title="(Original Research) Random feature potentials" /><published>2023-07-22T08:00:00+00:00</published><updated>2023-07-22T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/random_models</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/random_models/"><![CDATA[<p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/">Chrisitian Mendl</a> and <a href="https://fd-research.com/">Felix Dietrich</a>.</p>
 
 <p><em>All ideas, figures, equations, examples and code, unless cited, are a work of my own.</em></p>
 
@@ -861,150 +990,4 @@ which when solved for an ensemble of initial conditions, results in its phase sp
   </div>
 </div>
 
-<p>Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (<em>The figures above show 500 unique samples in red.</em>)</p>]]></content><author><name></name></author><category term="education" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Inferring invariants of dynamical systems with gaussian processes.]]></summary></entry><entry><title type="html">Multi-output Gaussian processes</title><link href="https://dynamic-queries.github.io/blog/2023/mogp/" rel="alternate" type="text/html" title="Multi-output Gaussian processes" /><published>2023-07-20T08:00:00+00:00</published><updated>2023-07-20T08:00:00+00:00</updated><id>https://dynamic-queries.github.io/blog/2023/mogp</id><content type="html" xml:base="https://dynamic-queries.github.io/blog/2023/mogp/"><![CDATA[<h3 id="introduction">Introduction</h3>
-<p>Gaussian processes are a popular <strong>Bayesian</strong> <strong>learning</strong> framework.</p>
-
-<p>A typical <em>learning problem</em> consists of approximating an approximation \(\hat{f}\) to the function \(f:x \mapsto y \quad \forall x,y \in \Omega \subset \mathbb{R}^d\), given evaluations of the function at certain input points, that is \(\mathcal{D} = \{(x_i, f_i) : i \in \mathbb{N}\}\).</p>
-
-<p><em>Bayesian inference</em> assumes that the input \(x\) and the outputs \(y\) are random variables. These densities are related by</p>
-
-\[P(x,y) = P(y | x) P(x) = P(x | y) P(y)\]
-
-<p>Note that we do not have a closed form for any of these probability functions and estimating probability densities from data is in itself a hard problem. Instead, we make guesses about what these functions might be. Historically, each of these probability functions have their own names, namely</p>
-
-<ol>
-  <li>\(P(y)\) – Prior</li>
-  <li>\(P(x | y)\) – Likelihood</li>
-  <li>\(P(x)\) – Marginal</li>
-  <li>\(P(y | x)\) – Posterior</li>
-</ol>
-
-<p>Commonly, one assumes a functional form for the prior. The posterior is the updated version of the prior, once we have seen the reference data.</p>
-
-<h3 id="gaussian-processes">Gaussian processes</h3>
-
-<p>If the likelihood and prior are Gaussian, then the Bayesian inference framework is a Gaussian process framework. In this case, the posterior has a closed form. I will discuss this in this section and write down the general inference procedure using Gaussian processes.</p>
-
-<p>Let \(y:=f(x) \sim GP(\mu(x), \kappa(x,x';\theta))\) and let the discrete observations of \(x,y\) be stacked into tall vectors \(X,Y\) respectively. If one is interested in evaluating \(f\) at a new point \(x\), one need only compute the expectation of \(\mathcal{N}(\hat{\mu}_k, \hat{\Sigma}_k)\) such that</p>
-
-\[\begin{align}
-    \hat{\mu} = K_{xX} \: (K_{XX} + \Lambda)^{-1} Y \\ 
-    \hat{\Sigma} = K_{xx'} - K_xX \: (K_{XX} + \Lambda)^{-1} K_{Xx'}
-\end{align}\]
-
-<p>Here \(K_{ab}^{ij} = \kappa(a[i],b[j];\theta_{k-1})\).</p>
-
-<hr />
-<p><strong><em>Algorithm</em></strong></p>
-
-<p>Given:</p>
-
-<ol>
-  <li>Covariance kernel \(\kappa\).</li>
-  <li>Reference data \(X,Y\)</li>
-  <li>Query points \(x\)</li>
-  <li>Threshold \(\epsilon\)</li>
-  <li>Noise covariance \(\Lambda\)</li>
-</ol>
-
-<p>For a given \(k\):</p>
-
-<ol>
-  <li>Evaluate \(K_{XX}\)</li>
-  <li>Compute \(y_k :=  K_{XX} \: (K_{XX} + \Lambda)^{-1} Y\)</li>
-  <li>Obtain discrepancy \(\mathcal{E}_k := \| y_k - Y\|\)</li>
-  <li>Compute \(G_k := \nabla_{\theta_{k-1}} \mathcal{E}\)</li>
-  <li>Update \(\theta_{k} := \theta_{k-1} - \alpha * G_k\)</li>
-</ol>
-
-<p>Until discrepancy \(\mathcal{E} &lt; \epsilon\):</p>
-
-<ol>
-  <li>Do the previous 6 steps.</li>
-  <li>Increment \(k\)</li>
-</ol>
-
-<p>Then,</p>
-
-<ol>
-  <li>Compute mean \(\hat{\mu}\) and covariance matrix \(\hat{\Sigma}\) with optimized \(\theta\).</li>
-  <li>Return \(\mathcal{N}(\hat{\mu},\hat{\Sigma})\)</li>
-</ol>
-
-<hr />
-
-<p>This procedure approximates any given function \(f\) from its samples. To illustrate this, consider the following example.</p>
-
-<style>
-    .column {
-  float: left;
-  width: 50.00%;
-  margin : 0 0 0px 0px;
-  padding: 2px;
-}
-
-/* Clear floats after image containers */
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-</style>
-
-<div class="row">
-  <div class="column">
-    <img style="width:100%" src="/assets/gp/sinusoid_data.png" alt="spline-sim" />
-  </div>
-  <div class="column">
-    <img style="width:100%" src="/assets/gp/initial_prediction.png" alt="spline-sur" />
-  </div>
-</div>
-
-<div class="row">
-  <div class="column">
-    <img style="width:100%" src="/assets/gp/final_prediction.png" alt="spline-sim" />
-  </div>
-</div>
-
-<p>With a squared exponential kernel, the sinusoidal function, before hyperparamter optimization is shown in the second figure and the prediction after optimization, is shown in the third. Note that variance in the prediction is high, for out of sample distributions as it should be.</p>
-
-<h3 id="multi-output-gaussian-processes">Multi-output Gaussian processes</h3>
-
-<p>The algorithm from the previous section is readily transferable to vector valued functions as well; with the added change that one uses kernel functions that are better suited for this application. A comprehensive review of vector values GP kernels can be found in <a href="https://arxiv.org/abs/1106.6251v2">Alvarez</a>.</p>
-
-<p>In the rest of the section, I will approximate the trajectories of the Lorenz attractor</p>
-
-<p>\(\begin{align}
-  \frac{d}{dt}\begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix}\sigma (y - x)\\
-  (\rho - z) - y\\
-  xy - \beta z \end{bmatrix} \\ 
-  \sigma = 10, \: 
-  \rho = 28, \: 
-  \beta = \frac{8}{3} \\ 
-\end{align}\)
-with suitable initial conditions. One such trajectory we are interested in, looks like</p>
-
-<style>
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
-</style>
-
-<p><img style="width:100%" class="center" src="/assets/gp/lorenz.svg" alt="spline-sur" /></p>
-
-<h4 id="independent-gps--igp">Independent GPs – IGP</h4>
-
-<p>Three independent GPs, each approximating \(x(t), y(t), z(t)\) require 100 randomly sampled points to make predictions (shown below) with a Matern kernel.</p>
-
-<p><img style="width:100%" class="center" src="/assets/gp/IGP_post.svg" alt="spline-sur" /></p>
-
-<p>This would be the minimum possible predictive accuracy that vector valued GP models need to realize. The divergence in \(\epsilon\) for \(t&gt;5.0\) is due to out of sampling error.</p>
-
-<h4 id="intrinsic-coregionalization-model--icm">Intrinsic coregionalization model – ICM</h4>
-
-<h4 id="latent-force-model--lfm">Latent force model – LFM</h4>
-
-<h4 id="process-convolution-model--pc">Process Convolution model – PC</h4>]]></content><author><name></name></author><category term="education" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Learning mutivariate dynamical systems with GPs]]></summary></entry></feed>
+<p>Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (<em>The figures above show 500 unique samples in red.</em>)</p>]]></content><author><name></name></author><category term="education" /><category term="SystemsIdentification" /><summary type="html"><![CDATA[Inferring invariants of dynamical systems with gaussian processes.]]></summary></entry></feed>
