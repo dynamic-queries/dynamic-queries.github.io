@@ -29,74 +29,39 @@ In this work, we investigate the efficacy of random feature models as suitable s
 
 ### Interlude
 
-
 #### Potential energy surfaces
+Quantum mechanics is the mathematical framework used to describe physical systems. As it is the case with any universal theory, there are different formulations and interpretations of quantum mechanics. Three such formalisms that have stood the test of time  -- *the wavefunction formalism, the density matrix formalism and the Wigner function formalism.* For the rest of the article, I will concern myself with the wavefunction formalism of quantum mechanics.
 
-#### Random feature models
-Consider a sufficiently regular function $$f:x \mapsto y$$. Then one can find bases functions $$\phi_i(x; \theta)$$ with parameteric dependence on $$\theta$$ such that
+Consider a physical system (molecular system) $$\mathcal{S}$$. In quantum mechanics, the state of the systems is completely described by the wavefunction -- $$
+|\Psi\rangle : R \times s  \mapsto \mathbb{C}
+$$. Here $$R,s$$ are the internal coordinates and spins of the constituents of $$\mathcal{S}$$. Generally, if each coordinate $$\{(R_i,s_i): i \in [1,N]\}$$ can assume $$d$$ different values, then $$
+|\Psi\rangle
+$$ maps a $$d^N$$ dimensional input vector space to $$\mathbb{C}$$. In some sense, the wavefunction can be categorized as a high dimensional function. Representing the wavefunction and performing operations on it suffers from what Bellman referred to as the curse of dimensionality.
+
+Traditionally, the Hamiltonian $$\mathcal{H}$$ is an operator that acts on $$
+|\Psi\rangle
+$$. While one is interested in several interesting mutations of this operation, one that is particularly useful is determining the lowest eigenvalue of $$\mathcal{H}$$; as this directly corresponds to the ground state energy of $$\mathcal{S}$$. (Physical systems -- macroscopic and microscopic like to occupy the lowest energy level at equilibirum.) To wit,
 
 $$
 \begin{align}
-    f(x) \approx \sum_i a_i \phi_i(x; \theta)
+  \mathcal{H} |\chi_0\rangle = \mathcal{E}_0 |\chi_0\rangle
 \end{align}
 $$
 
-This is a common feature in most function approximation schemes. In particular, if one uses a neural network with one hidden layer:
+$$\chi_0$$ is the lowest energy state of $$\mathcal{S}$$ and $$\mathcal{E}_0$$ is its energy. In quantum chemistry $$\mathcal{E}_0 : R \times s \mapsto \mathbb{R}$$ is referred to as the **potential energy surface**. $$\mathcal{E}_0$$ is again a high dimensional function. 
 
-$$
-\begin{align}
-    \label{eq:randomNN}
-    f(x) \approx W_2 \: \rho \left(W_1 x  + b_1 \right)
-\end{align}
-$$
+One can in principle approximate it, by diagonalizing $$\mathcal{H}$$. Diagonalizing a discretized version of $$\mathcal{H}$$, say $$\mathcal{H}_d$$ results in a matrix. $$\mathcal{H}_d \in \mathbb{C}^{d^N \times d^N}$$. Using a dense diagonalization routine is computationally of the order $$\mathcal{O}(d^{3N})$$. Iterative Ritz minimization inturn is atleast $$\mathcal{O}(d^{2N})$$ with pathalogical scaling constants. Considering that $$\mathcal{H}_d$$ is Hermitian, it can also be efficiently digonalized using an Arnoldi iteration. But the truth remains -- exact diagonalization methods work well only for small $$N$$.
 
-Tradionally, one randomly chooses the parameters which are subsequently trained with a gradient based algorithm. If one assumes that the weights $$\theta= \{W_1, W_2, b_1\}$$ follow a probability distribution $$p_{\theta}$$, during training this distribution is modified with every epoch.
-
-Random feature models, on the otherhand,  sample $$\theta \sim \mathcal{U}_{\theta}$$ from a uniform distribution (which requires no training). As surprising it is, it has been shown with uniform sampling of $$\theta$$ in (\ref{eq:randomNN}), used in conjunction with $$\rho = \{cos, tanh, relu\}$$ is a universal approximator. Further, one can define a litany of heuristics to define ad-hoc "probability" functions $$p_i$$, which when used for sampling should yield more accurate approximations at the same cost. 
-
-Shown below is the function $$x \mapsto sin(x)$$ trained with an ADAM optimizer and one sampled using the sampling algorithm (I will discuss this next.). The prediction from the sampling algorithm is one shot, requiring no iterative training training, that is characteristic of all gradient based training methods.
-
-<style>
-    .column {
-  float: left;
-  width: 50.00%;
-  margin : 0 0 0px 0px;
-  padding: 2px;
-}
-
-/* Clear floats after image containers */
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-</style>
-
-<div class="row">
-  <div class="column">
-    <img style="border:1px solid black;" src="/assets/random_feature/single_output.svg" alt="spline-sim" style="width:100%">
-  </div>
-  <div class="column">
-    <img style="border:1px solid black;" src="/assets/random_feature/single_sampling.svg" alt="spline-sur" style="width:100%">
-  </div>
-</div> 
+An efficient, widely prevalent, rather unintuitive method for determining $$\mathcal{E}_0$$ is using Density functional theory. Its based on Hohenberg Kohn's theorem -- *stating that one does not need knowledge of the wavefunction of a system to determine its ground state*. This directly excludes operating on a high dimensional Hilbert space but instead allows us to work with tractable mathematical quantities -- the density of states $$\rho$$.
 
 
-This is also the case for a multioutput function such as
 
-$$x \mapsto \begin{bmatrix} sin(4x) \\ cos(4x) \\ sin(4x) \: cos(4x)\end{bmatrix}$$
+### Appendix
 
-<div class="row">
-  <div class="column">
-    <img style="border:1px solid black;" src="/assets/random_feature/multi_output.svg" alt="spline-sim" style="width:100%">
-  </div>
-  <div class="column">
-    <img style="border:1px solid black;" src="/assets/random_feature/multi_sampling.svg" alt="spline-sur" style="width:100%">
-  </div>
-</div> 
+##### Arnoldi's iteration
 
-### Code
 
-##### Random feature model for approximating simple functions
+##### Ritz's minimization
 
-<script src="https://gist.github.com/dynamic-queries/7fe5162d9f355fe9e7414cf50a8fdfa0.js"></script>
+
+##### Dense diagonalization -- QR decomposition
