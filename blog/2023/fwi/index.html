@@ -177,9 +177,100 @@
     \arg \min_{c \in \mathcal{H}} \|u(z,t;c(x)) - u_m(z,t)\|
 \end{equation}\]
 
-<h3 id="procedure">Procedure</h3>
+<h3 id="results">Results</h3>
 
-<p>I illustrate my approach to this problem with a synthetic example.</p>
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<p><strong><em>Spline shaped velocity fields</em></strong></p>
+
+<p>Spline 1 <span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/normal_spline/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/normal_spline/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+
+<p><img style="width:120%" src="/assets/FWI/validate/normal_spline/time_series.svg" alt="spline-sur"></p>
+
+<p>Spline 2 <span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/my_spline/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/my_spline/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/my_spline/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Circular velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/circle/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/circle/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/circle/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Rectangular velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/rectangle/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/rectangle/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/rectangle/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Square velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/square/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/square/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/square/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Diagonal velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.]</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/diagonal/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/diagonal/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/diagonal/time_series.svg" alt="spline-sur"></p>
 
   </article>
 </div>
