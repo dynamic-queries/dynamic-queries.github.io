@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Physics informed Gaussian processes. | Rahul Manavalan</title>
+    <title>(Original Research) Random feature potentials | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="Structure aware identification of dynamical systems with GPs.">
+    <meta name="description" content="Inferring potential energy surfaces with random feature models.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/blog/2023/pigp/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/2023-21-07-random_models/">
     
     <!-- Dark Mode -->
     
@@ -72,8 +72,8 @@
               </li>
               
               <!-- Blog -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/blog/">Projects<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/blog/">Projects</a>
               </li>
 
               <!-- Other pages -->
@@ -118,13 +118,13 @@
 <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Physics informed Gaussian processes.</h1>
-    <p class="post-meta">August 1, 2023</p>
+    <h1 class="post-title">(Original Research) Random feature potentials</h1>
+    <p class="post-meta">July 22, 2023</p>
     <p class="post-tags">
       <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
         ·  
-        <a href="/blog/tag/sdes">
-          <i class="fas fa-hashtag fa-sm"></i> SDEs</a>  
+        <a href="/blog/tag/surrogatization">
+          <i class="fas fa-hashtag fa-sm"></i> Surrogatization</a>  
           
         ·  
         <a href="/blog/category/projects">
@@ -135,55 +135,49 @@
   </header>
 
   <article class="post-content">
-    <p><em>This is preliminary research conducted during my Masters studies (2020-2022) at TUM with <a href="https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/" rel="external nofollow noopener" target="_blank">Ravi Kislaya</a></em>.</p>
+    <p>This is original work done as a part of my masters studies at TUM with <a href="http://christian.mendl.net/" rel="external nofollow noopener" target="_blank">Chrisitian Mendl</a> and <a href="https://fd-research.com/" rel="external nofollow noopener" target="_blank">Felix Dietrich</a>.</p>
+
+<p><em>All ideas, figures, equations, examples and code, unless cited, are a work of my own.</em></p>
 
 <h3 id="introduction">Introduction</h3>
 
-<p>Building on the previous post of inferring dynamical systems with <a href="https://dynamic-queries.github.io/blog/2023/mogp/">multi-output GPs</a>, we formulate learning a statistical model from data based on the structure of the mechanistic models underlying that dynamical system. To wit:</p>
+<p>The importance of understanding the composition and behaviour of molecules is well established. Scientific disciplines such as chemistry, molecular biology, drug discovery and others, rely on molecular dynamics simulations as their core computational tool. 
+Tradionally, MD has been and to some extent still is, dependent on empirical force fields for estimating the interaction forces among molecules.</p>
 
-<p>Consider the dynamical system.
-\(\begin{align}
-    \frac{dx(t)}{dt} = f(x(t)) \\ 
-    x(0) = x_0 \in \mathbb{R}^d
-\end{align}\)</p>
+<p>These empirical models are a simplification at best. The “proper” way to evaluate the forces in a molecular dynamics simulation is to use first principle calculations that solves the stationary Schrodinger’s equations. But self-consistent loop sub-routines in most first principle calculations are too expensive to simulate molecules realistically for time domains where phenomena of interest emerge.</p>
 
-<p>If one has observables of this dynamical systems obtained at discrete time points such as \(X := [\hat{x}(t_1),\hat{x}(t_2),...,\hat{x}(t_N)]\) and the forcing function \(f(x)\), we would like to infer a statistical model (in this case, a GP) that aids as a reliable predictor for \(x(t)\). Here, GP is used as a surrogate and does not exactly fit the label of systems identification.</p>
+<p>This brings us to the fore of research today, where machine learning algorithms (deep learning, especially) has been co-opted to “learn” the rules of quantum mechanics from huge clusters of molecular data, generated from first principle calculations. The models used are the usual suspects – neural networks, gaussian processes and other kernel methods.</p>
 
-<h3 id="method">Method</h3>
+<p>In this work, we investigate the efficacy of random feature models as suitable surrogates for learning the ground state potentials of molecular systems.</p>
 
-<p>This can be realized as follows. Let</p>
+<p><em>I am aware that these two topics are esoteric in their own right. Therefore, I provide a quick interlude that discusses the notions of 1) Potential energy surfaces of molecular systems and 2) Random feature models as function approximation tools.</em></p>
 
-\[x(t) \sim \mathcal{GP}(\mu(t), \kappa(t,t'))\]
+<h3 id="interlude">Interlude</h3>
 
-<p>Let \(\kappa\) be a sufficiently smooth covariance kernel. Then,</p>
+<h4 id="potential-energy-surfaces">Potential energy surfaces</h4>
+<p>Quantum mechanics is the mathematical framework used to describe physical systems. As it is the case with any universal theory, there are different formulations and interpretations of quantum mechanics. Three such formalisms that have stood the test of time  – <em>the wavefunction formalism, the density matrix formalism and the Wigner function formalism.</em> For the rest of the article, I will concern myself with the wavefunction formalism of quantum mechanics.</p>
 
-\[\partial_t \: x(t) \sim \mathcal{GP}(\partial_t \mu(t), \partial_t \partial_{t'} \: \kappa(t,t'))\]
+<p>Consider a physical system (molecular system) \(\mathcal{S}\). In quantum mechanics, the state of the systems is completely described by the wavefunction – \(|\Psi\rangle : R \times s  \mapsto \mathbb{C}\). Here \(R,s\) are the internal coordinates and spins of the constituents of \(\mathcal{S}\). Generally, if each coordinate \(\{(R_i,s_i): i \in [1,N]\}\) can assume \(d\) different values, then \(|\Psi\rangle\) maps a \(d^N\) dimensional input vector space to \(\mathbb{C}\). In some sense, the wavefunction can be categorized as a high dimensional function. Representing the wavefunction and performing operations on it suffers from what Bellman referred to as the curse of dimensionality.</p>
 
-<p>From this, the log-likelihood can be written as</p>
+<p>Traditionally, the Hamiltonian \(\mathcal{H}\) is an operator that acts on \(|\Psi\rangle\). While one is interested in several interesting mutations of this operation, one that is particularly useful is determining the lowest eigenvalue of \(\mathcal{H}\); as this directly corresponds to the ground state energy of \(\mathcal{S}\). (Physical systems – macroscopic and microscopic like to occupy the lowest energy level at equilibirum.) To wit,</p>
 
-\[log \: p(x|\theta) := \sum_{i=1}^N \: \| \partial_t \: x(t_i) - f(x(t_i))\|_2 + \|\hat{x}(t_i) - x_i(t_i) \|_2\]
+\[\begin{align}
+  \mathcal{H} |\chi_0\rangle = \mathcal{E}_0 |\chi_0\rangle
+\end{align}\]
 
-<p>And as always one, chooses a zero mean Gaussian prior for a GP.</p>
+<p>\(\chi_0\) is the lowest energy state of \(\mathcal{S}\) and \(\mathcal{E}_0\) is its energy. In quantum chemistry \(\mathcal{E}_0 : R \times s \mapsto \mathbb{R}\) is referred to as the <strong>potential energy surface</strong>. \(\mathcal{E}_0\) is again a high dimensional function.</p>
 
-\[p(\theta) := \mathcal{N}(0,\kappa(t,t'))\]
+<p>One can in principle approximate it, by diagonalizing \(\mathcal{H}\). Diagonalizing a discretized version of \(\mathcal{H}\), say \(\mathcal{H}_d\) results in a matrix. \(\mathcal{H}_d \in \mathbb{C}^{d^N \times d^N}\). Using a dense diagonalization routine is computationally of the order \(\mathcal{O}(d^{3N})\). Iterative Ritz minimization inturn is atleast \(\mathcal{O}(d^{2N})\) with pathalogical scaling constants. Considering that \(\mathcal{H}_d\) is Hermitian, it can also be efficiently digonalized using an Arnoldi iteration. But the truth remains – exact diagonalization methods work well only for small \(N\).</p>
 
-<p>There are a couple of approaches to this inference procedure. One could write down an expression for the posterior and perform MAP. Otherwise, one can do variational inference. We demonstrate both these procedures in the following example.</p>
+<p>An efficient, widely prevalent, rather unintuitive method for determining \(\mathcal{E}_0\) is using Density functional theory. Its based on Hohenberg Kohn’s theorem – <em>stating that one does not need knowledge of the wavefunction of a system to determine its ground state</em>. This directly excludes operating on a high dimensional Hilbert space but instead allows us to work with tractable mathematical quantities – the density of states \(\rho\).</p>
 
-<h3 id="examples">Examples</h3>
+<h3 id="appendix">Appendix</h3>
 
-<h5 id="logistic-equation">Logistic equation</h5>
+<h5 id="arnoldis-iteration">Arnoldi’s iteration</h5>
 
-<h5 id="lotka-voltera-model">Lotka-Voltera model</h5>
+<h5 id="ritzs-minimization">Ritz’s minimization</h5>
 
-<h5 id="duffling-oscillator">Duffling oscillator</h5>
-
-<h5 id="robertsons-reaction-system">Robertson’s reaction system</h5>
-
-<h3 id="relationship-with-probabilistic-ode-solvers">Relationship with probabilistic ODE solvers</h3>
-
-<p>Probabilistic ODE solvers use the same method, but for the purpose of solving ODEs. However, when GPs are used as surrogates for finely discretized solutions to partial differential equations, incorporating the derivative information into the likelihood should result in improved inference, requiring fewer input reference datapoints. While the difference is subtle, it did not seem appropriate to further investigate this, considering that a large body of work had already been carried out on improving probabilistic integrators.</p>
-
-<h3 id="code">Code</h3>
+<h5 id="dense-diagonalization--qr-decomposition">Dense diagonalization – QR decomposition</h5>
 
   </article>
 </div>

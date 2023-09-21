@@ -10,10 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Surrogatization | Rahul Manavalan</title>
+    <title>Physics informed Gaussian processes. | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
-">
+    <meta name="description" content="Structure aware identification of dynamical systems with GPs.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -34,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/blog/tag/surrogatization/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/2023-01-08-pigp/">
     
     <!-- Dark Mode -->
     
@@ -73,8 +72,8 @@
               </li>
               
               <!-- Blog -->
-              <li class="nav-item active">
-                <a class="nav-link" href="/blog/">Projects<span class="sr-only">(current)</span></a>
+              <li class="nav-item ">
+                <a class="nav-link" href="/blog/">Projects</a>
               </li>
 
               <!-- Other pages -->
@@ -114,35 +113,79 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <div class="post">
+      <!-- _layouts/post.html -->
+
+<div class="post">
 
   <header class="post-header">
-    <h1 class="post-title"> <i class="fas fa-hashtag fa-sm"></i> Surrogatization </h1>
-    <p class="post-description"> an archive of posts with this tag </p>
+    <h1 class="post-title">Physics informed Gaussian processes.</h1>
+    <p class="post-meta">August 1, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/sdes">
+          <i class="fas fa-hashtag fa-sm"></i> SDEs</a>  
+          
+        ·  
+        <a href="/blog/category/projects">
+          <i class="fas fa-tag fa-sm"></i> projects</a>  
+          
+
+    </p>
   </header>
 
-  <article>
-    <div class="table-responsive">
-      <table class="table table-sm table-borderless">
-        
-        <tr>
-          <th scope="row">Jul 22, 2023</th>
-          <td>
-              <a class="post-link" href="/blog/2023/random_models/">(Original Research) Random feature potentials</a>
-          </td>
-        </tr>
-      
-        <tr>
-          <th scope="row">Jul 20, 2023</th>
-          <td>
-              <a class="post-link" href="/blog/2023/fwi/">(Original Research) Full Waveform inversion</a>
-          </td>
-        </tr>
-      
-      </table>
-    </div>
-  </article>
+  <article class="post-content">
+    <p><em>This is preliminary research conducted during my Masters studies (2020-2022) at TUM with <a href="https://www.cs.cit.tum.de/en/sccs/people/kislaya-ravi/" rel="external nofollow noopener" target="_blank">Ravi Kislaya</a></em>.</p>
 
+<h3 id="introduction">Introduction</h3>
+
+<p>Building on the previous post of inferring dynamical systems with <a href="https://dynamic-queries.github.io/blog/2023/mogp/">multi-output GPs</a>, we formulate learning a statistical model from data based on the structure of the mechanistic models underlying that dynamical system. To wit:</p>
+
+<p>Consider the dynamical system.
+\(\begin{align}
+    \frac{dx(t)}{dt} = f(x(t)) \\ 
+    x(0) = x_0 \in \mathbb{R}^d
+\end{align}\)</p>
+
+<p>If one has observables of this dynamical systems obtained at discrete time points such as \(X := [\hat{x}(t_1),\hat{x}(t_2),...,\hat{x}(t_N)]\) and the forcing function \(f(x)\), we would like to infer a statistical model (in this case, a GP) that aids as a reliable predictor for \(x(t)\). Here, GP is used as a surrogate and does not exactly fit the label of systems identification.</p>
+
+<h3 id="method">Method</h3>
+
+<p>This can be realized as follows. Let</p>
+
+\[x(t) \sim \mathcal{GP}(\mu(t), \kappa(t,t'))\]
+
+<p>Let \(\kappa\) be a sufficiently smooth covariance kernel. Then,</p>
+
+\[\partial_t \: x(t) \sim \mathcal{GP}(\partial_t \mu(t), \partial_t \partial_{t'} \: \kappa(t,t'))\]
+
+<p>From this, the log-likelihood can be written as</p>
+
+\[log \: p(x|\theta) := \sum_{i=1}^N \: \| \partial_t \: x(t_i) - f(x(t_i))\|_2 + \|\hat{x}(t_i) - x_i(t_i) \|_2\]
+
+<p>And as always one, chooses a zero mean Gaussian prior for a GP.</p>
+
+\[p(\theta) := \mathcal{N}(0,\kappa(t,t'))\]
+
+<p>There are a couple of approaches to this inference procedure. One could write down an expression for the posterior and perform MAP. Otherwise, one can do variational inference. We demonstrate both these procedures in the following example.</p>
+
+<h3 id="examples">Examples</h3>
+
+<h5 id="logistic-equation">Logistic equation</h5>
+
+<h5 id="lotka-voltera-model">Lotka-Voltera model</h5>
+
+<h5 id="duffling-oscillator">Duffling oscillator</h5>
+
+<h5 id="robertsons-reaction-system">Robertson’s reaction system</h5>
+
+<h3 id="relationship-with-probabilistic-ode-solvers">Relationship with probabilistic ODE solvers</h3>
+
+<p>Probabilistic ODE solvers use the same method, but for the purpose of solving ODEs. However, when GPs are used as surrogates for finely discretized solutions to partial differential equations, incorporating the derivative information into the likelihood should result in improved inference, requiring fewer input reference datapoints. While the difference is subtle, it did not seem appropriate to further investigate this, considering that a large body of work had already been carried out on improving probabilistic integrators.</p>
+
+<h3 id="code">Code</h3>
+
+  </article>
 </div>
 
     </div>
