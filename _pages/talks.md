@@ -20,9 +20,6 @@ bibliography: references.bib
     - With [Felix Dietrich](https://fd-research.com/), [Daniel Lehmberg](https://www.xing.com/profile/Daniel_Lehmberg2)
     - Download here [:green_book:](/assets/RFSI.pdf)
 
-
-## 2023
-
 - Fullwaveform Inversion with Neural Operators and Adversarial regularization networks.
     - Poster at [SIAM CSE 2023 in Amsterdam](https://meetings.siam.org/sess/dsp_talk.cfm?p=125969)
     - With [Felix Dietrich](https://fd-research.com/)
