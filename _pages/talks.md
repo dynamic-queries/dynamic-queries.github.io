@@ -10,6 +10,17 @@ horizontal: true
 bibliography: references.bib
 ---
 
+--- 
+
+
+## 2023
+
+- Systems Identification with Random Feature Neural Networks
+    - Poster at [Autumn School - Scientific Machine Learning and Dynamical Systems ](https://www.cwi.nl/nl/events/cwi-research-semester-programs/autumn-school-scientific-machine-learning-semester-programme/)
+    - With [Felix Dietrich](https://fd-research.com/), [Daniel Lehmberg](https://www.xing.com/profile/Daniel_Lehmberg2)
+    - Download here [:green_book:](/assets/RFSI.pdf)
+
+
 ## 2023
 
 - Fullwaveform Inversion with Neural Operators and Adversarial regularization networks.
@@ -17,6 +28,7 @@ bibliography: references.bib
     - With [Felix Dietrich](https://fd-research.com/)
     - Download here [:green_book:](/assets/SIAM_CSE_Poster_Wave_Inversion-32.pdf)
 
+--- 
 
 ## 2021
 
