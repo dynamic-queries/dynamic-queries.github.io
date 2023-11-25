@@ -16,13 +16,14 @@
   contents:
     - title: Scientific Computing
       items: 
+        - Waveform relaxation
         - Outer Loop Applications
         - Surrogates for PDEs
-        - Non-linear Model Order Reduction
+        - Linear / Non-linear Model Order Reduction
     
     - title: Quantum Chemistry
       items:
-        - Machine Learning Potentials
+        - Actively learned Machine Learning Potentials
         - Coarse Grained Modeling
         - Parallel in time molecular dynamics
       
@@ -35,13 +36,19 @@
     - title: Probabilistic numerics
       items: 
         - Numerical integration of ODEs
-        - Multigrid methods - "Gamblets"
+        - Gamblet transforms for multigrid methods
         - Gaussian process discretization of PDEs
 
 - title: Experience
   type: time_table
   contents:
     
+    - title: Researcher
+      institution: Lund University
+      year: 2024-2029
+      description:
+        - SciML for stochastic dynamical systems.
+
     - title: Student Researcher
       institution: Technical University of Munich
       year: 2022-2024
@@ -55,7 +62,7 @@
         - Multifidelity Gaussian Process surrogates.
 
     - title: Associate Software Engineer
-      institution: Robert Bosch Engineering and Bussiness Solutions.
+      institution: Robert Bosch Engineering and Business Solutions.
       year: 2019-2020
       description:
         - Systems simulation
@@ -74,7 +81,16 @@
 - title: Education
   type: time_table
   contents:
-    - title: Master of Science in Computational Science and Engineering (1.7/1.0)
+    - title: Doctoral candidate in Mathematical Statistics
+      institution: Lund University
+      year: 2024-2029
+      description:
+        - Advanced Probability Theory, Stochastic Processes.
+        - Numerical analysis for high dimensional PDEs.
+        - Uncertainity quantification.
+
+    
+    - title: Master of Science in Computational Science and Engineering (1.6/1.0)
       institution: Technical University of Munich
       year: 2020-2023
       description:
@@ -90,7 +106,7 @@
         - Model order reduction, Operator inference.
         - Sparse regression, Systems identification.
         - Neural fields, Equivariant/Invariant neural networks.
-        - Nerual ODEs, Adjoint methods, Automatic-differentiation.
+        - Neural ODEs, Adjoint methods, Automatic-differentiation.
     
     - title: Summer School on Density Functional Theory
       institution: Sorbonne Université, Paris
