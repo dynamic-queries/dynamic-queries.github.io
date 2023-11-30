@@ -16,7 +16,7 @@ bibliography: references.bib
 ## 2023
 
 - Machine learning potentials with higher order interactions
-    - Masters thesis in Computational Science and Engineering at the Technical Univeristy of Munich.
+    - Masters thesis in Computational Science and Engineering at the Technical University of Munich.
     - Download here [:green_book:](/assets/Higher_order_interactions_in_Machine_learning_potentials-23.pdf)
 
 - Systems Identification with Random Feature Neural Networks.
