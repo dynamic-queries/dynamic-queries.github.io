@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Publications | Rahul Manavalan</title>
+    <title>(Original Research) Full Waveform inversion | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A list of posters, peer-reviewed publications and conference proceedings.">
+    <meta name="description" content="Computational Non-destructive testing">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/publications/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/2023-21-07-fwi.html">
     
     <!-- Dark Mode -->
     
@@ -109,33 +109,165 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">Publications</h1>
-            <p class="post-description">A list of posters, peer-reviewed publications and conference proceedings.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <p>_pages/publications.md</p>
-<div class="publications">
+  <header class="post-header">
+    <h1 class="post-title">(Original Research) Full Waveform inversion</h1>
+    <p class="post-meta">July 20, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/inverseproblems-surrogatization">
+          <i class="fas fa-hashtag fa-sm"></i> InverseProblems, Surrogatization</a>  
+          
+        ·  
+        <a href="/blog/category/projects">
+          <i class="fas fa-tag fa-sm"></i> projects</a>  
+          
 
-<!-- -->
-  <!-- <h2 class="year">2021</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
-  <!-- <h2 class="year">2023</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
+    </p>
+  </header>
 
+  <article class="post-content">
+    <p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/" rel="external nofollow noopener" target="_blank">Felix Dietrich</a>. Part of this work was presented at <a href="https://meetings.siam.org/sess/dsp_talk.cfm?p=125969" rel="external nofollow noopener" target="_blank">SIAM CSE 2023 in Amsterdam</a></p>
+
+<p><em>All ideas, figures, equations, examples and code are a work of my own.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Ultrasonic imaging is a versatile tool for visualizing the subsurface properties of structures, which are not readily available for physical observation. In the last few decades this method has proliferated all walks of life, with applications ranging from medical imaging to non-destructive testing in engineering and the like. There have also been several adapatations such as photo-acoustic imaging which is a crucial tool in imaging microscopic elements of biological matter.</p>
+
+<p>Here I am interested in non-destructive testing for engineering structures. Consider the idealized scenario illustrated below.</p>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:50%" class="center" src="/assets/FWI_edit/outline.svg" alt="spline-sur"></p>
+
+<p>There is a rectangular domain with a defect in it. One does not know apriori how the defect looks like. But one has access to sensors measuring the amplitude of waves on the surface of the domain. Full waveform inversion concerns reconstructing the shape of the defect from these measured signals.</p>
+
+<h3 id="method">Method</h3>
+
+<p>In an ideal setting, the waves inside the domain \(\Omega\) can be assumed to propagate with velocity \(\forall x \in \Omega \quad c: x \mapsto \mathbb{R}\) and evolving in accordance with the acoustic wave equation.</p>
+
+\[\begin{align}
+    \frac{\partial^2 u(x,t)}{\partial t^2} = \frac{\partial^2 }{\partial x^2}\left[c(x)^2 u(x,t)\right] \\ 
+    u(x,0) = f(x) \\ 
+    \frac{\partial u(x,0)}{\partial t} = g(x) \\ 
+    u(y,t) = 0 \:\: \forall y \in \delta \Omega
+\end{align}\]
+
+<p>Here, I assume that the shape, \(s(x)\) of the defect is related to the velocity \(c(x)\) through \(s(x) = \phi(c(x))\) for some known invertible function \(\phi\). From this, it can be argued that inferring \(c(x)\) from reference measurement \(u_m(z,t) \:\: \forall z \in \Omega_s\) is, in effect, full-wave form inversion. Or equivalently one seeks the minimizer for the following:</p>
+
+\[\begin{equation}
+    \arg \min_{c \in \mathcal{H}} \|u(z,t;c(x)) - u_m(z,t)\|
+\end{equation}\]
+
+<h3 id="results">Results</h3>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<p><strong><em>Spline shaped velocity fields</em></strong></p>
+
+<p>Spline 1 <span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/normal_spline/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/normal_spline/surrogate.gif" alt="spline-sur">
+  </div>
 </div>
 
-          </article>
+<p><img style="width:120%" src="/assets/FWI/validate/normal_spline/time_series.svg" alt="spline-sur"></p>
 
-        </div>
+<p>Spline 2 <span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/my_spline/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/my_spline/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/my_spline/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Circular velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/circle/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/circle/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/circle/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Rectangular velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/rectangle/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/rectangle/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/rectangle/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Square velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/square/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/square/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/square/time_series.svg" alt="spline-sur"></p>
+
+<p><strong><em>Diagonal velocity fields</em></strong></p>
+
+<p><span style="color:red">[Not included in training]</span>.]</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/diagonal/simulation.gif" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/FWI/validate/diagonal/surrogate.gif" alt="spline-sur">
+  </div>
+</div>
+<p><img style="width:120%" src="/assets/FWI/validate/diagonal/time_series.svg" alt="spline-sur"></p>
+
+  </article>
+</div>
 
     </div>
 

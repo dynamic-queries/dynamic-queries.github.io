@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Publications | Rahul Manavalan</title>
+    <title>Multi-output Gaussian processes | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A list of posters, peer-reviewed publications and conference proceedings.">
+    <meta name="description" content="Learning mutivariate dynamical systems with GPs">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/publications/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/2023-22-07-mogp.html">
     
     <!-- Dark Mode -->
     
@@ -109,33 +109,178 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">Publications</h1>
-            <p class="post-description">A list of posters, peer-reviewed publications and conference proceedings.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <p>_pages/publications.md</p>
-<div class="publications">
+  <header class="post-header">
+    <h1 class="post-title">Multi-output Gaussian processes</h1>
+    <p class="post-meta">July 20, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/systemsidentification">
+          <i class="fas fa-hashtag fa-sm"></i> SystemsIdentification</a>  
+          
+        ·  
+        <a href="/blog/category/education">
+          <i class="fas fa-tag fa-sm"></i> education</a>  
+          
 
-<!-- -->
-  <!-- <h2 class="year">2021</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
-  <!-- <h2 class="year">2023</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
+    </p>
+  </header>
 
+  <article class="post-content">
+    <h3 id="introduction">Introduction</h3>
+<p>Gaussian processes are a popular <strong>Bayesian</strong> <strong>learning</strong> framework.</p>
+
+<p>A typical <em>learning problem</em> consists of approximating an approximation \(\hat{f}\) to the function \(f:x \mapsto y \quad \forall x,y \in \Omega \subset \mathbb{R}^d\), given evaluations of the function at certain input points, that is \(\mathcal{D} = \{(x_i, f_i) : i \in \mathbb{N}\}\).</p>
+
+<p><em>Bayesian inference</em> assumes that the input \(x\) and the outputs \(y\) are random variables. These densities are related by</p>
+
+\[P(x,y) = P(y | x) P(x) = P(x | y) P(y)\]
+
+<p>Note that we do not have a closed form for any of these probability functions and estimating probability densities from data is in itself a hard problem. Instead, we make guesses about what these functions might be. Historically, each of these probability functions have their own names, namely</p>
+
+<ol>
+  <li>\(P(y)\) – Prior</li>
+  <li>\(P(x | y)\) – Likelihood</li>
+  <li>\(P(x)\) – Marginal</li>
+  <li>\(P(y | x)\) – Posterior</li>
+</ol>
+
+<p>Commonly, one assumes a functional form for the prior. The posterior is the updated version of the prior, once we have seen the reference data.</p>
+
+<h3 id="gaussian-processes">Gaussian processes</h3>
+
+<p>If the likelihood and prior are Gaussian, then the Bayesian inference framework is a Gaussian process framework. In this case, the posterior has a closed form. I will discuss this in this section and write down the general inference procedure using Gaussian processes.</p>
+
+<p>Let \(y:=f(x) \sim GP(\mu(x), \kappa(x,x';\theta))\) and let the discrete observations of \(x,y\) be stacked into tall vectors \(X,Y\) respectively. If one is interested in evaluating \(f\) at a new point \(x\), one need only compute the expectation of \(\mathcal{N}(\hat{\mu}_k, \hat{\Sigma}_k)\) such that</p>
+
+\[\begin{align}
+    \hat{\mu} = K_{xX} \: (K_{XX} + \Lambda)^{-1} Y \\ 
+    \hat{\Sigma} = K_{xx'} - K_xX \: (K_{XX} + \Lambda)^{-1} K_{Xx'}
+\end{align}\]
+
+<p>Here \(K_{ab}^{ij} = \kappa(a[i],b[j];\theta_{k-1})\).</p>
+
+<hr>
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Given:</p>
+
+<ol>
+  <li>Covariance kernel \(\kappa\).</li>
+  <li>Reference data \(X,Y\)</li>
+  <li>Query points \(x\)</li>
+  <li>Threshold \(\epsilon\)</li>
+  <li>Noise covariance \(\Lambda\)</li>
+</ol>
+
+<p>For a given \(k\):</p>
+
+<ol>
+  <li>Evaluate \(K_{XX}\)</li>
+  <li>Compute \(y_k :=  K_{XX} \: (K_{XX} + \Lambda)^{-1} Y\)</li>
+  <li>Obtain discrepancy \(\mathcal{E}_k := \| y_k - Y\|\)</li>
+  <li>Compute \(G_k := \nabla_{\theta_{k-1}} \mathcal{E}\)</li>
+  <li>Update \(\theta_{k} := \theta_{k-1} - \alpha * G_k\)</li>
+</ol>
+
+<p>Until discrepancy \(\mathcal{E} &lt; \epsilon\):</p>
+
+<ol>
+  <li>Do the previous 6 steps.</li>
+  <li>Increment \(k\)</li>
+</ol>
+
+<p>Then,</p>
+
+<ol>
+  <li>Compute mean \(\hat{\mu}\) and covariance matrix \(\hat{\Sigma}\) with optimized \(\theta\).</li>
+  <li>Return \(\mathcal{N}(\hat{\mu},\hat{\Sigma})\)</li>
+</ol>
+
+<hr>
+
+<p>This procedure approximates any given function \(f\) from its samples. To illustrate this, consider the following example.</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/sinusoid_data.png" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/initial_prediction.png" alt="spline-sur">
+  </div>
 </div>
 
-          </article>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/gp/final_prediction.png" alt="spline-sim">
+  </div>
+</div>
 
-        </div>
+<p>With a squared exponential kernel, the sinusoidal function, before hyperparamter optimization is shown in the second figure and the prediction after optimization, is shown in the third. Note that variance in the prediction is high, for out of sample distributions as it should be.</p>
+
+<h3 id="multi-output-gaussian-processes">Multi-output Gaussian processes</h3>
+
+<p>The algorithm from the previous section is readily transferable to vector valued functions as well; with the added change that one uses kernel functions that are better suited for this application. A comprehensive review of vector values GP kernels can be found in <a href="https://arxiv.org/abs/1106.6251v2" rel="external nofollow noopener" target="_blank">Alvarez</a>.</p>
+
+<p>In the rest of the section, I will approximate the trajectories of the Lorenz attractor</p>
+
+<p>\(\begin{align}
+  \frac{d}{dt}\begin{bmatrix} x \\ y \\ z \end{bmatrix} = \begin{bmatrix}\sigma (y - x)\\
+  (\rho - z) - y\\
+  xy - \beta z \end{bmatrix} \\ 
+  \sigma = 10, \: 
+  \rho = 28, \: 
+  \beta = \frac{8}{3} \\ 
+\end{align}\)
+with suitable initial conditions. One such trajectory we are interested in, looks like</p>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:100%" class="center" src="/assets/gp/lorenz.svg" alt="spline-sur"></p>
+
+<h4 id="independent-gps--igp">Independent GPs – IGP</h4>
+
+<p>Three independent GPs, each approximating \(x(t), y(t), z(t)\) require 100 randomly sampled points to make predictions (shown below) with a Matern kernel.</p>
+
+<p><img style="width:100%" class="center" src="/assets/gp/IGP_post.svg" alt="spline-sur"></p>
+
+<p>This would be the minimum possible predictive accuracy that vector valued GP models need to realize. The divergence in \(\epsilon\) for \(t&gt;5.0\) is due to out of sampling error.</p>
+
+<h4 id="intrinsic-coregionalization-model--icm">Intrinsic coregionalization model – ICM</h4>
+
+<h4 id="latent-force-model--lfm">Latent force model – LFM</h4>
+
+<h4 id="process-convolution-model--pc">Process Convolution model – PC</h4>
+
+  </article>
+</div>
 
     </div>
 

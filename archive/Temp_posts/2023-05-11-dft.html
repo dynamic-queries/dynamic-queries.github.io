@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Publications | Rahul Manavalan</title>
+    <title>(WIP) Numerical Methods for Density Functional Theory | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A list of posters, peer-reviewed publications and conference proceedings.">
+    <meta name="description" content="A Primer on Electronic Structure Calculations.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/publications/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/Temp_posts/2023-05-11-dft.html">
     
     <!-- Dark Mode -->
     
@@ -109,33 +109,97 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">Publications</h1>
-            <p class="post-description">A list of posters, peer-reviewed publications and conference proceedings.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <p>_pages/publications.md</p>
-<div class="publications">
+  <header class="post-header">
+    <h1 class="post-title">(WIP) Numerical Methods for Density Functional Theory</h1>
+    <p class="post-meta">May 11, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/dft">
+          <i class="fas fa-hashtag fa-sm"></i> DFT</a>  
+          
+        ·  
+        <a href="/blog/category/review">
+          <i class="fas fa-tag fa-sm"></i> review</a>  
+          
 
-<!-- -->
-  <!-- <h2 class="year">2021</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
-  <!-- <h2 class="year">2023</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
+    </p>
+  </header>
 
+  <article class="post-content">
+    <h2 id="introduction">Introduction</h2>
+
+<p>It has been known for years that the physical laws underlying any arbitrary physical systems can be accurately described using quantum mechanics.
+While this viewpoint is philosophically elegant, it is not really useful as quantum mechanical descriptions of many-particle interactions, is formulated in a Hilbert’s space which scales exponentially with the number of particles, posing a computational bottleneck, which Bellman called the <strong>Curse of Dimensionality</strong>.</p>
+
+<p>One can often get away with this, by modelling systems with mean field, classical particle based and even continuum based approximations as one often does in quantum field theory, kinetic theory of fluids and fluid mechanics respectively. <a href="https://en.wikipedia.org/wiki/Spectroscopy" rel="external nofollow noopener" target="_blank">Molecular Spectroscopy</a> is one discipline where errors induced by such approximations is often dire, requiring explicit quantum mechanical descriptions despite the aforementioned bottleneck due to Bellman.</p>
+
+<p>Luckily there are several approximations that have been proposed that aim at circumventing this problem. One such method is Density Functional Theory. In what follows, I present a self-consistent introduction to Density Functional Theory (DFT) from the perspective of numerical analysis and an efficient algorithmic implementation.</p>
+
+<h2 id="a-many-body-problem">A Many Body Problem</h2>
+<p>For the rest of the article, I will refer to a many body quantum system with \(n\) electrons and \(m\) nuclear centers. It is known that the state of this system can be completely described with the help of its wavefunction, \(|\Psi\rangle\). If, the quantum system has \(p\) spin states, then the wavefunction, \(|\Psi\rangle : \mathbb{R}^{p^{m+n}} \times \mathbb{R}^{+} \mapsto \mathbb{C}\). Its evolution, is defined axiomatically by Schrodinger’s equation:</p>
+
+\[\begin{equation}
+    \label{eq:MBP}
+    i\bar{h} \frac{\partial |\Psi\rangle}{\partial t} = \left( -\frac{\bar{h}^2}{2M} \nabla^2 + V \right) |\Psi\rangle
+\end{equation}\]
+
+<p>The potential operator \(V\) in (\ref{eq:MBP}) is usually dominated by the electrostatic interactions among the different charge centers in the system. If \(Z_1, Z_2\) are the atomic numbers of two nuclear centers, located at \(r_1, r_2\), then the electrostatic potential between the two is</p>
+
+\[\begin{equation}
+    \label{eq:electrostatic}
+    V(r_1,r_2) = \frac{1}{4 \pi \epsilon} \frac{Z_1 Z_2 e^2}{\|r_1 - r_2\|} + V_{ext}
+\end{equation}\]
+
+<p>It is common to expand out (\ref{eq:MBP}-\ref{eq:electrostatic}) in its long form as follows.</p>
+
+\[\begin{equation}
+    \label{eq:Ham}
+    \begin{aligned}
+        i\bar{h} \frac{\partial |\Psi\rangle}{\partial t} = \left( -\frac{\bar{h}^2}{2} \sum_{i=1}^{m} \frac{1}{M_i}\nabla_{r_i}^2 -\frac{\bar{h}^2}{2} \sum_{j=1}^{n} \frac{1}{Me_{i}}\nabla_{r_j}^2\\ 
+         + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{m} \frac{Z_i e^2}{\|r_i - r_j\|} + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{n} \frac{e^2}{\|r_i - r_j\|} + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{m} \sum_{j=1}^{m} \frac{Z_i Z_j e^2}{\|r_i - r_j\|} + V_{ext}\right) |\Psi\rangle
+    \end{aligned}
+\end{equation}\]
+
+<p>The long form operator is known as the many electronic Hamiltonian. By itself, equation (\ref{eq:Ham}) is a parabolic partial differential equation with no analytical solutions, except for very simplified cases.</p>
+
+<p>The alternative of simulating the system numerically is also not computationally tractable. Say, \(p=2, m=6, n=60\). This corresponds to \(\Psi\) with \(2^{66} \approx 7.37 \times 10^{19}\) input parameters. If one were to parameterize each of these input directions with only \(10\) indicator functions then the state vector \(\tilde{\Psi}\) that uniquely represents a quantum state has \(10 \times 2^{66}\) components. This poses a burden that would be too heavy to bear for systems of larger sizes.</p>
+
+<h2 id="born-oppenheimer-approximation">Born Oppenheimer approximation</h2>
+
+<p>Making the observation that nuclear centers are substantially more massive than the electrons, Born and Oppenheimer postulated that the electrons and nuclear centers evolve in two different timescales. Effectively, the contributions of the nuclei to the many electronic Hamiltonian can be dropped and the nuclei can in-turn be simulated using Newton’s laws govered by a potential surface \(E\) obtained from solving the stationary Schrodinger’s equation.</p>
+
+\[\begin{equation}
+    \label{eq:SSE}
+        H_e |\Psi\rangle := \left(-\frac{\bar{h}^2}{2} \sum_{j=1}^{n} \frac{1}{Me_{i}}\nabla_{r_j}^2\\ 
+         + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{m} \frac{Z_i e^2}{\|r_i - r_j\|} + \frac{1}{4 \pi \epsilon} \sum_{i=i}^{n} \sum_{j=1}^{n} \frac{e^2}{\|r_i - r_j\|} + V_{ext}\right) |\Psi\rangle = E |\Psi\rangle
+\end{equation}\]
+
+<p>While, the BO approximation certainly reduces the complexity of solving (\ref{eq:MBP}), the wavefunction is still sufficiently massive to discourage its  computation, even on the largest computational facilities on earth. This is the curse of dimensionality that I alluded to, in the introduction. In what follows, I will elaborate on how DFT resolves this problem.</p>
+
+<h2 id="density-functional-theory">Density Functional Theory</h2>
+<p>\(|\Psi\rangle(z_1,z_2,....)\) has an exponentially growing input parameter space. So, all computations that involve \(|\Psi\rangle\) are prohibitively expensive. DFT addresses this problem, by restating (\ref{eq:SSE}) using an observable of \(|\Psi\rangle\) that takes in fewer parameters – the electron density of the system, \(\rho\), which is defined as:</p>
+
+\[\begin{equation}
+    \label{eq:density}
+    \rho(r) = n \sum_{s=\{0,1\}} \int \: dz_2 dz_3 ... dz_n \: \Psi^{*}((r,s),z_2,...,z_n) \Psi((r,s),z_2,...,z_n)
+\end{equation}\]
+
+<p>It would seem, that computing the density, in-turn requires knowledge of the wavefunction in the first place, which we have established as difficult to assemble on a computer. So, is this whole notion moot? Yes and No. While it is not computationally tractable to compute \(\rho\) directly, one can reformulate (\ref{eq:SSE}) in a variational setting and optimize for \(\rho\) indirectly.</p>
+
+<p>Consider the Ritz minimization iteration in the context of (\ref{eq:SSE}).</p>
+
+<p>\(\begin{equation}
+    E_{min} = \arg \min_{|\Psi\rangle \in \Theta} \frac{\langle\Psi|H_e|\Psi\rangle}{\langle\Psi|\Psi\rangle}
+\end{equation}\)
+where \(\Theta\) is the hypothesis space of antisymmetric functions \(|\Psi\rangle\) with \(\langle\Psi|\Psi\rangle = 1\).</p>
+
+  </article>
 </div>
-
-          </article>
-
-        </div>
 
     </div>
 

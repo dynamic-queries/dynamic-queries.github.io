@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Publications | Rahul Manavalan</title>
+    <title>A Langevin SDE simulator | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A list of posters, peer-reviewed publications and conference proceedings.">
+    <meta name="description" content="With emphasis on numerical methods.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/publications/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/2023-01-08-sde.html">
     
     <!-- Dark Mode -->
     
@@ -109,33 +109,168 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">Publications</h1>
-            <p class="post-description">A list of posters, peer-reviewed publications and conference proceedings.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <p>_pages/publications.md</p>
-<div class="publications">
+  <header class="post-header">
+    <h1 class="post-title">A Langevin SDE simulator</h1>
+    <p class="post-meta">August 1, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/sdes">
+          <i class="fas fa-hashtag fa-sm"></i> SDEs</a>  
+          
+        ·  
+        <a href="/blog/category/education">
+          <i class="fas fa-tag fa-sm"></i> education</a>  
+          
 
-<!-- -->
-  <!-- <h2 class="year">2021</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
-  <!-- <h2 class="year">2023</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
+    </p>
+  </header>
 
+  <article class="post-content">
+    <p><em>This is an implementation of a Langevin dynamics simulator developed as part of my masters thesis. All figures, code are a work of my own.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Consider a physical system \(\mathcal{S}\) with \(N\) molecules. Each of this molecule can occupy some portion of the Euclidian space \(q \in \Omega \subset \mathbb{R}^{3N}\) and have a velocity  \(p \in \mathcal{T}\Omega \subset \mathbb{R}^{3N}\). These quantities are sometimes called the canonical coordinates of \(\mathcal{S}\). It is often true, that one is interested more in the average properties of this molecular system, such as the temperature, pressure, enthalpy; and less in the actual trajectories of these molecules. It suffices to say, if there exists a probability distribution over \(\Omega \times \mathcal{T}\Omega\), say \(P(q,p)\) then any macroscopic property of interest \(\Phi\), can be obtained from the following integral</p>
+
+\[\begin{align}
+    \Phi := \mathbb{E}\left[\phi(q)\right] = \int P(q,p) \: \phi(q) \: dp \: dq 
+\end{align}\]
+
+<p>where \(\phi(q)\) is a constitutive relation, that we know from prior experience. (More or less)</p>
+
+<p>But the question of how one arrives at \(P(q,p)\) still remains to be answered. Typically, this is done by sampling sufficiently many realizations from this distribution using some Monte Carlo scheme. Solving the Langevin SDE leads to one such Monte Carlo method, whose trajectories sufficently samples \(P(q,p)\). In its most generic form, the Langevin equation is as follows.</p>
+
+\[\begin{align}
+        d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} M^{-1}p \: dt \\ -\nabla_q U(q) \: dt- \gamma p \: dt+ \sigma M^{-1/2} \: dW(t) \end{bmatrix}
+    \end{align}\]
+
+<p>\(U : q \mapsto \mathbb{R}\) is the potential energy function. \(M, \gamma, \sigma\) are parameters used in tuning the simulation. \(W(t)\) is a Wiener process. Sometimes referred to as Brownian motion; for \(t,s,k,l \in [0,T]\) a Wiener process is defined as follows:</p>
+
+\[\begin{align}
+        W(0) = 0 \\ 
+        \forall s&gt;t \quad W(s)-W(t) \sim \sqrt{s-t}\:\mathcal{N}(0,1) \\ 
+        W(s)-W(t) \textrm{ and } W(l)-W(k) \textrm{ are indepenedent of each other.}
+    \end{align}\]
+
+<p>For most practical purposes the Langevin SDE needs to be numerically simulated. This entails making time discretizations. It is usually true that the equations are stiff and small time discretization steps need to be taken for accurately simulating \(P(q,p)\). On the other hand, it could also be that smaller time steps, would require significantly longer computational runs before the entire distribution can be sampled. This “chicken and egg” dilemma, presents the need for numerical integrators that can efficiently simulate the Langevin equation without compromising accuracy.</p>
+
+<p>This article discusses some of these numerical schemes, provides implementations of these methods and illustrates them on the classical harmonic and double well potentials.</p>
+
+<h3 id="operator-splitting">Operator splitting</h3>
+
+<p>Operator splitting is a numerical approximation technique, where the vector field of an ordinary differential equation is complicated, but can be decomposed into an additive sum of terms that are trivial when treated individually. In the context of the Langevin SDE, this is</p>
+
+\[\begin{align}
+        d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} M^{-1}p \\ 0 \end{bmatrix} \: dt  + \begin{bmatrix} 0 \\ -\nabla_q U(q)  \end{bmatrix} \: dt + \begin{bmatrix} 0 \\  -\gamma p \: dt + \sigma M^{-1/2} \: dW(t) \end{bmatrix}
+    \end{align}\]
+
+<p>Here, each of the terms on the right hand side, is tractable – some analytically and the one with \(U\) numerically.</p>
+
+<hr>
+
+<p>Formally let the solution to</p>
+
+\[\begin{align}
+    d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} M^{-1}p \\ 0 \end{bmatrix} \: dt
+\end{align}\]
+
+<p>be</p>
+
+\[\begin{align}
+    \phi_A(t) := \begin{bmatrix} q(t) \\ p(t) \end{bmatrix}_A = \begin{bmatrix} e^{M^{-1}t}q(0) \\ p(0) \end{bmatrix}
+\end{align}\]
+
+<p>And the solution to</p>
+
+\[\begin{align}
+    d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} 0  \\ -\gamma p \: dt + \sigma M^{-1/2} \: dW(t)\end{bmatrix}
+\end{align}\]
+
+<p>be</p>
+
+\[\begin{align}
+    \phi_O(t) := \begin{bmatrix} q(t) \\ p(t) \end{bmatrix}_O = \begin{bmatrix} q(0) \\ e^{-\gamma t} p(0) + \frac{\sigma}{\sqrt{2 \gamma}} \sqrt{1-e^{-2\gamma t}} M^{-1/2} R(t)\end{bmatrix}
+\end{align}\]
+
+<p>where \(R(t) \sim \mathcal{N}(0,1)\).</p>
+
+<p>Finally, there exists no analytical solution to</p>
+
+\[\begin{align}
+    d \begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} 0  \\ -\nabla_q U(q)\end{bmatrix} \: dt
+\end{align}\]
+
+<p>in the general case and needs to be simulated numerically. We call this solution</p>
+
+\[\begin{align}
+    \phi_B(t) := \begin{bmatrix} q(t) \\ p(t) \end{bmatrix}_B
+\end{align}\]
+
+<hr>
+
+<p>The idea behind operator splitting is to compose these individual solutions in a specific sequence that results in minimum error. For this Langevin problem, <a href="https://arxiv.org/abs/1304.3269" rel="external nofollow noopener" target="_blank">Leimkuhler</a> considered several sequences. We will discuss two of them.</p>
+
+<h5 id="baoab">BAOAB</h5>
+
+\[\begin{align}
+    \phi(t+\tau) := \phi_B \left(t+\frac{\tau}{2}\right) \circ \phi_A \left(t+\frac{\tau}{2}\right) \circ \phi_O(t + \tau) \circ \phi_A \left(t+\frac{\tau}{2}\right) \circ \phi_B \left(t+\frac{\tau}{2}\right)
+\end{align}\]
+
+<h5 id="aboba">ABOBA</h5>
+
+\[\begin{align}
+    \phi(t+\tau) := \phi_A \left(t+\frac{\tau}{2}\right) \circ \phi_B \left(t+\frac{\tau}{2}\right) \circ \phi_O(t + \tau) \circ \phi_B \left(t+\frac{\tau}{2}\right) \circ \phi_A \left(t+\frac{\tau}{2}\right)
+\end{align}\]
+
+<h3 id="examples">Examples</h3>
+
+<p>In the following, we consider one dimensional molecular systems. That is \(q,p \in \mathbb{R}^N\). With these assumptions, the simulated trajectories and their distributions, along with the energies are shown below.</p>
+
+<h4 id="one-body-system">One body system</h4>
+<p>Here \(N=1\)</p>
+<h5 id="simple-harmonic-oscillator">Simple Harmonic oscillator</h5>
+
+\[\begin{align}
+    U(q) = \frac{1}{2} k(q-c)^2
+\end{align}\]
+
+<h5 id="double-well-potential-oscillator">Double Well potential oscillator</h5>
+
+\[\begin{align}
+    U(q) = \frac{1}{4} k(q-a)^2(q+a)^2
+\end{align}\]
+
+<h4 id="two-body-systems">Two body systems</h4>
+
+<p>Here \(N=2\), that is \(q := \begin{bmatrix} q_1 \\ q_2 \end{bmatrix}\)</p>
+
+<h5 id="double-well-with-pairwise-harmonic-potential">Double well with pairwise harmonic potential</h5>
+
+\[\begin{align}
+    U(q_1) = \frac{1}{4} k(q_1-a)^2(q_1-b)^2 + \frac{1}{2} k(q_1-q_2)^2
+\end{align}\]
+
+<h5 id="double-well-with-soft-bound-potential">Double well with soft-bound potential</h5>
+
+\[\begin{align}
+    U(q_1) = \frac{1}{4} k(q_1-a)^2(q_1-b)^2 + V(q_1, q_2) \\ 
+    V(q_1, q_2) = \begin{cases} cos\left(1 + \frac{ (q_2 - q_1) \pi }{r_c}\right) \quad r&lt;r_c \\ 0 \quad r \geq r_c \end{cases}
+\end{align}\]
+
+<p>Extending these simulations to higher dimensions is trivial, but remains out of the scope of this article.</p>
+
+<h3 id="code">Code</h3>
+
+<script src="https://gist.github.com/dynamic-queries/607429860ce4d1f309537bd534d476e7.js"></script>
+
+
+  </article>
 </div>
-
-          </article>
-
-        </div>
 
     </div>
 

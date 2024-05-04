@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Publications | Rahul Manavalan</title>
+    <title>(WIP) Generative modeling using Diffusion map particle system | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A list of posters, peer-reviewed publications and conference proceedings.">
+    <meta name="description" content="Marrying two unlikely algorithms for physical modeling.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/publications/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/Temp_posts/2023-05-06-gen_dmap.html">
     
     <!-- Dark Mode -->
     
@@ -109,33 +109,129 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">Publications</h1>
-            <p class="post-description">A list of posters, peer-reviewed publications and conference proceedings.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <p>_pages/publications.md</p>
-<div class="publications">
+  <header class="post-header">
+    <h1 class="post-title">(WIP) Generative modeling using Diffusion map particle system</h1>
+    <p class="post-meta">May 6, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/genmod">
+          <i class="fas fa-hashtag fa-sm"></i> GenMod</a>  
+          
+        ·  
+        <a href="/blog/category/review">
+          <i class="fas fa-tag fa-sm"></i> review</a>  
+          
 
-<!-- -->
-  <!-- <h2 class="year">2021</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
-  <!-- <h2 class="year">2023</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
+    </p>
+  </header>
 
+  <article class="post-content">
+    <h3 id="introduction">Introduction</h3>
+
+<p>This review aims at providing a self-contained, pedantic overview of deep generative modelling using score based diffusion, culminating with discussions on <a href="https://arxiv.org/abs/2304.00200" rel="external nofollow noopener" target="_blank">the recent paper</a> from Youssef Marzouk.</p>
+
+<p>Generative models are manifestations of this widely held philosophical belief:</p>
+<div class="alert alert-block alert-success">
+<b>Philosophical Belief 1</b> All natural phenomena are generative. That is to say, there is an underlying generative process for every physical occurance.
 </div>
 
-          </article>
+<p>Clearly, there are infinitely many possibilities that may ensue from such a generative process. Assuming that we can enumerate all of these outcomes, say with set \(\Omega\), then a generative process \(\mathcal{G}\) underlying a system \(\mathcal{S}\) can be effectively described using probability theory. Therefore, the problem of generative modelling is in-effect the problem of probability density (distribution) estimation.</p>
 
-        </div>
+<p>In practice, there are several restrictions to effectively estimating probability density, \(p_{\mathcal{G}}(z) \: \forall z \in \Omega\), from a finite set of observations \(\Omega_f \subset \Omega\). Regardless, any method \(m\) that claims to do so must satisfy these conditions.</p>
+<ol>
+  <li>For a suitably chosen functional norm, \(\lim_{\Omega_f \mapsto \Omega} \|p_{\mathcal{G}}^{m}(z) - p_{\mathcal{G}}(z)\|_f \mapsto 0\)</li>
+  <li>It must be computationally effcient to sample from \(p_{\mathcal{G}}^{m}(z)\).</li>
+  <li>It must be computationally effcient to evaluate \(p_{\mathcal{G}}^{m}(z)\).</li>
+</ol>
+
+<p>Traditional functional approximation methods can satisfy (1) with an arbitrary level of accuracy, yet fail with respect to (2) and (3) due to the curse of dimensionality. Deep learning models on the other hand, are adept at circumventing this problem. Popular deep-generative models (in no particular order) include</p>
+
+<div class="alert alert-block alert-success">
+   1. Adversarial Generative Models <br>
+   2. Variational Autoencoders <br>
+   3. Normalizing Flows <br>
+   4. Score based Diffusion Models <br>
+   5. Autoregressive Models <br>
+   6. Energy based Models <br>
+</div>
+<p>to name a few.</p>
+
+<p>In what follows, a tutorial styled introduction to score based diffusion algorithms is presented and are compared with the method using diffusion map particle system.</p>
+
+<h3 id="score-based-diffusion">Score based diffusion</h3>
+
+<p>Diffusion models are based on certain assumptions and results, which we will assume are axiomatic.</p>
+
+<ol>
+  <li>Let \(p_f\) be the probability distribution defined over a certain function space \(\mathcal{F}\) such that \(\forall f \in \mathcal{F}, f:x \mapsto y\) where \(x,y \in \mathbb{R}^d\).</li>
+  <li>Let there exist a time dependent stochastic differential operator \(\mathcal{L}_t\) which transforms \(f(x) \sim p_f\) such that \(\lim_{t \mapsto \infty} \mathcal{L}_t f(x) = g(x)\) where \(g(x) \sim \mathcal{GP}(\bar{x},k(x,x'))\).</li>
+  <li>For every such forward operator, there exists an equivalent reverse time stochastic differential operator \(\tilde{\mathcal{L}_t}\) such that \(\lim_{t \mapsto \infty} \tilde{\mathcal{L}_t} g(x) = f(x)\).</li>
+</ol>
+
+<p>2 and 3, taken together results in differentiable and invertible map from a distribution over a trivial function space (noisy functions in this case) to a distribution over functions with certain structure. This forms the crux of generative modeling using score based diffusion. The key idea is to sample or evaluate the density of functions on the trivial distribution and transform the samples back and forth by solving stochastic differential equations. This further leads to the following questions.</p>
+
+<ol>
+  <li>For a given \(\mathcal{F}\), what is the most appropriate choice of \(\mathcal{L}\) in terms of computational tractablity? That is,
+    <ol>
+      <li>Which stochastic differential equation, reaches its steady state relatively quickly?</li>
+      <li>Which numerical integration scheme preserves the structure of any \(f \sim \mathcal{F}\)?</li>
+    </ol>
+  </li>
+  <li>What is the dual operator \(\tilde{\mathcal{L}}\) for a given \(\mathcal{L}\)?</li>
+</ol>
+
+<p>For better or worse, there is no clear resolution on the “best SDE” and the “best numerical integrator” for a given function class. Most of today’s state of the art, in this regard, is based on heuristics.</p>
+
+<h4 id="computational-model">Computational model</h4>
+<p>Let \(p_0(x)\) be the target distribution. Given sample \(x_i^0 \in \mathbb{R}^d \sim p_0(x)\), we proceed as follows.</p>
+
+<ol>
+  <li>Numerically solve \(dx^t = f(x^t,t)\:dt + g(t)\:dW(t)\) with initial condition \(x_i^0\) for \([0,T]\).
+    <ol>
+      <li>Here, \(f(x,t) \textrm{ and } g(t)\) are known as the drift and the diffusivity terms respectively.</li>
+      <li>\(W(t)\) is a Wiener process.</li>
+    </ol>
+  </li>
+  <li>Parmeterize a neural network \(\mathcal{S_{\Theta}}:\mathbb{R}^d \mapsto \mathbb{R}^d\).</li>
+  <li>Numerically solve \(dx^t = [f(x^t,t) - g(t)^2 \mathcal{S_{\Theta}}]\:dt + g(t)\:dW(t)\) for \([T,0]\).</li>
+</ol>
+
+<p>Use this computational routine to solve</p>
+
+\[\begin{equation}
+   \arg \min_{\Theta} \mathbb{E}_{x \sim p(x)}[\|m^{0 \mapsto T \mapsto 0}(x) - x\|]
+\end{equation}\]
+
+<p>Common choices for \(f,g\) in literature include:</p>
+
+<h5 id="sldm">SLDM</h5>
+<p>\(\begin{equation}
+   f(x,t) = -\frac{\beta(t)x}{2}
+\end{equation}\)</p>
+
+\[\begin{equation}
+   g(t) = \sqrt{\beta(t)}
+\end{equation}\]
+
+<h5 id="ddpm">DDPM</h5>
+
+\[\begin{equation}
+   f(x,t) = 0
+\end{equation}\]
+
+\[\begin{equation}
+   g(t) = \sqrt{\frac{d \sigma(t)}{dt}}
+\end{equation}\]
+
+<p>for some suitably chosen functions \(\sigma, \beta\).</p>
+
+  </article>
+</div>
 
     </div>
 

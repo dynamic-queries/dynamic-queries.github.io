@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <!-- Head -->
+  <head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">    <!-- Metadata, OpenGraph and Schema.org -->
+    
+
+    <!-- Standard metadata -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>(Original Research) Bayesian Waveform Inversion | Rahul Manavalan</title>
+    <meta name="author" content="Rahul  Manavalan">
+    <meta name="description" content="Full waveform inversion with MCMC, HMC, NUTS">
+    <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
+
+
+    <!-- Bootstrap & MDB -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-DF7Zhf293AJxJNTmh5zhoYYIMs2oXitRfBjY+9L//AY=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/css/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous">
+
+    <!-- Fonts & Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.1/css/academicons.min.css" integrity="sha256-i1+4qU2G2860dGGIOJscdC30s9beBXjFfzjWLjBRsBg=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+
+    <!-- Code Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/github.css" media="" id="highlight_theme_light">
+
+    <!-- Styles -->
+    
+    <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
+    
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/2023-21-07-bayesian_inversion.html">
+    
+    <!-- Dark Mode -->
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jwarby/jekyll-pygments-themes@master/native.css" media="none" id="highlight_theme_dark">
+
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/dark_mode.js"></script>
+    
+
+  </head>
+
+  <!-- Body -->
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+    <header>
+
+      <!-- Nav Bar -->
+      <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+        <div class="container">
+          <a class="navbar-brand title font-weight-lighter" href="/">Rahul Manavalan</a>
+          <!-- Navbar Toggle -->
+          <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar top-bar"></span>
+            <span class="icon-bar middle-bar"></span>
+            <span class="icon-bar bottom-bar"></span>
+          </button>
+
+          <div class="collapse navbar-collapse text-right" id="navbarNav">
+            <ul class="navbar-nav ml-auto flex-nowrap">
+
+              <!-- About -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/">About</a>
+              </li>
+              
+
+              <!-- Other pages -->
+              <li class="nav-item ">
+                <a class="nav-link" href="/projects/">Research</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/talks/">Posters and Publications</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/teaching/">Teaching</a>
+              </li>
+              <li class="nav-item ">
+                <a class="nav-link" href="/cv/">CV</a>
+              </li>
+
+              <!-- Toogle theme mode -->
+              <li class="toggle-container">
+                <button id="light-toggle" title="Change theme">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Scrolling Progress Bar -->
+      <progress id="progress" value="0">
+        <div class="progress-container">
+          <span class="progress-bar"></span>
+        </div>
+      </progress>
+    </header>
+
+
+    <!-- Content -->
+    <div class="container mt-5">
+      <!-- _layouts/post.html -->
+
+<div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">(Original Research) Bayesian Waveform Inversion</h1>
+    <p class="post-meta">July 21, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/inverseproblems">
+          <i class="fas fa-hashtag fa-sm"></i> InverseProblems</a>  
+          
+        ·  
+        <a href="/blog/category/projects">
+          <i class="fas fa-tag fa-sm"></i> projects</a>  
+          
+
+    </p>
+  </header>
+
+  <article class="post-content">
+    <p>This is original work done as a part of a student research project during my masters studies at TUM with <a href="https://fd-research.com/" rel="external nofollow noopener" target="_blank">Felix Dietrich</a>.</p>
+
+<p><em>All ideas, figures, equations, examples and code, unless cited are a work of my own.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p><strong>Waveform inversion</strong> is principally parameter estimation with three insights.</p>
+
+<ol>
+  <li>The parameter is a field over some domain \(\Omega\).</li>
+  <li>Only partial observations of the quantity of interest are available.</li>
+  <li>Observables are obtained from evaluating a family of wave propagation models.</li>
+</ol>
+
+<p>Consider a simple example of an acoustic wave equation.</p>
+
+\[\begin{align}
+    x \in \Omega \subset \mathbb{R} \\ 
+    t \in \mathbb{R}^+ \\ 
+    \frac{\partial}{\partial t}  u(x,t) = \frac{\partial^2}{\partial x^2} \left[c(x)^2 u(x,t)\right] \\ 
+    u(x,0) = f(x) \\ 
+    \frac{\partial }{\partial t}u(x,0) = g(x) \\
+    u(y,t) = 0 \quad \forall y \in \delta \Omega
+\end{align}\]
+
+<p>Here \(f,g\) are suitably chosen initial conditions that would sustain elastic progation of a wave in \(\Omega\). In the context of waveform inversion, \(c(x)\) is the parameter and \(u(z,t) \: \forall z \in \hat{\Omega} \subset \Omega\) is the observable. For the sake of this article, consider the following example for \(c,u\).</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/bayesian/parameter.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/bayesian/observable.svg" alt="spline-sur">
+  </div>
+</div>
+
+<p>The goal is to reconstruct \(c(x)\) (<em>to the left</em>) from \(u(z,t)\) (<em>to the right</em>) measured at \(z=\{z_0, z_i\}\) where \(z_i \in \Omega\). The optimal \(c^{*}(x)\) is the minimizer to</p>
+
+\[\begin{align}
+  \label{eq:opt}
+  \arg \min_{\hat{c} \in \mathcal{H}} \sum_{i}\| \hat{u}(z_i,t; \hat{c}(x)) - u(z_i,t)\|
+\end{align}\]
+
+<p>where \(\hat{u}(z_0,t)\) is evaluated by solving the acoustic wave equation using a robust finite difference method <em>(see code)</em>.</p>
+
+<h3 id="parameter-estimation">Parameter estimation</h3>
+<p>Estimating \(c(x)\) is non-trivial. Firstly, one has to choose an appropriate bases to parameterize this function. This of course varies on a case by case basis. For the example above, radial bases functions are good approximants. Therefore,</p>
+
+\[\begin{align}
+  c(x) = \sum_{i=1}^{N} a_i \phi_i (x) \\ 
+  \phi_i(x) := \phi(x;x_i,\mu) = \exp\left[{-\left(\frac{x-x_0}{\mu}\right)^2}\right] \\ 
+  N = 5
+\end{align}\]
+
+<p>Therefore the parameterization space is now \(\mathcal{A} \ni a\).</p>
+
+<p>\(N\) is, by design, chosen sufficiently small to faciliate comparison with Bayesian optimization.</p>
+
+<h4 id="frequentist-estimation">Frequentist estimation</h4>
+<p>Problem (\ref{eq:opt}) is ill-posed in the sense of Hadamard. As a result, it is initially solved with tradional gradient based optimization algorithms with suitable regularization. The algorithms used in this pursuit, are briefy outlined and the “best possible” reconstructions are presented.</p>
+
+<p>The reconstructions here, must be taken with a grain of salt, for it is entirely possible to come up with an excellent initial guess that could converge to the actual \(c(x)\) accurately.</p>
+
+<p>Furthermore, it is observed that the reconstructions are sensitive to the choice of the type of regularization and the magnitude of the regularization constant. Common regularizations to an \(l_2\) loss includes weighted norms of inputs, finite difference of \(l_2\) loss with respect to time, fourier coefficients of \(l_2\) loss and so on.</p>
+
+<p>In the presented cases, \(l_2\) Tikhonov regularization is used. That is</p>
+
+\[\begin{align}
+  \arg \min_{a \in \mathcal{A}} \sum_{i}\| \hat{u}(z_i,t; \hat{c}(x;a)) - u(z_i,t)\| + \lambda \| \hat{c}(x;a) \|
+\end{align}\]
+
+<p>The values of the regularization constants and the number of iterations used for each of these algorithms is indicated below.</p>
+
+<h5 id="adam">ADAM</h5>
+
+<p>This is a first order optimization algorithm introduced in 2014 by <a href="https://arxiv.org/abs/1412.6980" rel="external nofollow noopener" target="_blank">Kingma</a>. It is a variant of momentum based methods such as Adagrad and Nesterov optimization methods. Generically, if \(f_{\theta}\) is the objective function that needs to be optimized with respect to the parameters \(\theta\), it is done so as follows.</p>
+
+<hr>
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Intitialize:</p>
+<ol>
+  <li>Constants \(\beta_1 = 0.9, \beta_2 = 0.999, \alpha = 0.001 , \epsilon=10^{-8}\)</li>
+  <li>Initial positions and velocities \(m_0 = 0, v_0 = 0\)</li>
+  <li>Make a “good initial guess” \(\theta_0\)</li>
+</ol>
+
+<p>For the \(t^{th}\) iteration:</p>
+
+<ol>
+  <li>Evaluate the gradient of the function \(g_t := \nabla_{\theta} f_{\theta_{t-1}}\)</li>
+  <li>Compute “position” term : \(m_t = \frac{\beta_1}{1 - \beta_1 ^ t} m_{t-1} + \frac{1-\beta_1}{1 - \beta_1 ^ t} g_t\)</li>
+  <li>Compute “momentum” term : \(v_t = \frac{\beta_2}{1 - \beta_2 ^ t} v_{t-1} + \frac{1-\beta_2}{1 - \beta_2 ^ t} g_t^2\)</li>
+  <li>Update parameters : \(\theta_t = \theta_{t-1} - \alpha \frac{m_t}{\sqrt{v_t} + \epsilon}\)</li>
+</ol>
+
+<p>For \(t \in [1,\textrm{maxiters}] \subset \mathbb{N}\)</p>
+
+<ol>
+  <li>Repeat the four previous steps.</li>
+</ol>
+
+<hr>
+
+<p>Using the previous algorithm and with a regularization constant \(\lambda = 2.01 \pm 10^{-4}\), one obtains the following reconstruction.</p>
+
+<p><img style="width:60%" src="/assets/bayesian/recon_parameter_adam.svg" alt="spline-sur"></p>
+
+<h5 id="bfgs">BFGS</h5>
+
+<p>One can also use, higher order optimization methods that make use of  \(\nabla_{\theta}(\nabla_{\theta} f_{\theta})\). Alas, computing the Hessian for every iteration is computationally expensive.
+<a href="https://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm" rel="external nofollow noopener" target="_blank">BFGS method</a> is a quasi-Netwon method which instead of computing the entire Hessian, approximates it with several evalutions of the gradient of \(f_{\theta}\).</p>
+
+<p>Akin, to the previous section, one obtains a minimizer \(\theta^*\) for \(f_{\theta}\) as follows.</p>
+
+<hr>
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Initialize:</p>
+
+<ol>
+  <li>Initial Hessian approximant and initial learning rate : \(B_0 = \mathcal{I}, \alpha_0 = 10^{-2}\)</li>
+  <li>Make a “good initial guess” \(\theta_0\)</li>
+</ol>
+
+<p>For every \(k^{th}\) iteration:</p>
+
+<ol>
+  <li>Estimate new search direction, \(p_k\) by solving \(B_{k-1} p_k = -\nabla_{\theta} f_{\theta_{k-1}}\)</li>
+  <li>Estimate step size, \(\alpha_k\) by solving \(\arg \min_{\alpha_k} f_{\theta}(\theta_{k-1} + \alpha_k p_k)\)</li>
+  <li>Compute new direction \(\theta_{k} = \theta_{k-1} + \alpha_k p_k\)</li>
+  <li>Estimate update vector \(y_k = \nabla_{\theta} f(\theta_{k}) - \nabla_{\theta} f(\theta_{k-1})\)</li>
+  <li>Let \(s_k = \alpha_k p_k\)</li>
+  <li>Update Hessian approximant \(B_{k} = B_{k-1} + \frac{y_k y_k^T}{y_k^T s_k} + \frac{B_{k-1} s_k^T s_k B_{k-1}^T}{s_k^T B_{k-1} s_k}\)</li>
+</ol>
+
+<p>For \(k \in [1,\textrm{maxiters}] \subset \mathbb{N}\)</p>
+
+<ol>
+  <li>Repeat the six previous steps.</li>
+</ol>
+
+<hr>
+
+<p>Using the previous algorithm and with a regularization constant \(\lambda = 0.399 \pm 10^{-3}\), one obtains the following reconstruction.</p>
+
+<p><img style="width:60%" src="/assets/bayesian/recon_parameter_bfgs.svg" alt="spline-sur"></p>
+
+<h5 id="issues">Issues</h5>
+
+<p>There are two difficulties that one encounters with the frequentist estimation while treating an ill-conditioned problem such as this one.</p>
+
+<ol>
+  <li>Good initial guesses are vital for fast convergence.</li>
+  <li>Estimation is very sensitive to the value of \(\lambda\).</li>
+</ol>
+
+<p>Elaborating on (2), consider the following reconstructions with BFGS optimization for \(\lambda = 0.397,\:0.399\:,0.40\:,0.402\)  respectively.</p>
+
+<div class="row">
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.397.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.399.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.4.svg" alt="spline-sur">
+  </div>
+  <div class="column">
+    <img style="width:80%" src="/assets/bayesian/bfgs_0.402.svg" alt="spline-sur">
+  </div>
+</div>
+
+<p>Such sensitivity makes any practical grid search (which is performed at a much higher resolution) useless, questioning the practicality of such optimization routines for practical applications.</p>
+
+<h4 id="bayesian-estimation">Bayesian estimation</h4>
+<p>Plagued by the ill-posedness of frequentist estimation, it seems appropriate to turn to Bayesian estimation. Granted, one does need a good prior for Bayesian methods to make computational sense, however Bayesian inverse problems are well posed (As highlighted in <a href="https://www.cambridge.org/core/journals/acta-numerica/article/abs/inverse-problems-a-bayesian-perspective/587A3A0D480A1A7C2B1B284BCEDF7E23" rel="external nofollow noopener" target="_blank">Stuart</a>).</p>
+
+<p>Appropriately, the Bayes rule for this inference problem can be written as</p>
+
+\[\begin{align}
+  p(a | u(z)) = \frac{p(u(z)|a)\:p(a)}{p(u(z))}
+\end{align}\]
+
+<p>It is known that, esimating the marginal density \(p(u(z))\) is computationlly intractable. Therefore, in what follows two classes of Bayesian state estimation methods – MCMC and HMC (and its variants) are used to estimate \(p(a|u(z))\) from which one can compute the expectation, variance and other higher order moments of \(\hat{c}(x;a)\).</p>
+
+<h5 id="markov-chain-monte-carlo">Markov Chain Monte carlo</h5>
+
+<h6 id="metropolis-hasting-sampling">Metropolis Hasting sampling</h6>
+
+<h6 id="gibbs-sampling">Gibbs sampling</h6>
+
+<h5 id="hamiltonian-monte-carlo">Hamiltonian Monte carlo</h5>
+
+<h6 id="plain-hmc">Plain HMC</h6>
+
+<h6 id="no-u-turn-sampling-hmc">No U-turn sampling HMC</h6>
+
+<h3 id="code">Code</h3>
+
+<p>These results can be reproduced with the following code. <em>(Documentation coming soon.)</em></p>
+
+<script src="https://gist.github.com/dynamic-queries/3473ab7b87744cd1ad07cddd74eabd03.js"></script>
+
+
+  </article>
+</div>
+
+    </div>
+
+    <!-- Footer -->    
+    <footer class="fixed-bottom">
+      <div class="container mt-0">
+        © Copyright 2024 Rahul  Manavalan. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>.
+
+      </div>
+    </footer>
+
+    <!-- JavaScripts -->
+    <!-- jQuery -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- Bootsrap & MDB scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha256-fgLAgv7fyCGopR/gBNq2iW3ZKIdqIcyshnUULC4vex8=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mdbootstrap@4.20.0/js/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script>
+
+    <!-- Masonry & imagesLoaded -->
+  <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+  <script defer src="/assets/js/masonry.js" type="text/javascript"></script>
+    
+  <!-- Medium Zoom JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.0.8/dist/medium-zoom.min.js" integrity="sha256-7PhEpEWEW0XXQ0k6kQrPKwuoIomz8R8IYyuU1Qew4P8=" crossorigin="anonymous"></script>
+  <script defer src="/assets/js/zoom.js"></script><!-- Load Common JS -->
+  <script defer src="/assets/js/common.js"></script>
+  <script defer src="/assets/js/copy_code.js" type="text/javascript"></script>
+
+    
+  <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script>
+  <script async src="https://badge.dimensions.ai/badge.js"></script>
+
+    <!-- MathJax -->
+  <script type="text/javascript">
+    window.MathJax = {
+      tex: {
+        tags: 'ams'
+      }
+    };
+  </script>
+  <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.0/es5/tex-mml-chtml.js"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+    
+    
+
+<!-- Scrolling Progress Bar -->
+<script type="text/javascript">
+  /*
+   * This JavaScript code has been adapted from the article 
+   * https://css-tricks.com/reading-position-indicator/ authored by Pankaj Parashar, 
+   * published on the website https://css-tricks.com on the 7th of May, 2014.
+   * Couple of changes were made to the original code to make it compatible 
+   * with the `al-foio` theme.
+   */
+  const progressBar = $("#progress");
+  /*
+   * We set up the bar after all elements are done loading.
+   * In some cases, if the images in the page are larger than the intended
+   * size they'll have on the page, they'll be resized via CSS to accomodate
+   * the desired size. This mistake, however, breaks the computations as the
+   * scroll size is computed as soon as the elements finish loading.
+   * To account for this, a minimal delay was introduced before computing the
+   * values.
+   */
+  window.onload = function () {
+    setTimeout(progressBarSetup, 50);
+  };
+  /*
+   * We set up the bar according to the browser.
+   * If the browser supports the progress element we use that.
+   * Otherwise, we resize the bar thru CSS styling
+   */
+  function progressBarSetup() {
+    if ("max" in document.createElement("progress")) {
+      initializeProgressElement();
+      $(document).on("scroll", function() {
+        progressBar.attr({ value: getCurrentScrollPosition() });
+      });
+      $(window).on("resize", initializeProgressElement);
+    } else {
+      resizeProgressBar();
+      $(document).on("scroll", resizeProgressBar);
+      $(window).on("resize", resizeProgressBar);
+    }
+  }
+  /*
+   * The vertical scroll position is the same as the number of pixels that
+   * are hidden from view above the scrollable area. Thus, a value > 0 is
+   * how much the user has scrolled from the top
+   */
+  function getCurrentScrollPosition() {
+    return $(window).scrollTop();
+  }
+
+  function initializeProgressElement() {
+    let navbarHeight = $("#navbar").outerHeight(true);
+    $("body").css({ "padding-top": navbarHeight });
+    $("progress-container").css({ "padding-top": navbarHeight });
+    progressBar.css({ top: navbarHeight });
+    progressBar.attr({
+      max: getDistanceToScroll(),
+      value: getCurrentScrollPosition(),
+    });
+  }
+  /*
+   * The offset between the html document height and the browser viewport
+   * height will be greater than zero if vertical scroll is possible.
+   * This is the distance the user can scroll
+   */
+  function getDistanceToScroll() {
+    return $(document).height() - $(window).height();
+  }
+
+  function resizeProgressBar() {
+    progressBar.css({ width: getWidthPercentage() + "%" });
+  }
+  // The scroll ratio equals the percentage to resize the bar
+  function getWidthPercentage() {
+    return (getCurrentScrollPosition() / getDistanceToScroll()) * 100;
+  }
+</script>
+
+  </body>
+</html>

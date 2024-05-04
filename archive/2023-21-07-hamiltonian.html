@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Publications | Rahul Manavalan</title>
+    <title>Learning Hamiltonians with GP | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A list of posters, peer-reviewed publications and conference proceedings.">
+    <meta name="description" content="Inferring invariants of dynamical systems with gaussian processes.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/publications/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/archive/2023-21-07-hamiltonian.html">
     
     <!-- Dark Mode -->
     
@@ -109,33 +109,139 @@
 
     <!-- Content -->
     <div class="container mt-5">
-      <!-- page.html -->
-        <div class="post">
+      <!-- _layouts/post.html -->
 
-          <header class="post-header">
-            <h1 class="post-title">Publications</h1>
-            <p class="post-description">A list of posters, peer-reviewed publications and conference proceedings.</p>
-          </header>
+<div class="post">
 
-          <article>
-            <p>_pages/publications.md</p>
-<div class="publications">
+  <header class="post-header">
+    <h1 class="post-title">Learning Hamiltonians with GP</h1>
+    <p class="post-meta">July 20, 2023</p>
+    <p class="post-tags">
+      <a href="/blog/2023"> <i class="fas fa-calendar fa-sm"></i> 2023 </a>
+        ·  
+        <a href="/blog/tag/systemsidentification">
+          <i class="fas fa-hashtag fa-sm"></i> SystemsIdentification</a>  
+          
+        ·  
+        <a href="/blog/category/education">
+          <i class="fas fa-tag fa-sm"></i> education</a>  
+          
 
-<!-- -->
-  <!-- <h2 class="year">2021</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
-  <!-- <h2 class="year">2023</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
+    </p>
+  </header>
 
+  <article class="post-content">
+    <p>This work is a re-creation of a method for learning the Hamiltonian of a dynamical system from <a href="https://pubs.aip.org/aip/cha/article/29/12/121107/1027304/On-learning-Hamiltonian-systems-from-data" rel="external nofollow noopener" target="_blank">Bertlan and Dietrich</a>.</p>
+
+<p><em>All figures, equations, examples and code are a work of my own. Only the idea has been borrowed from the paper.</em></p>
+
+<h3 id="introduction">Introduction</h3>
+
+<p>Most physical systems lend themselves to description using Hamiltonian mechanics. Briefly put:</p>
+
+<p>For an \(N\) body system living in \(d\) dimensions, the classical mechanical state of the system is described sufficiently using a pair of canonical coordinates \(q,p \in \mathbb{R}^{dN}\). For an evolutionary system, the canonical coordinates depend on time. Evidently, such evolutions are governed by Newton’s equations. However, Netwon’s equation are bulky to compute, analyze for large \(N\). This problem was recognized by Hamilton and subsequently led to what is now referred to the Hamiltonian formulation of classical mechanics.</p>
+
+<p>Hamilton postulated that there exists a function \(H : q \times p \mapsto \mathbb{R}\) – the Hamiltonian. The evolution equations in this framework were given by the following PDE:</p>
+
+\[\begin{align}
+    \label{eq:Ham}
+    \frac{\partial}{\partial t} q(t) = \frac{\partial H}{\partial p}\\ 
+    \frac{\partial}{\partial t} p(t) = -\frac{\partial H}{\partial q}
+\end{align}\]
+
+<p>Or more compactly</p>
+
+\[{\partial_t} z := {\partial_t}\begin{bmatrix} q \\ p \end{bmatrix} = \begin{bmatrix} \mathcal{0} &amp;&amp;  \mathcal{I} \\ -\mathcal{I} &amp;&amp; \mathcal{0} \end{bmatrix} \partial_{\begin{bmatrix} q &amp; p \end{bmatrix}^{T}} H(q,p)\]
+
+<p>Given observations \(\left([q(t_1),q(t_2),...,q(t_m)],[p(t_1),p(t_2),...,p(t_m)]\right)\), I am interested in learning \(H\) using a Gaussian process.</p>
+
+<h3 id="method">Method</h3>
+
+<p>Let \(H(z) \sim \mathcal{GP(\mu_z,\kappa(z,z'))}\).</p>
+
+\[\begin{align}
+  \mathbb{E}(H(z^*)) = k(z^* ,z)\: k(z ,z')^{-1}\:H(z') \\
+  \frac{\partial}{\partial z^*}\mathbb{E}(H(z^*)) = \mathcal{J}^{-1} \frac{\partial z^*}{\partial t} \\
+  \left[\frac{\partial}{\partial z^*}k(z^* ,z)\right]\: \left[k(z ,z')\right]^{-1}\:H(z') =\mathcal{J}^{-1} \frac{\partial z^*}{\partial t} 
+\end{align}\]
+
+<p>Here, \(z^*\) and \(\frac{\partial z^*}{\partial t}\) are known reference points. \(z'\) are the validation points where the derivative of the Hamiltonian is not known. In order to determine this, one proceeds according to the following algorithm.</p>
+
+<hr>
+
+<p><strong><em>Algorithm</em></strong></p>
+
+<p>Given</p>
+<ol>
+  <li>Snapshots \(z^*(t_d) = \left[z^*(1), z^*(2) ... z^*(T) \right]\)</li>
+  <li>Query points \(z_1, z_2, ...,z_N\)</li>
+  <li>Covariance kernel \(\kappa\)</li>
+</ol>
+
+<p>Do</p>
+<ol>
+  <li>Evaluate \(\frac{d z^*}{dt}\) using any higher order finite difference scheme.</li>
+  <li>Setup \(b:=\mathcal{J}^{-1} \: \frac{d z^*}{dt}\)</li>
+  <li>Compute \(K_{zz'} \in \mathbb{R}^{N \times N}\) where \(K_{zz'}^{i,j} := \kappa(z^i,z^j)\)</li>
+  <li>Invert \(K_{zz'}\)</li>
+  <li>Compute \(M \in \mathbb{R}^{2dN \times N}\) where \(M^{:,j} := \frac{\partial}{\partial z^*} \kappa(z^*,z)\)</li>
+  <li>Evaluate inference matrix \(I := M K_{zz'}^{-1}\)</li>
+  <li>Solve \(I H_{z'} = b\) for \(H_{z'}\)</li>
+</ol>
+
+<hr>
+
+<h3 id="examples">Examples</h3>
+
+<h5 id="simple-non-linear-pendulum">Simple non-linear pendulum</h5>
+
+<p>A pendulum is a prototypical example of a Hamiltonian dynamical system. As shown below it is a one-dimensional dynamical system, described by the amplitude of oscillations \(\theta\) and its time derivative \(\dot{\theta}\).</p>
+
+<style>
+    .column {
+  float: left;
+  width: 50.00%;
+  margin : 0 0 0px 0px;
+  padding: 2px;
+}
+
+/* Clear floats after image containers */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+</style>
+
+<style>
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+</style>
+
+<p><img style="width:15%" class="center" src="/assets/hamiltonian/pendulum.svg" alt="spline-sur"></p>
+
+<p>The equations of motion of a pendulum is the classical equation 
+\(\begin{align}
+    \frac{d^2 \theta}{dt^2} = -\frac{g}{l} sin(\theta)   
+\end{align}\)
+which when solved for an ensemble of initial conditions, results in its phase space. The phase space and its tangent bundle (its derivative) is shown below.</p>
+<div class="row">
+  <div class="column">
+    <img style="width:100%" src="/assets/hamiltonian/mini_sampled_trajectories.svg" alt="spline-sim">
+  </div>
+  <div class="column">
+    <img style="width:100%" src="/assets/hamiltonian/mini_sampled_velocities.svg" alt="spline-sur">
+  </div>
 </div>
 
-          </article>
+<p>Note that all the points in the images above satisfies the PDE in (\ref{eq:Ham}). Therefore, one could uniformly draw samples from this space to learn its Hamiltonian. (<em>The figures above show 500 unique samples in red.</em>)</p>
 
-        </div>
+  </article>
+</div>
 
     </div>
 

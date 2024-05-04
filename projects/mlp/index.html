@@ -10,9 +10,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Publications | Rahul Manavalan</title>
+    <title>MLP | Rahul Manavalan</title>
     <meta name="author" content="Rahul  Manavalan">
-    <meta name="description" content="A list of posters, peer-reviewed publications and conference proceedings.">
+    <meta name="description" content="Learning interaction potentials of many body systems.">
     <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website">
 
 
@@ -33,7 +33,7 @@
     <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;">
     
     <link rel="stylesheet" href="/assets/css/main.css">
-    <link rel="canonical" href="https://dynamic-queries.github.io/publications/">
+    <link rel="canonical" href="https://dynamic-queries.github.io/projects/mlp/">
     
     <!-- Dark Mode -->
     
@@ -113,25 +113,133 @@
         <div class="post">
 
           <header class="post-header">
-            <h1 class="post-title">Publications</h1>
-            <p class="post-description">A list of posters, peer-reviewed publications and conference proceedings.</p>
+            <h1 class="post-title">MLP</h1>
+            <p class="post-description">Learning interaction potentials of many body systems.</p>
           </header>
 
           <article>
-            <p>_pages/publications.md</p>
-<div class="publications">
+            <h3 id="introduction">Introduction</h3>
+<p>Machine learning potentials are surrogates for expensive electronic structure calculations. The use of these surrogates is justified on account of the iterative nature of MD simulations for several practical applications from drug design to material discovery. Training such machine learning models over molecular properties calculated for billions of atomic configurations, has been shown to provide sufficient generalization accuracy. In this work, I introduce a new way of training second and third generation machine learning potentials with a recently proposed sampling algorithm.</p>
 
-<!-- -->
-  <!-- <h2 class="year">2021</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
-  <!-- <h2 class="year">2023</h2> -->
-  <!-- <ol class="bibliography"></ol> -->
-  <ol class="bibliography"></ol>
-<!--  -->
+<h3 id="workflow">Workflow</h3>
 
-</div>
+<p>A typical workflow for training machine learning potentials is illustrated below.</p>
+
+<p><img style="width:90%" src="/assets/thesis/workflow2.svg" alt="spline-sur"></p>
+
+<p>As an example, a molecule of sucrose is considered. Sucrose – \(C_{12} H_{22} O_{11}\) is a hydrocarbon ubiquitous in fruits, sugars and other sweetening agents. The goal of this workflow is to efficiently predict the molecular properties of sucrose for different positions of the carbon, hydrogen and oxygen atoms respectively.</p>
+
+<p>Typically, several positions of atoms \(\textbf{R}\) and their atomic numbers \(\textbf{A}\) are concatenated into a single vector called an atomic descriptor – \([\textbf{R},\textbf{A}]\). It has been observed that encoding additional inductive bias, based on the physics of the system can improve the accuracy of the training procedure. Promptly, the atomic descriptors are mapped into a higher level descriptor coordinate \(\textbf{D}\). One should bear in mind, that the computational complexity of this descriptor map should be as low as possible. Finally, the descriptor coordinates \(\textbf{D}\) are mapped onto the space of molecular properties using a neural network.</p>
+
+<p>Training this model, entails altering the parameters of the neural network iteratively until the predictions from the network and the reference data from electronic structure calculations match to an acceptable degree of accuracy.</p>
+
+<h3 id="classification-of-machine-learning-potentials-and-molecular-descriptors">Classification of machine learning potentials and molecular descriptors.</h3>
+
+<p>In 2021, <a href="https://arxiv.org/abs/2107.03727" rel="external nofollow noopener" target="_blank">Behler</a> classified machine learning potentials, based on the choice the neural network architecture.</p>
+
+<p><img style="width:80%" src="/assets/thesis/mlp.png" alt="spline-sur"></p>
+
+<p>Furthermore, research into descriptors for machine learning potentials is also quite involved as illustrated in this phylogenic tree of molecular descriptors. (Adopted from <a href="https://pubs.acs.org/doi/10.1021/acs.chemrev.1c00021" rel="external nofollow noopener" target="_blank">this paper</a>)</p>
+
+<p><img style="width:90%" src="/assets/thesis/descriptors.gif" alt="spline-sur"></p>
+
+<h3 id="contrbutions">Contrbutions</h3>
+<p>In the light of this ubuquity, I choose two models, <a href="https://onlinelibrary.wiley.com/doi/full/10.1002/qua.24890" rel="external nofollow noopener" target="_blank">PairHDNNP</a> from the third generation and <a href="https://arxiv.org/abs/1805.09003" rel="external nofollow noopener" target="_blank">DeepPMD</a> from the fourth generation of neural network potentials. It should be stated, that these models do not represent the state of the art in “Surrogates for force computational in quantum chemistry”. Nonetheless, they are sufficiently recent to demonstrate the efficacy of our training algorithm. These models are trained on the <a href="https://www.science.org/doi/10.1126/sciadv.1603015" rel="external nofollow noopener" target="_blank">MD17 dataset</a>.</p>
+
+<h3 id="md17-dataset">MD17 dataset</h3>
+<p>The MD17 dataset was first introduced along with the GDML model for inferring atomic forces. It consists of eight organic molecules with upto 21 atoms and 4 different chemical species, including</p>
+
+<ul>
+  <li>Benzene</li>
+  <li>Uracil</li>
+  <li>Naphthalene</li>
+  <li>Aspirin</li>
+  <li>Salicylic acid</li>
+  <li>Ethanol</li>
+  <li>Toluene</li>
+</ul>
+
+<p>For each of these molecules, several thousand atomic configurations \(R = \{R_i : i \in [1,m]\}\) along with the corresponding ground state energies \(E\) and the atomic forces \(F\), computed from density functional computations are furnished. This constitutes the core of the dataset.</p>
+
+<p><a href="">..Insert figures of these molecules..</a></p>
+
+<h3 id="inference-models">Inference models</h3>
+
+<p>Both the PairHDNNP model and DeePMD model have the following neural network architecture.</p>
+
+<p><img style="width:90%" src="/assets/thesis/DeepMD.svg" alt="spline-sur"></p>
+
+<p>The atomic coordinates \(R_i\) are mapped to a local environment feature vector \(D_i\). This transformation is different for the two models. Individual deep fully connected neural networks \(N_i\) are used to approximate the local atomic energy \(E_i\). The total energy, \(E\), which is an extensive property is the sum of the individual atomic energies.</p>
+
+<h4 id="deepmd-models">DeePMD models</h4>
+
+<h5 id="version-1">Version 1</h5>
+<p>There are several iterations of the DeePMD model. In the first ever model
+, the local atomic environments, \(D_i\) are defined by the following map.</p>
+
+\[\begin{equation}
+    \label{eq:DeepMD}
+    D_i(...,R_i,...) = \begin{bmatrix}
+        \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+        \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+        \frac{1}{r_{ij}} &amp;
+        \frac{R_{ij}^x}{r_{ij}^2} &amp;
+         \frac{R_{ij}^y}{r_{ij}^2} &amp; 
+          \frac{R_{ij}^z}{r_{ij}^2} \\
+          \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+          \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+    \end{bmatrix}^{T} \in \mathbb{R}^{4 \times n}
+\end{equation}\]
+
+<p>Here, information about the system, is sufficiently captured using all relative distances and displacements between the atoms.</p>
+
+<h5 id="version-2">Version 2</h5>
+<p>Subsequently, a more physically inspired descriptor with a cutoff parameter was proposed.</p>
+
+\[\begin{equation}
+    \label{eq:DeepMD2}
+    D_i(...,R_i,...) = \begin{bmatrix}
+        \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+        \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+        \mathcal{s}(r_{ij}) &amp;
+        \frac{\mathcal{s}(r_{ij}) R_{ij}^x}{r_{ij}} &amp;
+         \frac{\mathcal{s}(r_{ij}) R_{ij}^y}{r_{ij}} &amp; 
+          \frac{\mathcal{s}(r_{ij}) R_{ij}^z}{r_{ij}} \\
+          \vdots &amp;\vdots &amp;\vdots&amp; \vdots \\  
+          \dots &amp;\dots &amp;\dots&amp; \dots \\ 
+    \end{bmatrix}^{T} \in \mathbb{R}^{4 \times n}
+\end{equation}\]
+
+\[\begin{equation}
+    \label{eq:source}
+    s(r) = \begin{cases}
+        \frac{1}{r},&amp; \text{for } r &lt; r_{cs} \\ 
+        \frac{1}{r}\left(\frac{1}{2} cos\left[ \pi \frac{r-r_{cs}}{r_c - r_{cs}}\right] + \frac{1}{2}\right),&amp; \text{for } r_{cs} \leq r &lt; r_c \\ 
+        0, &amp; \text{for } r \geq r_c
+    \end{cases}
+\end{equation}\]
+
+<p>It should be noted that, both versions of the DeepMD descriptors are invariant with respect to translation and rotation. However, when two identical atoms in a molecule are permuted, the descriptor functions do vary.</p>
+
+<h4 id="hdnnp-models">HDNNP models</h4>
+<p>This drawback is overcome in the HDNNP descriptors. Here permutation invariance is built into the descriptor function by summing up over all possible configurations. This comes in two flavours – a two body descriptor and a three body descriptor. Higher body descriptors are possible, however this would render them computationally intractable.</p>
+
+<h5 id="two-body-descriptors">Two body descriptors</h5>
+<p>Contrary to the previous descriptor, the local environment in this case is specified by a scalar.</p>
+
+\[\begin{equation}
+    \label{eq:behler-2}
+    D_i(...,R_i,...) = \sum_j e^{-\left(\frac{R_{ij} - R_c}{\sigma}\right)^2} s(R_{ij})
+\end{equation}\]
+
+<h5 id="three-body-descriptors">Three body descriptors</h5>
+
+<h4 id="model-order-reduction-methods">Model order Reduction methods</h4>
+<p>Borrowing ideas from reduced basis modeling, one can seek a low rank approximation for the potential energy. Such functions in the low dimensional space can be good descriptors, as it was recently demonstrated in the case of certain metallic elements.</p>
+
+<h5 id="pod-descriptors">POD descriptors</h5>
+
+<h5 id="dmap-descriptors">DMap descriptors</h5>
 
           </article>
 
