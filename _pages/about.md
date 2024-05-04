@@ -24,9 +24,6 @@ I am particularly intrigued by the duality of optimization landscapes and evolut
 
 My research focuses on developing novel numerical and statistical methods for dynamical systems with applications spanning computational fluid dynamics, quantum many body physics, waveform inversion and quantum chemistry. 
 
-I believe in pursuing science as a collective and to facilitate exchange of ideas among different researchers, I founded the SIAM Student Chapters at the Technical University of Munich in 2023 and at Lund University in 2024. Our reading group is open to everyone. Feel free to drop in.
-
-
-When I am not working, I like to make silly simulations of waves. They are really fun!
+When I am not working, I like to make silly simulations of waves.
 <img style="border:1px solid black;" class="center" src="/assets/wave_disp.gif" alt="spline-sur" style="width:50%">
 

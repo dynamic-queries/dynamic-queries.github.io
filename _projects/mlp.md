@@ -1,8 +1,8 @@
 ---
 layout: page
 title: MLP 
-description: Efficient training procedure for Machine learning potentials
-img: 
+description: Learning interaction potentials of many body systems.
+img: assets/thesis/mlp.png 
 importance: 2
 category: 2023
 ---

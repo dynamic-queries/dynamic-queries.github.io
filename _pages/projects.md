@@ -1,11 +1,11 @@
 ---
 layout: page
-title: Projects
+title: Research
 permalink: /projects/
-description: A collection of academic projects.
+description: My current and previous research work.
 nav: true
-nav_order: 2
-display_categories: [2023, 2022, 2021, 2020]
+nav_order: 1
+display_categories: [2024, 2023]
 horizontal: true
 ---
 

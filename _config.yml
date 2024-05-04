@@ -55,7 +55,7 @@ navbar_fixed: true
 footer_fixed: true
 
 # Dimensions
-max_width: 800px
+max_width: 900px
 
 # TODO: add layout settings (single page vs. multi-page)
 
@@ -120,10 +120,10 @@ bing_site_verification:  # out your bing-site-verification ID (Bing Webmaster)
 # Blog
 # -----------------------------------------------------------------------------
 
-blog_name: Academic Projects # blog_name will be displayed in your blog page
-blog_nav_title: Projects # your blog must have a title for it to be displayed in the nav bar
-blog_description: 
-permalink: /blog/:year/:title/
+# blog_name:  Applied-Mathology # blog_name will be displayed in your blog page
+# blog_nav_title: A-Mathology # your blog must have a title for it to be displayed in the nav bar
+# blog_description: How to make sense of all this mess?
+# permalink: /blog/:year/:title/
 
 # Pagination
 pagination:
