@@ -19,10 +19,13 @@ social: false  # includes social icons at the bottom of the page
 I am a doctoral student in mathematical statistics at Lund University. Formerly, I was student-researcher at the Technical University of Munich and constantly collaborate with people there.
 
  I am an active proponent of [John Tukey](https://nationalmedals.org/laureate/john-wilder-tukey/)'s -- "getting to play in everyone’s backyard" idea. Promptly, I am interested in all things [manifold learning](https://fdresearchblog.files.wordpress.com/2019/02/informal-introduction-to-manifold-learning.pdf) and its applications to Many Body Physics, Non-linear Model Order Reduction and other surrogates for large scale dynamical systems.
-
 I am particularly intrigued by the duality of optimization landscapes and evolution potentials of large scale (especially quantum) dynamical systems.
 
-My research focuses on developing novel numerical and statistical methods for dynamical systems with applications spanning computational fluid dynamics, quantum many body physics, waveform inversion and quantum chemistry. 
+My research focuses on developing novel numerical and statistical methods for dynamical systems with applications spanning computational fluid dynamics, quantum many body physics, waveform inversion and quantum chemistry.
+A major component of this is examining the source and propagation of uncertainty in these models.
+
+I am the lead developer of [FastSolvers.jl](https://github.com/SciML/FastSolvers.jl); a package for accelerated PDE evaluations.
+
 
 When I am not working, I like to make silly simulations of waves.
 <img style="border:1px solid black;" class="center" src="/assets/wave_disp.gif" alt="spline-sur" style="width:50%">
